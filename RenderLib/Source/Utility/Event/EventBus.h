@@ -3,7 +3,10 @@
 #include <memory>
 #include <functional>
 
-#include <dexode/EventBus.hpp>
+namespace dexode
+{
+    class EventBus;
+}
 
 namespace RL
 {
@@ -24,15 +27,14 @@ namespace RL
 
         void Init();
 
-        template <class Event, typename _ = void>
-        void SubscribeEvent(std::function<void(const Event&)>&& callback);
-
         template <typename Event>
         void SpreadEvent(Event event);
         
     private:
         EventBus() = default;
 
-        std::unique_ptr<dexode::EventBus> m_EventBus;
+        std::shared_ptr<dexode::EventBus> m_EventBus;
+
+        friend class EventListener;
     };
 }

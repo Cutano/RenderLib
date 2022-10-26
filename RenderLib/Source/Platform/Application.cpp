@@ -1,5 +1,6 @@
 #include "Base.h"
 #include "Application.h"
+#include "Workspace/Workspace.h"
 
 #include <filesystem>
 
@@ -29,6 +30,7 @@ namespace RL
             }
         }
 
+        InitEventBus();
         SetupWorkspace();
         InitGraphicsEngine();
         LoadAsset();
@@ -53,6 +55,7 @@ namespace RL
     void Application::SetupWorkspace()
     {
         Log::Logger()->info("Initiating workspace...");
+        Workspace::Get().Init(m_StartupParam.WorkspaceDir);
     }
 
     void Application::InitGraphicsEngine()

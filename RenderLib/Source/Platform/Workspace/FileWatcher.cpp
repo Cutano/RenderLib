@@ -16,6 +16,7 @@ namespace RL
 
         // Start watching asynchronously the directories
         m_Watcher->watch();
+        Log::Logger()->info("FileWatcher started.");
     }
 
     FileWatcher::~FileWatcher()

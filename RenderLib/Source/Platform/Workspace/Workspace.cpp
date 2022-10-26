@@ -4,8 +4,9 @@
 
 namespace RL
 {
-    Workspace::Workspace(std::string dir) : m_WorkspaceDir(std::move(dir))
+    void Workspace::Init(const std::string& dir)
     {
+        m_WorkspaceDir = dir;
         m_Watcher = std::make_unique<FileWatcher>(m_WorkspaceDir);
     }
 }

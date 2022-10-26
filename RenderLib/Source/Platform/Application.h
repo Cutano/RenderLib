@@ -6,7 +6,7 @@
 
 namespace RL
 {
-    // Application Startup Procedure:
+    // Application Startup Routine:
     //   Init Event Bus
     //   Setup Workspace
     //   Init Graphics Engine

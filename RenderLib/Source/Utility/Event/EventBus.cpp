@@ -1,16 +1,12 @@
 #include "EventBus.h"
 
+#include <dexode/EventBus.hpp>
+
 namespace RL
 {
     void EventBus::Init()
     {
-        m_EventBus = std::make_unique<dexode::EventBus>();
-    }
-    
-    template <class Event, typename _>
-    void EventBus::SubscribeEvent(std::function<void(const Event&)>&& callback)
-    {
-        
+        m_EventBus = std::make_shared<dexode::EventBus>();
     }
 
     template <typename Event>
