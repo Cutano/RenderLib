@@ -1,6 +1,7 @@
 #include "Base.h"
 #include "Application.h"
 #include "Workspace/Workspace.h"
+#include "Function/Graphics/GraphicEngine.h"
 
 #include <filesystem>
 
@@ -61,6 +62,7 @@ namespace RL
     void Application::InitGraphicsEngine()
     {
         Log::Logger()->info("Initiating graphics engine...");
+        GraphicEngine::Get().Init();
     }
 
     void Application::LoadAsset()

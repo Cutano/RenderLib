@@ -92,6 +92,7 @@
     <None Include="packages.config" />
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="Source\Function\Graphics\GraphicEngine.cpp" />
     <ClCompile Include="Source\Platform\Application.cpp" />
     <ClCompile Include="Source\Platform\Window\Window.cpp" />
     <ClCompile Include="Source\Platform\Window\WindowManager.cpp" />
@@ -127,6 +128,7 @@
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="Source\Function\Graphics\GraphicEngine.h" />
     <ClInclude Include="Source\Platform\Application.h" />
     <ClInclude Include="Source\Platform\Window\Window.h" />
     <ClInclude Include="Source\Platform\Window\WindowManager.h" />
