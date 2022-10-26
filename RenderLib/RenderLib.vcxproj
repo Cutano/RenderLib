@@ -60,7 +60,7 @@
       <ConformanceMode>true</ConformanceMode>
       <LanguageStandard>stdcpp20</LanguageStandard>
       <LanguageStandard_C>stdc17</LanguageStandard_C>
-      <AdditionalIncludeDirectories>$(SolutionDir)ThirdParty\DiligentEngine\DiligentCore\Graphics\GraphicsEngine\interface;$(SolutionDir)ThirdParty\DiligentEngine\DiligentCore\Graphics\GraphicsEngineD3D12\interface;$(ProjectDir)Include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>$(SolutionDir)ThirdParty\DiligentEngine\DiligentCore\Graphics\GraphicsEngine\interface;$(SolutionDir)ThirdParty\DiligentEngine\DiligentCore\Graphics\GraphicsEngineD3D12\interface;$(SolutionDir)ThirdParty\spdlog\include;$(ProjectDir)Source;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
     </ClCompile>
     <Link>
       <SubSystem>Console</SubSystem>
@@ -78,7 +78,7 @@
       <ConformanceMode>true</ConformanceMode>
       <LanguageStandard>stdcpp20</LanguageStandard>
       <LanguageStandard_C>stdc17</LanguageStandard_C>
-      <AdditionalIncludeDirectories>$(SolutionDir)ThirdParty\DiligentEngine\DiligentCore\Graphics\GraphicsEngine\interface;$(SolutionDir)ThirdParty\DiligentEngine\DiligentCore\Graphics\GraphicsEngineD3D12\interface;$(ProjectDir)Include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>$(SolutionDir)ThirdParty\DiligentEngine\DiligentCore\Graphics\GraphicsEngine\interface;$(SolutionDir)ThirdParty\DiligentEngine\DiligentCore\Graphics\GraphicsEngineD3D12\interface;$(SolutionDir)ThirdParty\spdlog\include;$(ProjectDir)Source;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
     </ClCompile>
     <Link>
       <SubSystem>Console</SubSystem>
@@ -92,6 +92,8 @@
     <None Include="packages.config" />
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="Source\Platform\Application.cpp" />
+    <ClCompile Include="Source\Utility\Log.cpp" />
     <ClCompile Include="Source\main.cpp" />
   </ItemGroup>
   <ItemGroup>
@@ -107,6 +109,14 @@
     <ProjectReference Include="..\ThirdParty\DiligentEngine\build\Win64\ZERO_CHECK.vcxproj">
       <Project>{d1038e2b-8dcf-35b2-8d02-ef519946aaa5}</Project>
     </ProjectReference>
+    <ProjectReference Include="..\ThirdParty\spdlog\build\spdlog.vcxproj">
+      <Project>{32460ddc-499e-354a-8919-5424e91529e6}</Project>
+    </ProjectReference>
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="Source\Platform\Application.h" />
+    <ClInclude Include="Source\Utility\Log.h" />
+    <ClInclude Include="Source\Base.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
