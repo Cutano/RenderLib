@@ -56,14 +56,16 @@
     <ClCompile>
       <WarningLevel>Level3</WarningLevel>
       <SDLCheck>true</SDLCheck>
-      <PreprocessorDefinitions>_DEBUG;_CONSOLE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <PreprocessorDefinitions>PLATFORM_WIN32;D3D12_SUPPORTED;_DEBUG;_CONSOLE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <ConformanceMode>true</ConformanceMode>
       <LanguageStandard>stdcpp20</LanguageStandard>
       <LanguageStandard_C>stdc17</LanguageStandard_C>
+      <AdditionalIncludeDirectories>$(SolutionDir)ThirdParty\DiligentEngine\DiligentCore\Graphics\GraphicsEngine\interface;$(SolutionDir)ThirdParty\DiligentEngine\DiligentCore\Graphics\GraphicsEngineD3D12\interface;$(ProjectDir)Include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
     </ClCompile>
     <Link>
       <SubSystem>Console</SubSystem>
       <GenerateDebugInformation>true</GenerateDebugInformation>
+      <AdditionalDependencies>dxguid.lib;DXGI.lib;D3d12.lib;d3dcompiler.lib;$(CoreLibraryDependencies);%(AdditionalDependencies)</AdditionalDependencies>
     </Link>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
@@ -72,25 +74,45 @@
       <FunctionLevelLinking>true</FunctionLevelLinking>
       <IntrinsicFunctions>true</IntrinsicFunctions>
       <SDLCheck>true</SDLCheck>
-      <PreprocessorDefinitions>NDEBUG;_CONSOLE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <PreprocessorDefinitions>PLATFORM_WIN32;D3D12_SUPPORTED;NDEBUG;_CONSOLE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <ConformanceMode>true</ConformanceMode>
       <LanguageStandard>stdcpp20</LanguageStandard>
       <LanguageStandard_C>stdc17</LanguageStandard_C>
+      <AdditionalIncludeDirectories>$(SolutionDir)ThirdParty\DiligentEngine\DiligentCore\Graphics\GraphicsEngine\interface;$(SolutionDir)ThirdParty\DiligentEngine\DiligentCore\Graphics\GraphicsEngineD3D12\interface;$(ProjectDir)Include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
     </ClCompile>
     <Link>
       <SubSystem>Console</SubSystem>
       <EnableCOMDATFolding>true</EnableCOMDATFolding>
       <OptimizeReferences>true</OptimizeReferences>
       <GenerateDebugInformation>true</GenerateDebugInformation>
+      <AdditionalDependencies>dxguid.lib;DXGI.lib;D3d12.lib;d3dcompiler.lib;$(CoreLibraryDependencies);%(AdditionalDependencies)</AdditionalDependencies>
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
     <None Include="packages.config" />
   </ItemGroup>
+  <ItemGroup>
+    <ClCompile Include="Source\main.cpp" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\ThirdParty\DiligentEngine\build\Win64\DiligentCore\DiligentCore-static.vcxproj">
+      <Project>{d0666570-8d99-3a7a-8a86-656b49023938}</Project>
+    </ProjectReference>
+    <ProjectReference Include="..\ThirdParty\DiligentEngine\build\Win64\DiligentCore\Graphics\Archiver\Diligent-Archiver-static.vcxproj">
+      <Project>{3db7e43f-563e-3d7f-831e-995d852a6ec7}</Project>
+    </ProjectReference>
+    <ProjectReference Include="..\ThirdParty\DiligentEngine\build\Win64\DiligentCore\Primitives\Diligent-Primitives.vcxproj">
+      <Project>{94b6e619-da6d-3fed-a3fe-964d2e4570ae}</Project>
+    </ProjectReference>
+    <ProjectReference Include="..\ThirdParty\DiligentEngine\build\Win64\ZERO_CHECK.vcxproj">
+      <Project>{d1038e2b-8dcf-35b2-8d02-ef519946aaa5}</Project>
+    </ProjectReference>
+  </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
     <Import Project="..\packages\glfw.3.3.8\build\native\glfw.targets" Condition="Exists('..\packages\glfw.3.3.8\build\native\glfw.targets')" />
     <Import Project="..\packages\Microsoft.Direct3D.D3D12.1.606.4\build\native\Microsoft.Direct3D.D3D12.targets" Condition="Exists('..\packages\Microsoft.Direct3D.D3D12.1.606.4\build\native\Microsoft.Direct3D.D3D12.targets')" />
+    <Import Project="..\packages\WinPixEventRuntime.1.0.220810001\build\WinPixEventRuntime.targets" Condition="Exists('..\packages\WinPixEventRuntime.1.0.220810001\build\WinPixEventRuntime.targets')" />
   </ImportGroup>
   <Target Name="EnsureNuGetPackageBuildImports" BeforeTargets="PrepareForBuild">
     <PropertyGroup>
@@ -99,5 +121,6 @@
     <Error Condition="!Exists('..\packages\glfw.3.3.8\build\native\glfw.targets')" Text="$([System.String]::Format('$(ErrorText)', '..\packages\glfw.3.3.8\build\native\glfw.targets'))" />
     <Error Condition="!Exists('..\packages\Microsoft.Direct3D.D3D12.1.606.4\build\native\Microsoft.Direct3D.D3D12.props')" Text="$([System.String]::Format('$(ErrorText)', '..\packages\Microsoft.Direct3D.D3D12.1.606.4\build\native\Microsoft.Direct3D.D3D12.props'))" />
     <Error Condition="!Exists('..\packages\Microsoft.Direct3D.D3D12.1.606.4\build\native\Microsoft.Direct3D.D3D12.targets')" Text="$([System.String]::Format('$(ErrorText)', '..\packages\Microsoft.Direct3D.D3D12.1.606.4\build\native\Microsoft.Direct3D.D3D12.targets'))" />
+    <Error Condition="!Exists('..\packages\WinPixEventRuntime.1.0.220810001\build\WinPixEventRuntime.targets')" Text="$([System.String]::Format('$(ErrorText)', '..\packages\WinPixEventRuntime.1.0.220810001\build\WinPixEventRuntime.targets'))" />
   </Target>
 </Project>
