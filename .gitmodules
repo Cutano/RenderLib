@@ -1,0 +1,24 @@
+[submodule "ThirdParty/DiligentTools"]
+	path = ThirdParty/DiligentTools
+	url = https://github.com/Cutano/DiligentTools.git
+[submodule "ThirdParty/DiligentCore"]
+	path = ThirdParty/DiligentCore
+	url = https://github.com/Cutano/DiligentCore.git
+[submodule "ThirdParty/entt"]
+	path = ThirdParty/entt
+	url = https://github.com/skypjack/entt.git
+[submodule "ThirdParty/glm"]
+	path = ThirdParty/glm
+	url = https://github.com/g-truc/glm.git
+[submodule "ThirdParty/ImGuizmo"]
+	path = ThirdParty/ImGuizmo
+	url = https://github.com/CedricGuillemet/ImGuizmo.git
+[submodule "ThirdParty/efsw"]
+	path = ThirdParty/efsw
+	url = https://github.com/SpartanJ/efsw.git
+[submodule "ThirdParty/spdlog"]
+	path = ThirdParty/spdlog
+	url = https://github.com/gabime/spdlog.git
+[submodule "ThirdParty/thread-pool"]
+	path = ThirdParty/thread-pool
+	url = https://github.com/bshoshany/thread-pool.git
