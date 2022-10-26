@@ -7,9 +7,6 @@
 [submodule "ThirdParty/ImGuizmo"]
 	path = ThirdParty/ImGuizmo
 	url = https://github.com/CedricGuillemet/ImGuizmo.git
-[submodule "ThirdParty/efsw"]
-	path = ThirdParty/efsw
-	url = https://github.com/SpartanJ/efsw.git
 [submodule "ThirdParty/spdlog"]
 	path = ThirdParty/spdlog
 	url = https://github.com/gabime/spdlog.git
@@ -19,3 +16,6 @@
 [submodule "ThirdParty/DiligentEngine"]
 	path = ThirdParty/DiligentEngine
 	url = https://github.com/Cutano/DiligentEngine.git
+[submodule "ThirdParty/efsw"]
+	path = ThirdParty/efsw
+	url = https://github.com/Cutano/efsw.git
