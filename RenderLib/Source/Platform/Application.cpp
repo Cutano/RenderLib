@@ -2,6 +2,7 @@
 #include "Application.h"
 #include "Workspace/Workspace.h"
 #include "Function/Graphics/GraphicEngine.h"
+#include "Platform/Window/WindowManager.h"
 
 #include <filesystem>
 
@@ -45,6 +46,10 @@ namespace RL
 
     void Application::Run()
     {
+        while (true)
+        {
+            WindowManager::Get().Update();
+        }
     }
 
     void Application::InitEventBus()
@@ -78,5 +83,7 @@ namespace RL
     void Application::InitMainWindow()
     {
         Log::Logger()->info("Initiating main window...");
+        WindowManager::Get().Init();
+        WindowManager::Get().ShowMainWindow("Render Lib");
     }
 }

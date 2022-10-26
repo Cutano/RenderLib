@@ -12,6 +12,6 @@ namespace RL
     template <typename Event>
     void EventBus::SpreadEvent(Event event)
     {
-        m_EventBus->postpone(event);
+        m_EventBus->postpone<Event>(event);
     }
 }

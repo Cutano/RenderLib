@@ -24,9 +24,10 @@
 #define WIN32_LEAN_AND_MEAN
 
 #include <Windows.h>
-
-#define BIT(x) (1u << (x))
+#include <cassert>
 
 #include "Utility/Log.h"
-#include "Utility/Event/Events.h"
 #include "Utility/Event/EventBus.h"
+
+#define BIT(x) (1u << (x))
+#define RL_ASSERT(exp, msg) if (!(exp)) {assert(false); Log::Logger()->critical(msg);}

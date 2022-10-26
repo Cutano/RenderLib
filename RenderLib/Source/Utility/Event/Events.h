@@ -2,12 +2,19 @@
 
 #include "Utility/KeyCodes.h"
 
+typedef struct HWND__ *HWND;
+
 namespace RL
 {
     struct ResizeEvent
     {
         float Width {0};
         float Height {0};
+    };
+
+    struct WindowEvent
+    {
+        HWND Hwnd {};
     };
 
     struct KeyEvent
@@ -22,33 +29,33 @@ namespace RL
 
     struct Position2DEvent
     {
-        float X;
-        float Y;
+        double X {0};
+        double Y {0};
     };
 
     struct Position3DEvent
     {
-        float X;
-        float Y;
-        float Z;
+        double X {0};
+        double Y {0};
+        double Z {0};
     };
 
-    struct SceneWindowResizeEvent : ResizeEvent
+    struct SceneViewportResizeEvent : ResizeEvent
     {
         
     };
 
-    struct AppWindowResizeEvent : ResizeEvent
+    struct AppWindowResizeEvent : ResizeEvent, WindowEvent
     {
         
     };
 
-    struct AppWindowMinimizeEvent
+    struct AppWindowMinimizeEvent : WindowEvent
     {
         
     };
 
-    struct AppWindowCloseEvent
+    struct AppWindowCloseEvent : WindowEvent
     {
         
     };
@@ -68,7 +75,7 @@ namespace RL
         
     };
 
-    struct MouseMovedEvent : Position2DEvent
+    struct MouseMovedEvent : Position2DEvent, WindowEvent
     {
         
     };
