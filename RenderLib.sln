@@ -1020,6 +1020,10 @@ Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "xxhash", "ThirdParty\Dilige
 		{D1038E2B-8DCF-35B2-8D02-EF519946AAA5} = {D1038E2B-8DCF-35B2-8D02-EF519946AAA5}
 	EndProjectSection
 EndProject
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "RenderLib", "RenderLib\RenderLib.vcxproj", "{E0450581-7C44-4040-B7DE-DB7800C41F6C}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "RenderLibLauncher", "RenderLibLauncher\RenderLibLauncher.csproj", "{3B920B1F-131D-45BE-AA61-0C2549C1FDE8}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		debug|x64 = debug|x64
@@ -1779,6 +1783,22 @@ Global
 		{D0BBA131-9805-318A-A2F2-396A500C1F7C}.relwithdbginfo|x64.Build.0 = RelWithDebInfo|x64
 		{D0BBA131-9805-318A-A2F2-396A500C1F7C}.RelWithDebInfo|x64.ActiveCfg = RelWithDebInfo|x64
 		{D0BBA131-9805-318A-A2F2-396A500C1F7C}.RelWithDebInfo|x64.Build.0 = RelWithDebInfo|x64
+		{E0450581-7C44-4040-B7DE-DB7800C41F6C}.debug|x64.ActiveCfg = Debug|x64
+		{E0450581-7C44-4040-B7DE-DB7800C41F6C}.debug|x64.Build.0 = Debug|x64
+		{E0450581-7C44-4040-B7DE-DB7800C41F6C}.MinSizeRel|x64.ActiveCfg = Debug|x64
+		{E0450581-7C44-4040-B7DE-DB7800C41F6C}.MinSizeRel|x64.Build.0 = Debug|x64
+		{E0450581-7C44-4040-B7DE-DB7800C41F6C}.release|x64.ActiveCfg = Release|x64
+		{E0450581-7C44-4040-B7DE-DB7800C41F6C}.release|x64.Build.0 = Release|x64
+		{E0450581-7C44-4040-B7DE-DB7800C41F6C}.relwithdbginfo|x64.ActiveCfg = Release|x64
+		{E0450581-7C44-4040-B7DE-DB7800C41F6C}.relwithdbginfo|x64.Build.0 = Release|x64
+		{E0450581-7C44-4040-B7DE-DB7800C41F6C}.RelWithDebInfo|x64.ActiveCfg = Release|x64
+		{E0450581-7C44-4040-B7DE-DB7800C41F6C}.RelWithDebInfo|x64.Build.0 = Release|x64
+		{3B920B1F-131D-45BE-AA61-0C2549C1FDE8}.debug|x64.ActiveCfg = Debug|x64
+		{3B920B1F-131D-45BE-AA61-0C2549C1FDE8}.debug|x64.Build.0 = Debug|x64
+		{3B920B1F-131D-45BE-AA61-0C2549C1FDE8}.MinSizeRel|x64.ActiveCfg = Debug|x64
+		{3B920B1F-131D-45BE-AA61-0C2549C1FDE8}.release|x64.ActiveCfg = Release|x64
+		{3B920B1F-131D-45BE-AA61-0C2549C1FDE8}.relwithdbginfo|x64.ActiveCfg = Release|x64
+		{3B920B1F-131D-45BE-AA61-0C2549C1FDE8}.RelWithDebInfo|x64.ActiveCfg = Release|x64
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

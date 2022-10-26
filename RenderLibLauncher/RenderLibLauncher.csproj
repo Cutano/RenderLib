@@ -1,0 +1,14 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <BaseOutputPath>$(SolutionDir)Build\Bin\</BaseOutputPath>
+    <BaseIntermediateOutputPath>$(SolutionDir)Build\Obj\</BaseIntermediateOutputPath>
+    <OutputType>WinExe</OutputType>
+    <TargetFramework>net6.0-windows</TargetFramework>
+    <Nullable>enable</Nullable>
+    <UseWPF>true</UseWPF>
+    <Platforms>x64</Platforms>
+    <UseWindowsForms>True</UseWindowsForms>
+  </PropertyGroup>
+
+</Project>
