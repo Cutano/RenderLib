@@ -2,9 +2,18 @@
 
 #include <vector>
 #include <string>
+#include <memory>
 
 namespace RL
 {
+    // Application Startup Procedure:
+    //   Init Event Bus
+    //   Setup Workspace
+    //   Init Graphics Engine
+    //   Load Assets
+    //   Perform Preprocess
+    //   Init Main Window
+    
     struct StartupParam
     {
         std::string ExePath;
@@ -25,6 +34,13 @@ namespace RL
         void Run();
 
     private:
+        void InitEventBus();
+        void SetupWorkspace();
+        void InitGraphicsEngine();
+        void LoadAsset();
+        void Preprocess();
+        void InitMainWindow();
+        
         StartupParam m_StartupParam;
     };
 }

@@ -7,10 +7,18 @@
     <ClCompile Include="Source\main.cpp" />
     <ClCompile Include="Source\Utility\Log.cpp" />
     <ClCompile Include="Source\Platform\Application.cpp" />
+    <ClCompile Include="Source\Platform\Window\Window.cpp" />
+    <ClCompile Include="Source\Platform\Window\WindowManager.cpp" />
+    <ClCompile Include="Source\Platform\Workspace\Workspace.cpp" />
+    <ClCompile Include="Source\Platform\Workspace\FileWatcher.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Source\Base.h" />
     <ClInclude Include="Source\Utility\Log.h" />
     <ClInclude Include="Source\Platform\Application.h" />
+    <ClInclude Include="Source\Platform\Window\Window.h" />
+    <ClInclude Include="Source\Platform\Window\WindowManager.h" />
+    <ClInclude Include="Source\Platform\Workspace\Workspace.h" />
+    <ClInclude Include="Source\Platform\Workspace\FileWatcher.h" />
   </ItemGroup>
 </Project>

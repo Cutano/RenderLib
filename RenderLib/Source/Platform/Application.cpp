@@ -28,6 +28,12 @@ namespace RL
                 Log::Logger()->warn("Workspace not specified, using default dir: {}", m_StartupParam.WorkspaceDir);
             }
         }
+
+        SetupWorkspace();
+        InitGraphicsEngine();
+        LoadAsset();
+        Preprocess();
+        InitMainWindow();
     }
 
     Application::~Application()
@@ -36,5 +42,36 @@ namespace RL
 
     void Application::Run()
     {
+    }
+
+    void Application::InitEventBus()
+    {
+        Log::Logger()->info("Initiating event bus...");
+        EventBus::Get().Init();
+    }
+
+    void Application::SetupWorkspace()
+    {
+        Log::Logger()->info("Initiating workspace...");
+    }
+
+    void Application::InitGraphicsEngine()
+    {
+        Log::Logger()->info("Initiating graphics engine...");
+    }
+
+    void Application::LoadAsset()
+    {
+        Log::Logger()->info("Loading assets...");
+    }
+
+    void Application::Preprocess()
+    {
+        Log::Logger()->info("Preprocessing...");
+    }
+
+    void Application::InitMainWindow()
+    {
+        Log::Logger()->info("Initiating main window...");
     }
 }

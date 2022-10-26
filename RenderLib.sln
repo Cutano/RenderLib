@@ -1024,6 +1024,8 @@ Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "RenderLib", "RenderLib\Rend
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "RenderLibLauncher", "RenderLibLauncher\RenderLibLauncher.csproj", "{3B920B1F-131D-45BE-AA61-0C2549C1FDE8}"
 EndProject
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "EventBus", "ThirdParty\EventBus\build\lib\EventBus.vcxproj", "{41962E89-096D-36B2-8940-94196C106A88}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		debug|x64 = debug|x64
@@ -1799,6 +1801,16 @@ Global
 		{3B920B1F-131D-45BE-AA61-0C2549C1FDE8}.release|x64.ActiveCfg = Release|x64
 		{3B920B1F-131D-45BE-AA61-0C2549C1FDE8}.relwithdbginfo|x64.ActiveCfg = Release|x64
 		{3B920B1F-131D-45BE-AA61-0C2549C1FDE8}.RelWithDebInfo|x64.ActiveCfg = Release|x64
+		{41962E89-096D-36B2-8940-94196C106A88}.debug|x64.ActiveCfg = Debug|x64
+		{41962E89-096D-36B2-8940-94196C106A88}.debug|x64.Build.0 = Debug|x64
+		{41962E89-096D-36B2-8940-94196C106A88}.MinSizeRel|x64.ActiveCfg = MinSizeRel|x64
+		{41962E89-096D-36B2-8940-94196C106A88}.MinSizeRel|x64.Build.0 = MinSizeRel|x64
+		{41962E89-096D-36B2-8940-94196C106A88}.release|x64.ActiveCfg = Release|x64
+		{41962E89-096D-36B2-8940-94196C106A88}.release|x64.Build.0 = Release|x64
+		{41962E89-096D-36B2-8940-94196C106A88}.relwithdbginfo|x64.ActiveCfg = RelWithDebInfo|x64
+		{41962E89-096D-36B2-8940-94196C106A88}.relwithdbginfo|x64.Build.0 = RelWithDebInfo|x64
+		{41962E89-096D-36B2-8940-94196C106A88}.RelWithDebInfo|x64.ActiveCfg = RelWithDebInfo|x64
+		{41962E89-096D-36B2-8940-94196C106A88}.RelWithDebInfo|x64.Build.0 = RelWithDebInfo|x64
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -1898,6 +1910,7 @@ Global
 		{02B7C2D3-6C91-369F-84B1-44A4F1FAB980} = {A0841C3E-2620-3FE3-9CEB-A92ECB5E4DCA}
 		{8D42F9B5-00EE-3934-858A-BFF93EDDEBED} = {A0841C3E-2620-3FE3-9CEB-A92ECB5E4DCA}
 		{D0BBA131-9805-318A-A2F2-396A500C1F7C} = {1CDC0C8D-4560-3BC9-9B58-49BFF911FAC7}
+		{41962E89-096D-36B2-8940-94196C106A88} = {01380509-7325-4825-A544-CDBED082BA6E}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {632182BB-7C93-4982-949A-655D88EAF165}

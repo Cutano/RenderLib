@@ -60,7 +60,7 @@
       <ConformanceMode>true</ConformanceMode>
       <LanguageStandard>stdcpp20</LanguageStandard>
       <LanguageStandard_C>stdc17</LanguageStandard_C>
-      <AdditionalIncludeDirectories>$(SolutionDir)ThirdParty\DiligentEngine\DiligentCore\Graphics\GraphicsEngine\interface;$(SolutionDir)ThirdParty\DiligentEngine\DiligentCore\Graphics\GraphicsEngineD3D12\interface;$(SolutionDir)ThirdParty\spdlog\include;$(ProjectDir)Source;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>$(SolutionDir)ThirdParty\DiligentEngine\DiligentCore\Graphics\GraphicsEngine\interface;$(SolutionDir)ThirdParty\DiligentEngine\DiligentCore\Graphics\GraphicsEngineD3D12\interface;$(SolutionDir)ThirdParty\efsw\include;$(SolutionDir)ThirdParty\spdlog\include;$(SolutionDir)ThirdParty\EventBus\lib\src;$(ProjectDir)Source;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
     </ClCompile>
     <Link>
       <SubSystem>Console</SubSystem>
@@ -78,7 +78,7 @@
       <ConformanceMode>true</ConformanceMode>
       <LanguageStandard>stdcpp20</LanguageStandard>
       <LanguageStandard_C>stdc17</LanguageStandard_C>
-      <AdditionalIncludeDirectories>$(SolutionDir)ThirdParty\DiligentEngine\DiligentCore\Graphics\GraphicsEngine\interface;$(SolutionDir)ThirdParty\DiligentEngine\DiligentCore\Graphics\GraphicsEngineD3D12\interface;$(SolutionDir)ThirdParty\spdlog\include;$(ProjectDir)Source;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>$(SolutionDir)ThirdParty\DiligentEngine\DiligentCore\Graphics\GraphicsEngine\interface;$(SolutionDir)ThirdParty\DiligentEngine\DiligentCore\Graphics\GraphicsEngineD3D12\interface;$(SolutionDir)ThirdParty\efsw\include;$(SolutionDir)ThirdParty\spdlog\include;$(SolutionDir)ThirdParty\EventBus\lib\src;$(ProjectDir)Source;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
     </ClCompile>
     <Link>
       <SubSystem>Console</SubSystem>
@@ -93,6 +93,85 @@
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Source\Platform\Application.cpp" />
+    <ClCompile Include="Source\Platform\Window\Window.cpp" />
+    <ClCompile Include="Source\Platform\Window\WindowManager.cpp" />
+    <ClCompile Include="Source\Platform\Workspace\FileWatcher.cpp" />
+    <ClCompile Include="Source\Platform\Workspace\Workspace.cpp" />
+    <ClCompile Include="Source\Utility\Event\EventBus.cpp">
+      <RuntimeLibrary>MultiThreadedDebugDll</RuntimeLibrary>
+      <BasicRuntimeChecks>EnableFastChecks</BasicRuntimeChecks>
+      <Optimization>Disabled</Optimization>
+      <SupportJustMyCode>true</SupportJustMyCode>
+      <AssemblerOutput>NoListing</AssemblerOutput>
+      <AssemblerListingLocation>D:\RenderLib\Build\Obj\x64\Debug\</AssemblerListingLocation>
+      <UndefineAllPreprocessorDefinitions>false</UndefineAllPreprocessorDefinitions>
+      <BrowseInformation>false</BrowseInformation>
+      <BrowseInformationFile>D:\RenderLib\Build\Obj\x64\Debug\</BrowseInformationFile>
+      <CompileAs>Default</CompileAs>
+      <ConformanceMode>true</ConformanceMode>
+      <DiagnosticsFormat>Column</DiagnosticsFormat>
+      <DisableLanguageExtensions>false</DisableLanguageExtensions>
+      <ErrorReporting>Prompt</ErrorReporting>
+      <ExpandAttributedSource>false</ExpandAttributedSource>
+      <ExceptionHandling>Sync</ExceptionHandling>
+      <EnableASAN>false</EnableASAN>
+      <EnableFuzzer>false</EnableFuzzer>
+      <EnableFiberSafeOptimizations>false</EnableFiberSafeOptimizations>
+      <EnableEnhancedInstructionSet>NotSet</EnableEnhancedInstructionSet>
+      <FloatingPointModel>Precise</FloatingPointModel>
+      <ForceConformanceInForLoopScope>true</ForceConformanceInForLoopScope>
+      <GenerateModuleDependencies>false</GenerateModuleDependencies>
+      <GenerateSourceDependencies>false</GenerateSourceDependencies>
+      <GenerateXMLDocumentationFiles>false</GenerateXMLDocumentationFiles>
+      <InlineFunctionExpansion>Default</InlineFunctionExpansion>
+      <IntrinsicFunctions>false</IntrinsicFunctions>
+      <IgnoreStandardIncludePath>false</IgnoreStandardIncludePath>
+      <LanguageStandard>stdcpp20</LanguageStandard>
+      <LanguageStandard_C>stdc17</LanguageStandard_C>
+      <MinimalRebuild>false</MinimalRebuild>
+      <ModuleDependenciesFile>D:\RenderLib\Build\Obj\x64\Debug\</ModuleDependenciesFile>
+      <ModuleOutputFile>D:\RenderLib\Build\Obj\x64\Debug\</ModuleOutputFile>
+      <OmitDefaultLibName>false</OmitDefaultLibName>
+      <FavorSizeOrSpeed>Neither</FavorSizeOrSpeed>
+      <WholeProgramOptimization>false</WholeProgramOptimization>
+      <ObjectFileName>D:\RenderLib\Build\Obj\x64\Debug\</ObjectFileName>
+      <CallingConvention>Cdecl</CallingConvention>
+      <ProgramDataBaseFileName>D:\RenderLib\Build\Obj\x64\Debug\vc143.pdb</ProgramDataBaseFileName>
+      <PrecompiledHeader>NotUsing</PrecompiledHeader>
+      <PrecompiledHeaderFile>stdafx.h</PrecompiledHeaderFile>
+      <PrecompiledHeaderOutputFile>D:\RenderLib\Build\Obj\x64\Debug\RenderLib.pch</PrecompiledHeaderOutputFile>
+      <PreprocessToFile>false</PreprocessToFile>
+      <PreprocessKeepComments>false</PreprocessKeepComments>
+      <PreprocessSuppressLineNumbers>false</PreprocessSuppressLineNumbers>
+      <RemoveUnreferencedCodeData>true</RemoveUnreferencedCodeData>
+      <ScanSourceForModuleDependencies>false</ScanSourceForModuleDependencies>
+      <ShowIncludes>false</ShowIncludes>
+      <SourceDependenciesFile>D:\RenderLib\Build\Obj\x64\Debug\</SourceDependenciesFile>
+      <SuppressStartupBanner>true</SuppressStartupBanner>
+      <BufferSecurityCheck>true</BufferSecurityCheck>
+      <SmallerTypeCheck>false</SmallerTypeCheck>
+      <SpectreMitigation>false</SpectreMitigation>
+      <StructMemberAlignment>Default</StructMemberAlignment>
+      <TrackerLogDirectory>D:\RenderLib\Build\Obj\x64\Debug\RenderLib.tlog\</TrackerLogDirectory>
+      <TranslateIncludes>false</TranslateIncludes>
+      <MinimalRebuildFromTracking>true</MinimalRebuildFromTracking>
+      <TreatWarningAsError>false</TreatWarningAsError>
+      <TreatWChar_tAsBuiltInType>true</TreatWChar_tAsBuiltInType>
+      <UseFullPaths>true</UseFullPaths>
+      <WarningLevel>Level3</WarningLevel>
+      <XMLDocumentationFileName>D:\RenderLib\Build\Obj\x64\Debug\</XMLDocumentationFileName>
+      <DebugInformationFormat>EditAndContinue</DebugInformationFormat>
+      <IntelJCCErratum>false</IntelJCCErratum>
+      <TreatAngleIncludeAsExternal>false</TreatAngleIncludeAsExternal>
+      <ExternalWarningLevel>InheritWarningLevel</ExternalWarningLevel>
+      <TreatExternalTemplatesAsInternal>true</TreatExternalTemplatesAsInternal>
+      <DisableAnalyzeExternal>false</DisableAnalyzeExternal>
+      <PreprocessorDefinitions>HAS_GLFW;PLATFORM_WIN32;D3D12_SUPPORTED;_DEBUG;_CONSOLE;_UNICODE;UNICODE;</PreprocessorDefinitions>
+      <SDLCheck>true</SDLCheck>
+      <AdditionalIncludeDirectories>D:\RenderLib\packages\WinPixEventRuntime.1.0.220810001\build\..\Include\WinPixEventRuntime;D:\RenderLib\packages\Microsoft.Direct3D.D3D12.1.606.4\build\native\include;D:\RenderLib\packages\glfw.3.3.8\build\native\include/;D:\RenderLib\ThirdParty\DiligentEngine\DiligentCore\Graphics\GraphicsEngine\interface;D:\RenderLib\ThirdParty\DiligentEngine\DiligentCore\Graphics\GraphicsEngineD3D12\interface;D:\RenderLib\ThirdParty\efsw\include;D:\RenderLib\ThirdParty\spdlog\include;D:\RenderLib\ThirdParty\EventBus\lib\src;D:\RenderLib\RenderLib\Source;</AdditionalIncludeDirectories>
+      <LinkCompiled>true</LinkCompiled>
+    </ClCompile>
+    <ClCompile Include="Source\Utility\Event\Events.cpp" />
     <ClCompile Include="Source\Utility\Log.cpp" />
     <ClCompile Include="Source\main.cpp" />
   </ItemGroup>
@@ -109,12 +188,24 @@
     <ProjectReference Include="..\ThirdParty\DiligentEngine\build\Win64\ZERO_CHECK.vcxproj">
       <Project>{d1038e2b-8dcf-35b2-8d02-ef519946aaa5}</Project>
     </ProjectReference>
+    <ProjectReference Include="..\ThirdParty\efsw\make\windows\efsw-static-lib.vcxproj">
+      <Project>{73408775-dfcb-f439-e8dc-772e54e7503a}</Project>
+    </ProjectReference>
+    <ProjectReference Include="..\ThirdParty\EventBus\build\lib\EventBus.vcxproj">
+      <Project>{41962e89-096d-36b2-8940-94196c106a88}</Project>
+    </ProjectReference>
     <ProjectReference Include="..\ThirdParty\spdlog\build\spdlog.vcxproj">
       <Project>{32460ddc-499e-354a-8919-5424e91529e6}</Project>
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Source\Platform\Application.h" />
+    <ClInclude Include="Source\Platform\Window\Window.h" />
+    <ClInclude Include="Source\Platform\Window\WindowManager.h" />
+    <ClInclude Include="Source\Platform\Workspace\FileWatcher.h" />
+    <ClInclude Include="Source\Platform\Workspace\Workspace.h" />
+    <ClInclude Include="Source\Utility\Event\EventBus.h" />
+    <ClInclude Include="Source\Utility\Event\Events.h" />
     <ClInclude Include="Source\Utility\Log.h" />
     <ClInclude Include="Source\Base.h" />
   </ItemGroup>
