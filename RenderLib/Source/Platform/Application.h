@@ -2,6 +2,7 @@
 
 #include <vector>
 #include <string>
+#include <atomic>
 #include <memory>
 
 namespace RL
@@ -13,6 +14,8 @@ namespace RL
     //   Load Assets
     //   Perform Preprocess
     //   Init Main Window
+
+    class EventListener;
     
     struct StartupParam
     {
@@ -33,6 +36,8 @@ namespace RL
 
         void Run();
 
+        void OnAppWindowClose();
+
     private:
         void InitEventBus();
         void SetupWorkspace();
@@ -42,5 +47,9 @@ namespace RL
         void InitMainWindow();
         
         StartupParam m_StartupParam;
+
+        std::atomic_bool m_ShouldExit {false};
+
+        EventListener* m_Listener;
     };
 }

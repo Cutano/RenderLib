@@ -30,6 +30,8 @@ namespace RL
         void SpreadEvent(Event event)
         {
             m_EventBus->postpone<Event>(event);
+            // Should I move process to main loop?
+            m_EventBus->process();
         }
         
     private:

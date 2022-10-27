@@ -3,6 +3,8 @@
 #include "Workspace/Workspace.h"
 #include "Function/Graphics/GraphicEngine.h"
 #include "Platform/Window/WindowManager.h"
+#include "Utility/Event/EventListener.h"
+#include "Utility/Event/Events.h"
 
 #include <filesystem>
 
@@ -42,20 +44,35 @@ namespace RL
 
     Application::~Application()
     {
+        delete m_Listener;
     }
 
     void Application::Run()
     {
-        while (true)
+        while (!m_ShouldExit)
         {
             WindowManager::Get().Update();
         }
+    }
+
+    void Application::OnAppWindowClose()
+    {
+        m_ShouldExit = true;
     }
 
     void Application::InitEventBus()
     {
         Log::Logger()->info("Initiating event bus...");
         EventBus::Get().Init();
+
+        m_Listener = new EventListener();
+        m_Listener->SubscribeEvent<AppWindowCloseEvent>([this](const AppWindowCloseEvent e)
+        {
+            if (e.Hwnd == WindowManager::Get().GetMainWindowHwnd())
+            {
+                OnAppWindowClose();
+            }
+        });
     }
 
     void Application::SetupWorkspace()

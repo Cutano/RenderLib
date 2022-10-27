@@ -21,5 +21,11 @@ namespace RL
         const auto window = std::make_shared<Window>(title, 1440, 900, true);
 
         m_WindowRegistry[window->GetHwnd()] = window;
+        m_MainWindowHwnd = window->GetHwnd();
+    }
+
+    HWND WindowManager::GetMainWindowHwnd()
+    {
+        return m_MainWindowHwnd;
     }
 }

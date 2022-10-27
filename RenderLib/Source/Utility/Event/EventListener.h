@@ -14,7 +14,10 @@ namespace RL
         EventListener();
 
         template <class Event, typename _ = void>
-        void SubscribeEvent(std::function<void(const Event&)>&& callback);
+        void SubscribeEvent(std::function<void(const Event&)>&& callback)
+        {
+            m_Listener->listen(callback);
+        }
 
     private:
         std::shared_ptr<dexode::EventBus> m_EventBus;

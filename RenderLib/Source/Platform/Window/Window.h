@@ -12,10 +12,10 @@ namespace RL
     class Window
     {
     public:
-        Window(std::string title, uint32_t width, uint32_t height, bool decorated);
-
-        void Show();
-        void Resize(uint32_t width, uint32_t height);
+        Window(std::string title, int width, int height, bool decorated);
+        
+        void Resize(int width, int height);
+        void SetPosition(int x, int y);
         void Update();
 
         [[nodiscard]] uint32_t GetWidth() const;
@@ -27,8 +27,8 @@ namespace RL
     private:
         std::string m_Title;
 
-        uint32_t m_Width {1440};
-        uint32_t m_Height {900};
+        int m_Width {1440};
+        int m_Height {900};
 
         HWND m_Hwnd {};
         

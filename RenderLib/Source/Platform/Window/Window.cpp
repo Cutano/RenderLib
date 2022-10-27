@@ -11,7 +11,7 @@ namespace RL
         Log::Logger()->error("GLFW Error ({0}): {1}", error, description);
     }
     
-    Window::Window(std::string title, uint32_t width, uint32_t height, bool decorated = false)
+    Window::Window(std::string title, int width, int height, bool decorated = false)
     : m_Title(std::move(title)), m_Width(width), m_Height(height)
     {
         if (!s_GLFWInitialized)
@@ -154,15 +154,17 @@ namespace RL
     	}
     }
 
-    void Window::Show()
-    {
-        
-    }
-
-    void Window::Resize(uint32_t width, uint32_t height)
+    void Window::Resize(const int width, const int height)
     {
         m_Width = width;
         m_Height = height;
+
+    	glfwSetWindowSize(m_Window, width, height);
+    }
+
+    void Window::SetPosition(const int x, const int y)
+    {
+    	glfwSetWindowPos(m_Window, x, y);
     }
 
     void Window::Update()
