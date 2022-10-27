@@ -94,6 +94,7 @@ namespace RL
             clearColor, Diligent::RESOURCE_STATE_TRANSITION_MODE_TRANSITION);
         
         m_ImGuiImpl->Render(m_DeviceContext);
+        m_ImGuiImpl->EndFrame();
     }
 
     void GraphicEngine::Shutdown()
@@ -126,6 +127,21 @@ namespace RL
         m_ImGuiImpl = new ImGuiImplRenderLib(mainWindow, m_RenderDevice);
     }
 
+    void GraphicEngine::AttachWindow(const std::shared_ptr<Window>& window)
+    {
+        Diligent::SwapChainDesc swapChainDesc;
+        swapChainDesc.Usage = Diligent::SWAP_CHAIN_USAGE_RENDER_TARGET;
+        swapChainDesc.ColorBufferFormat = Diligent::TEX_FORMAT_RGBA8_UNORM;
+        swapChainDesc.BufferCount = 2;
+        swapChainDesc.DefaultDepthValue = 0;
+        
+        Diligent::ISwapChain* swapChain;
+        const Diligent::Win32NativeWindow nativeWindow(window->GetHwnd());
+
+        m_EngineFactory->CreateSwapChainD3D12(m_RenderDevice, m_DeviceContext, swapChainDesc, {}, nativeWindow, &swapChain);
+        window->SetSwapChain(swapChain);
+    }
+
     void GraphicEngine::AttachRawWindow(HWND hwnd)
     {
         Diligent::SwapChainDesc swapChainDesc;
@@ -138,5 +154,10 @@ namespace RL
         const Diligent::Win32NativeWindow window(hwnd);
 
         m_EngineFactory->CreateSwapChainD3D12(m_RenderDevice, m_DeviceContext, swapChainDesc, {}, window, &swapChain);
+    }
+
+    Diligent::IDeviceContext* GraphicEngine::GetDeviceContext() const
+    {
+        return m_DeviceContext;
     }
 }

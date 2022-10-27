@@ -13,6 +13,7 @@ namespace Diligent
 
 namespace RL
 {
+    class Window;
     class ImGuiImplRenderLib;
     
     class GraphicEngine
@@ -37,7 +38,10 @@ namespace RL
 
         void AttachMainWindow();
         void AttachGuiBackend();
+        void AttachWindow(const std::shared_ptr<Window>& window);
         void AttachRawWindow(HWND hwnd);
+
+        Diligent::IDeviceContext* GetDeviceContext() const;
         
     private:
         GraphicEngine() = default;

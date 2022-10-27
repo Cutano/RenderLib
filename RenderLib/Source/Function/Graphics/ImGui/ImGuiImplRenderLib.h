@@ -3,6 +3,8 @@
 #include <memory>
 #include <ImGuiImplDiligent.hpp>
 
+struct ImGuiViewport;
+
 namespace RL
 {
     class Window;
@@ -26,6 +28,8 @@ namespace RL
         void EndFrame() override;
 
     private:
+        void RenderWindow(ImGuiViewport* viewport);
+        
         std::shared_ptr<EventListener> m_Listener;
         std::shared_ptr<Window> m_MainWindow;
     };

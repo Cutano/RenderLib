@@ -1,11 +1,14 @@
+#include <ImGuiDiligentRenderer.hpp>
+#include <DeviceContext.h>
+#include <backends/imgui_impl_glfw.h>
+#include <SwapChain.h>
+
 #include "ImGuiImplRenderLib.h"
 #include "Utility/Event/EventListener.h"
 #include "Utility/Event/Events.h"
 #include "Platform/Window/Window.h"
 #include "Platform/Window/WindowManager.h"
-
-#include <backends/imgui_impl_glfw.h>
-#include <SwapChain.h>
+#include "Function/Graphics/GraphicEngine.h"
 
 namespace RL
 {
@@ -89,7 +92,8 @@ namespace RL
                 HWND hwnd = viewport->PlatformHandleRaw ? static_cast<HWND>(viewport->PlatformHandleRaw) : static_cast<HWND>(viewport->PlatformHandle);
                 const auto glfwWindow = static_cast<GLFWwindow*>(viewport->PlatformHandle);
 
-                WindowManager::Get().CreateFromRawGlfwWindow(glfwWindow);
+                const auto window = WindowManager::Get().CreateFromRawGlfwWindow(glfwWindow);
+                GraphicEngine::Get().AttachWindow(window);
             };
 
             platform_io.Renderer_DestroyWindow = [](ImGuiViewport* viewport)
@@ -110,10 +114,26 @@ namespace RL
 
             platform_io.Renderer_RenderWindow = [](ImGuiViewport* viewport, void* render_arg)
             {
-                // HWND hwnd = viewport->PlatformHandleRaw ? static_cast<HWND>(viewport->PlatformHandleRaw) : static_cast<HWND>(viewport->PlatformHandle);
-                // const auto glfwWindow = static_cast<GLFWwindow*>(viewport->PlatformHandle);
-                //
-                // WindowManager::Get().GetWindow(hwnd)->Present();
+                HWND hwnd = viewport->PlatformHandleRaw ? static_cast<HWND>(viewport->PlatformHandleRaw) : static_cast<HWND>(viewport->PlatformHandle);
+                const auto glfwWindow = static_cast<GLFWwindow*>(viewport->PlatformHandle);
+
+                if (!hwnd) return;
+                
+                const auto window = WindowManager::Get().GetWindow(hwnd);
+                const auto swapChain = window->GetSwapChain();
+                const auto desc = window->GetSwapChain()->GetDesc();
+                
+                auto* rtv = swapChain->GetCurrentBackBufferRTV();
+                auto* dsv = swapChain->GetDepthBufferDSV();
+                
+                constexpr float clearColor[] = {0.45f, 0.55f, 0.60f, 1.00f};
+                
+                const auto& context = GraphicEngine::Get().GetDeviceContext();
+                
+                context->SetRenderTargets(1, &rtv, dsv, Diligent::RESOURCE_STATE_TRANSITION_MODE_TRANSITION);
+                context->ClearRenderTarget(rtv, clearColor, Diligent::RESOURCE_STATE_TRANSITION_MODE_TRANSITION);
+                
+                static_cast<Diligent::ImGuiDiligentRenderer*>(render_arg)->RenderViewportDrawData(context, viewport->DrawData, desc.Width, desc.Height, desc.PreTransform);
             };
 
             platform_io.Renderer_SwapBuffers = [](ImGuiViewport* viewport, void* render_arg)
@@ -121,7 +141,10 @@ namespace RL
                 // HWND hwnd = viewport->PlatformHandleRaw ? static_cast<HWND>(viewport->PlatformHandleRaw) : static_cast<HWND>(viewport->PlatformHandle);
                 // const auto glfwWindow = static_cast<GLFWwindow*>(viewport->PlatformHandle);
                 //
-                // WindowManager::Get().GetWindow(hwnd)->Present();
+                // if (!hwnd) return;
+                //
+                // const auto window = WindowManager::Get().GetWindow(hwnd);
+                // window->Present();
             };
         }
     }
@@ -142,11 +165,17 @@ namespace RL
     void ImGuiImplRenderLib::Render(Diligent::IDeviceContext* pCtx)
     {
         ImGuiImplDiligent::Render(pCtx);
+        ImGui::RenderPlatformWindowsDefault(nullptr, m_pRenderer.get());
     }
 
     void ImGuiImplRenderLib::EndFrame()
     {
-        ImGuiImplDiligent::EndFrame();
+        ImGuiImplDiligent::
+        EndFrame();
         ImGui::UpdatePlatformWindows();
+    }
+
+    void ImGuiImplRenderLib::RenderWindow(ImGuiViewport* viewport)
+    {
     }
 }
