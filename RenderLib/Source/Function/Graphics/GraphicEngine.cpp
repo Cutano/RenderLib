@@ -125,4 +125,18 @@ namespace RL
         const auto mainWindow = WindowManager::Get().GetMainWindow();
         m_ImGuiImpl = new ImGuiImplRenderLib(mainWindow, m_RenderDevice);
     }
+
+    void GraphicEngine::AttachRawWindow(HWND hwnd)
+    {
+        Diligent::SwapChainDesc swapChainDesc;
+        swapChainDesc.Usage = Diligent::SWAP_CHAIN_USAGE_RENDER_TARGET;
+        swapChainDesc.ColorBufferFormat = Diligent::TEX_FORMAT_RGBA8_UNORM;
+        swapChainDesc.BufferCount = 2;
+        swapChainDesc.DefaultDepthValue = 0;
+        
+        Diligent::ISwapChain* swapChain;
+        const Diligent::Win32NativeWindow window(hwnd);
+
+        m_EngineFactory->CreateSwapChainD3D12(m_RenderDevice, m_DeviceContext, swapChainDesc, {}, window, &swapChain);
+    }
 }

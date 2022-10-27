@@ -2,6 +2,8 @@
 
 #include <memory>
 
+typedef struct HWND__ *HWND;
+
 namespace Diligent
 {
     struct IEngineFactoryD3D12;
@@ -35,6 +37,7 @@ namespace RL
 
         void AttachMainWindow();
         void AttachGuiBackend();
+        void AttachRawWindow(HWND hwnd);
         
     private:
         GraphicEngine() = default;
@@ -43,6 +46,6 @@ namespace RL
         Diligent::IRenderDevice* m_RenderDevice {nullptr};
         Diligent::IDeviceContext* m_DeviceContext {nullptr};
 
-        ImGuiImplRenderLib* m_ImGuiImpl;
+        ImGuiImplRenderLib* m_ImGuiImpl {nullptr};
     };
 }

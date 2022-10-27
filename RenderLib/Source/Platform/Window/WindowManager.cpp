@@ -36,4 +36,28 @@ namespace RL
     {
         return m_WindowRegistry[m_MainWindowHwnd];
     }
+
+    std::shared_ptr<Window> WindowManager::CreateFromRawGlfwWindow(GLFWwindow* glfwWindow)
+    {
+        auto window = std::make_shared<Window>(glfwWindow);
+
+        m_WindowRegistry[window->GetHwnd()] = window;
+        return window;
+    }
+
+    void WindowManager::DestroyWindow(std::shared_ptr<Window>& window)
+    {
+        m_WindowRegistry.erase(window->GetHwnd());
+        window.reset();
+    }
+
+    void WindowManager::DestroyWindow(const HWND hwnd)
+    {
+        m_WindowRegistry.erase(hwnd);
+    }
+
+    std::shared_ptr<Window> WindowManager::GetWindow(HWND hwnd)
+    {
+        return m_WindowRegistry[hwnd];
+    }
 }

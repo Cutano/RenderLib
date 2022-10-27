@@ -2,6 +2,7 @@
 #include "Utility/Event/EventListener.h"
 #include "Utility/Event/Events.h"
 #include "Platform/Window/Window.h"
+#include "Platform/Window/WindowManager.h"
 
 #include <backends/imgui_impl_glfw.h>
 #include <SwapChain.h>
@@ -73,6 +74,56 @@ namespace RL
         {
             ImGui_ImplGlfw_MonitorCallback(e.Monitor, e.Event);
         });
+
+        ImGuiIO& io = ImGui::GetIO();
+
+        io.BackendFlags |= ImGuiBackendFlags_PlatformHasViewports;
+        io.BackendFlags |= ImGuiBackendFlags_RendererHasViewports;
+
+        if (io.ConfigFlags & ImGuiConfigFlags_ViewportsEnable)
+        {
+            ImGuiPlatformIO& platform_io = ImGui::GetPlatformIO();
+
+            platform_io.Renderer_CreateWindow = [](ImGuiViewport* viewport)
+            {
+                HWND hwnd = viewport->PlatformHandleRaw ? static_cast<HWND>(viewport->PlatformHandleRaw) : static_cast<HWND>(viewport->PlatformHandle);
+                const auto glfwWindow = static_cast<GLFWwindow*>(viewport->PlatformHandle);
+
+                WindowManager::Get().CreateFromRawGlfwWindow(glfwWindow);
+            };
+
+            platform_io.Renderer_DestroyWindow = [](ImGuiViewport* viewport)
+            {
+                HWND hwnd = viewport->PlatformHandleRaw ? static_cast<HWND>(viewport->PlatformHandleRaw) : static_cast<HWND>(viewport->PlatformHandle);
+                const auto glfwWindow = static_cast<GLFWwindow*>(viewport->PlatformHandle);
+
+                WindowManager::Get().DestroyWindow(hwnd);
+            };
+
+            platform_io.Renderer_SetWindowSize = [](ImGuiViewport* viewport, ImVec2 size)
+            {
+                HWND hwnd = viewport->PlatformHandleRaw ? static_cast<HWND>(viewport->PlatformHandleRaw) : static_cast<HWND>(viewport->PlatformHandle);
+                const auto glfwWindow = static_cast<GLFWwindow*>(viewport->PlatformHandle);
+
+                WindowManager::Get().GetWindow(hwnd)->Resize(static_cast<int>(size.x), static_cast<int>(size.y));
+            };
+
+            platform_io.Renderer_RenderWindow = [](ImGuiViewport* viewport, void* render_arg)
+            {
+                // HWND hwnd = viewport->PlatformHandleRaw ? static_cast<HWND>(viewport->PlatformHandleRaw) : static_cast<HWND>(viewport->PlatformHandle);
+                // const auto glfwWindow = static_cast<GLFWwindow*>(viewport->PlatformHandle);
+                //
+                // WindowManager::Get().GetWindow(hwnd)->Present();
+            };
+
+            platform_io.Renderer_SwapBuffers = [](ImGuiViewport* viewport, void* render_arg)
+            {
+                // HWND hwnd = viewport->PlatformHandleRaw ? static_cast<HWND>(viewport->PlatformHandleRaw) : static_cast<HWND>(viewport->PlatformHandle);
+                // const auto glfwWindow = static_cast<GLFWwindow*>(viewport->PlatformHandle);
+                //
+                // WindowManager::Get().GetWindow(hwnd)->Present();
+            };
+        }
     }
 
     ImGuiImplRenderLib::~ImGuiImplRenderLib()
@@ -96,5 +147,6 @@ namespace RL
     void ImGuiImplRenderLib::EndFrame()
     {
         ImGuiImplDiligent::EndFrame();
+        ImGui::UpdatePlatformWindows();
     }
 }

@@ -6,6 +6,8 @@
 
 #include "Base.h"
 
+typedef struct GLFWwindow GLFWwindow;
+
 namespace RL
 {
     class Window;
@@ -31,6 +33,11 @@ namespace RL
 
         void ShowMainWindow(const std::string& title);
         std::shared_ptr<Window> GetMainWindow();
+
+        std::shared_ptr<Window> CreateFromRawGlfwWindow(GLFWwindow* glfwWindow);
+        void DestroyWindow(std::shared_ptr<Window>& window);
+        void DestroyWindow(HWND hwnd);
+        std::shared_ptr<Window> GetWindow(HWND hwnd);
 
     private:
         WindowManager() = default;

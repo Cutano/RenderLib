@@ -21,6 +21,7 @@ namespace RL
     {
     public:
         Window(std::string title, int width, int height, bool decorated);
+        explicit Window(GLFWwindow* glfwWindow);
         
         void Resize(int width, int height);
         void SetPosition(int x, int y);
@@ -39,6 +40,7 @@ namespace RL
         void SetSwapChain(Diligent::ISwapChain* swapChain);
 
     private:
+        void RegisterCallbacks();
         std::string m_Title;
 
         int m_Width {1440};

@@ -40,6 +40,118 @@ namespace RL
         else
             Log::Logger()->warn("Platform", "Raw mouse motion not supported.");
 
+    	// Update window size to actual size
+    	{
+        	int _width, _height;
+        	glfwGetWindowSize(m_Window, &_width, &_height);
+        	m_Width = _width;
+        	m_Height = _height;
+    	}
+
+    	RegisterCallbacks();
+    }
+
+	Window::Window(GLFWwindow* glfwWindow)
+    {
+    	m_Window = glfwWindow;
+    	m_Hwnd = glfwGetWin32Window(m_Window);
+
+    	glfwSetWindowUserPointer(m_Window, &m_Hwnd);
+
+    	if (glfwRawMouseMotionSupported())
+    		glfwSetInputMode(m_Window, GLFW_RAW_MOUSE_MOTION, GLFW_TRUE);
+    	else
+    		Log::Logger()->warn("Platform", "Raw mouse motion not supported.");
+
+    	// Update window size to actual size
+    	{
+    		int _width, _height;
+    		glfwGetWindowSize(m_Window, &_width, &_height);
+    		m_Width = _width;
+    		m_Height = _height;
+    	}
+
+    	RegisterCallbacks();
+    }
+
+    void Window::Resize(const int width, const int height)
+    {
+        m_Width = width;
+        m_Height = height;
+
+    	glfwSetWindowSize(m_Window, width, height);
+    }
+
+    void Window::SetPosition(const int x, const int y)
+    {
+    	glfwSetWindowPos(m_Window, x, y);
+    }
+
+    void Window::Update()
+    {
+    	glfwWaitEventsTimeout(0.005);
+    }
+
+    void Window::Present()
+    {
+    	if (m_SwapChain != nullptr)
+    	{
+    		m_SwapChain->Present();
+    	}
+    }
+
+    int Window::GetWidth() const
+    {
+        return m_Width;
+    }
+
+    void Window::SetWidth(const int width)
+    {
+        m_Width = width;
+    }
+
+    int Window::GetHeight() const
+    {
+        return m_Height;
+    }
+
+    bool Window::IsMinimized() const
+    {
+    	return m_IsMinimized;
+    }
+
+    HWND Window::GetHwnd() const
+    {
+        return m_Hwnd;
+    }
+
+    GLFWwindow* Window::GetGlfWWindow() const
+    {
+    	return m_Window;
+    }
+
+    std::shared_ptr<Diligent::ISwapChain> Window::GetSwapChain() const
+    {
+    	return m_SwapChain;
+    }
+
+    void Window::SetHeight(const int height)
+    {
+        m_Height = height;
+    }
+
+    void Window::SetSwapChain(const std::shared_ptr<Diligent::ISwapChain>& swapChain)
+    {
+	    m_SwapChain = swapChain;
+    }
+
+    void Window::SetSwapChain(Diligent::ISwapChain* swapChain)
+    {
+    	m_SwapChain.reset(swapChain);
+    }
+
+    void Window::RegisterCallbacks()
+    {
         glfwSetWindowSizeCallback(m_Window, [](GLFWwindow* window, int width, int height)
         {
 	        const auto& hwnd = *static_cast<HWND*>(glfwGetWindowUserPointer(window));
@@ -222,112 +334,28 @@ namespace RL
     		EventBus::Get().SpreadEvent<MonitorEvent>(e);
     	});
 
-    	// Update window size to actual size
-    	{
-        	int _width, _height;
-        	glfwGetWindowSize(m_Window, &_width, &_height);
-        	m_Width = width;
-        	m_Height = height;
-    	}
-
     	m_Listener = std::make_shared<EventListener>();
 
     	m_Listener->SubscribeEvent<AppWindowResizeEvent>([this](const AppWindowResizeEvent e)
-    	{
-	        if (e.Hwnd == m_Hwnd)
-	        {
-		        m_Width = static_cast<int>(e.Width);
-	        	m_Height = static_cast<int>(e.Height);
+		{
+			if (e.Hwnd == m_Hwnd)
+			{
+				m_Width = static_cast<int>(e.Width);
+				m_Height = static_cast<int>(e.Height);
 
-	        	if (m_SwapChain != nullptr)
-	        	{
-	        		m_SwapChain->Resize(m_Width, m_Height);
-	        	}
-	        }
-    	});
+				if (m_SwapChain != nullptr)
+				{
+					m_SwapChain->Resize(m_Width, m_Height);
+				}
+			}
+		});
 
     	m_Listener->SubscribeEvent<AppWindowMinimizeEvent>([this](const AppWindowMinimizeEvent e)
-    	{
-    		if (e.Hwnd == m_Hwnd)
-    		{
-    			m_IsMinimized = e.Minimized;
-    		}
-    	});
-    }
-
-    void Window::Resize(const int width, const int height)
-    {
-        m_Width = width;
-        m_Height = height;
-
-    	glfwSetWindowSize(m_Window, width, height);
-    }
-
-    void Window::SetPosition(const int x, const int y)
-    {
-    	glfwSetWindowPos(m_Window, x, y);
-    }
-
-    void Window::Update()
-    {
-    	glfwWaitEventsTimeout(0.005);
-    }
-
-    void Window::Present()
-    {
-    	if (m_SwapChain != nullptr)
-    	{
-    		m_SwapChain->Present();
-    	}
-    }
-
-    int Window::GetWidth() const
-    {
-        return m_Width;
-    }
-
-    void Window::SetWidth(const int width)
-    {
-        m_Width = width;
-    }
-
-    int Window::GetHeight() const
-    {
-        return m_Height;
-    }
-
-    bool Window::IsMinimized() const
-    {
-    	return m_IsMinimized;
-    }
-
-    HWND Window::GetHwnd() const
-    {
-        return m_Hwnd;
-    }
-
-    GLFWwindow* Window::GetGlfWWindow() const
-    {
-    	return m_Window;
-    }
-
-    std::shared_ptr<Diligent::ISwapChain> Window::GetSwapChain() const
-    {
-    	return m_SwapChain;
-    }
-
-    void Window::SetHeight(const int height)
-    {
-        m_Height = height;
-    }
-
-    void Window::SetSwapChain(const std::shared_ptr<Diligent::ISwapChain>& swapChain)
-    {
-	    m_SwapChain = swapChain;
-    }
-
-    void Window::SetSwapChain(Diligent::ISwapChain* swapChain)
-    {
-    	m_SwapChain.reset(swapChain);
+		{
+			if (e.Hwnd == m_Hwnd)
+			{
+				m_IsMinimized = e.Minimized;
+			}
+		});
     }
 }
