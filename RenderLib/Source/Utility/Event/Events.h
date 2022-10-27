@@ -52,7 +52,7 @@ namespace RL
 
     struct AppWindowMinimizeEvent : WindowEvent
     {
-        
+        bool Minimized {false};
     };
 
     struct AppWindowCloseEvent : WindowEvent

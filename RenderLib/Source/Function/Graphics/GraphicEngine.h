@@ -27,7 +27,10 @@ namespace RL
         GraphicEngine& operator=(GraphicEngine&& other) noexcept = delete;
 
         void Init();
+        void Update();
         void Shutdown();
+
+        void AttachMainWindow();
         
     private:
         GraphicEngine() = default;

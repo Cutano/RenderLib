@@ -50,6 +50,6 @@ namespace RL
 
         std::atomic_bool m_ShouldExit {false};
 
-        EventListener* m_Listener;
+        EventListener* m_Listener {nullptr};
     };
 }

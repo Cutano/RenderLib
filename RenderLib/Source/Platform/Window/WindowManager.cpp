@@ -24,8 +24,8 @@ namespace RL
         m_MainWindowHwnd = window->GetHwnd();
     }
 
-    HWND WindowManager::GetMainWindowHwnd()
+    std::shared_ptr<Window> WindowManager::GetMainWindow()
     {
-        return m_MainWindowHwnd;
+        return m_WindowRegistry[m_MainWindowHwnd];
     }
 }

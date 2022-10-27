@@ -29,7 +29,7 @@ namespace RL
         void Update();
 
         void ShowMainWindow(const std::string& title);
-        HWND GetMainWindowHwnd();
+        std::shared_ptr<Window> GetMainWindow();
 
     private:
         WindowManager() = default;

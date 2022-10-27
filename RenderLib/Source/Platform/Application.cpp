@@ -2,6 +2,7 @@
 #include "Application.h"
 #include "Workspace/Workspace.h"
 #include "Function/Graphics/GraphicEngine.h"
+#include "Platform/Window/Window.h"
 #include "Platform/Window/WindowManager.h"
 #include "Utility/Event/Events.h"
 #include "Utility/Event/EventBus.h"
@@ -69,7 +70,7 @@ namespace RL
         m_Listener = new EventListener();
         m_Listener->SubscribeEvent<AppWindowCloseEvent>([this](const AppWindowCloseEvent e)
         {
-            if (e.Hwnd == WindowManager::Get().GetMainWindowHwnd())
+            if (e.Hwnd == WindowManager::Get().GetMainWindow()->GetHwnd())
             {
                 OnAppWindowClose();
             }
@@ -103,5 +104,7 @@ namespace RL
         Log::Logger()->info("Initiating main window...");
         WindowManager::Get().Init();
         WindowManager::Get().ShowMainWindow("Render Lib");
+
+        GraphicEngine::Get().AttachMainWindow();
     }
 }
