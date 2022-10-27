@@ -1,8 +1,7 @@
 ﻿#pragma once
 
 #include <memory>
-
-#include "dexode/EventBus.hpp"
+#include <dexode/EventBus.hpp>
 
 namespace RL
 {
