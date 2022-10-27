@@ -1,4 +1,5 @@
 #include "GuiSystem.h"
+#include "GuiComponent/Window/DemoWindow.h"
 
 #include <imgui.h>
 
@@ -19,6 +20,8 @@ namespace RL
 
         // Setup Dear ImGui style
         ImGui::StyleColorsDark();
+
+        m_GuiRegistry.emplace_back(std::make_shared<DemoWindow>());
     }
 
     void GuiSystem::Update()
@@ -40,6 +43,11 @@ namespace RL
         ImGui::PopStyleVar(3);
         const ImGuiID dockSpaceId = ImGui::GetID("DockSpace");
         ImGui::DockSpace(dockSpaceId, ImVec2(0.0f, 0.0f));
+
+        for (const auto& guiWindow : m_GuiRegistry)
+        {
+            guiWindow->Draw();
+        }
 
         ImGui::End();
     }

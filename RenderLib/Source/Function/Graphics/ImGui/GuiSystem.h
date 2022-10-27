@@ -1,7 +1,12 @@
 #pragma once
 
+#include <vector>
+#include <memory>
+
 namespace RL
 {
+    class GuiBase;
+    
     class GuiSystem
     {
     public:
@@ -24,5 +29,7 @@ namespace RL
         GuiSystem() = default;
 
         void* m_ImGuiCtx {nullptr};
+
+        std::vector<std::shared_ptr<GuiBase>> m_GuiRegistry;
     };
 }

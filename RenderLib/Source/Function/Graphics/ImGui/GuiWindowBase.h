@@ -14,8 +14,10 @@ namespace RL
         GuiWindowBase& operator=(const GuiWindowBase& other) = delete;
         GuiWindowBase& operator=(GuiWindowBase&& other) noexcept = delete;
 
+        bool& ShouldShow();
+
     protected:
-        
+        bool m_Show {false};
     };
     
 }
