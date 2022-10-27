@@ -69,6 +69,11 @@ namespace RL
     {
         
     };
+
+    struct KeyRepeatedEvent : KeyEvent
+    {
+        
+    };
     
     struct KeyTypedEvent : KeyEvent
     {

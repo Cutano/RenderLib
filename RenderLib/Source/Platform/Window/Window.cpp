@@ -60,26 +60,27 @@ namespace RL
 
         glfwSetKeyCallback(m_Window, [](GLFWwindow* window, int key, int scancode, int action, int mods)
         {
-        	KeyPressedEvent e;
-        	
 	        switch (action)
 	        {
 	        case GLFW_PRESS:
 		        {
+	        		KeyPressedEvent e;
 			        e.Key = static_cast<KeyCode>(key);
 			        EventBus::Get().SpreadEvent<KeyPressedEvent>(e);
 			        break;
 		        }
 	        case GLFW_RELEASE:
 		        {
+	        		KeyReleasedEvent e;
 			        e.Key = static_cast<KeyCode>(key);
-			        EventBus::Get().SpreadEvent<KeyPressedEvent>(e);
+			        EventBus::Get().SpreadEvent<KeyReleasedEvent>(e);
 			        break;
 		        }
 	        case GLFW_REPEAT:
 		        {
+	        		KeyRepeatedEvent e;
 			        e.Key = static_cast<KeyCode>(key);
-			        EventBus::Get().SpreadEvent<KeyPressedEvent>(e);
+			        EventBus::Get().SpreadEvent<KeyRepeatedEvent>(e);
 			        break;
 		        }
 	        }
@@ -94,20 +95,20 @@ namespace RL
 
         glfwSetMouseButtonCallback(m_Window, [](GLFWwindow* window, int button, int action, int mods)
         {
-        	MouseButtonPressedEvent e;
-        	
 	        switch (action)
 	        {
 	        case GLFW_PRESS:
 		        {
+	        		MouseButtonPressedEvent e;
 			        e.Button = static_cast<MouseButton>(button);
 			        EventBus::Get().SpreadEvent<MouseButtonPressedEvent>(e);
 			        break;
 		        }
 	        case GLFW_RELEASE:
 		        {
+	        		MouseButtonReleasedEvent e;
 			        e.Button = static_cast<MouseButton>(button);
-			        EventBus::Get().SpreadEvent<MouseButtonPressedEvent>(e);
+			        EventBus::Get().SpreadEvent<MouseButtonReleasedEvent>(e);
 			        break;
 		        }
 	        }

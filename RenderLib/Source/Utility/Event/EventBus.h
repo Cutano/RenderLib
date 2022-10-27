@@ -1,15 +1,11 @@
 #pragma once
 
+#include "Events.h"
+
 #include <any>
 #include <memory>
 #include <functional>
-
-#include "Events.h"
-
-namespace dexode
-{
-    class EventBus;
-}
+#include <dexode/EventBus.hpp>
 
 namespace RL
 {
@@ -31,7 +27,10 @@ namespace RL
         void Init();
 
         template <typename Event>
-        void SpreadEvent(Event event);
+        void SpreadEvent(Event event)
+        {
+            m_EventBus->postpone<Event>(event);
+        }
         
     private:
         EventBus() = default;
