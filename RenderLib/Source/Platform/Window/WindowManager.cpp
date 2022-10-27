@@ -16,6 +16,14 @@ namespace RL
         }
     }
 
+    void WindowManager::Present()
+    {
+        for (auto [hwnd, window] : m_WindowRegistry)
+        {
+            window->Present();
+        }
+    }
+
     void WindowManager::ShowMainWindow(const std::string& title)
     {
         const auto window = std::make_shared<Window>(title, 1440, 900, true);

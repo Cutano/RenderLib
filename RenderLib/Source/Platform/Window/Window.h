@@ -25,6 +25,7 @@ namespace RL
         void Resize(int width, int height);
         void SetPosition(int x, int y);
         void Update();
+        void Present();
 
         [[nodiscard]] int GetWidth() const;
         [[nodiscard]] int GetHeight() const;

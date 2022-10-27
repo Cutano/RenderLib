@@ -27,6 +27,7 @@ namespace RL
 
         void Init();
         void Update();
+        void Present();
 
         void ShowMainWindow(const std::string& title);
         std::shared_ptr<Window> GetMainWindow();

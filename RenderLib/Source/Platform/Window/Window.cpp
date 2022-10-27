@@ -271,11 +271,14 @@ namespace RL
     void Window::Update()
     {
     	glfwWaitEventsTimeout(0.005);
+    }
 
-        if (m_SwapChain != nullptr)
-        {
-	        m_SwapChain->Present();
-        }
+    void Window::Present()
+    {
+    	if (m_SwapChain != nullptr)
+    	{
+    		m_SwapChain->Present();
+    	}
     }
 
     int Window::GetWidth() const
