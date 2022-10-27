@@ -8,6 +8,54 @@ namespace RL
 {
     void GraphicEngine::Init()
     {
+        Diligent::SetDebugMessageCallback([](Diligent::DEBUG_MESSAGE_SEVERITY severity,
+                                             const char* msg,
+                                             const char* function,
+                                             const char* file,
+                                             int line)
+        {
+            if (function == nullptr)
+            {
+                switch (severity)
+                {
+                case Diligent::DEBUG_MESSAGE_SEVERITY_INFO:
+                    Log::GraphicsLogger()->info("Engine: {}", msg);
+                    break;
+                case Diligent::DEBUG_MESSAGE_SEVERITY_WARNING:
+                    Log::GraphicsLogger()->warn("Engine: {}", msg);
+                    break;
+                case Diligent::DEBUG_MESSAGE_SEVERITY_ERROR:
+                    Log::GraphicsLogger()->error("Engine: {}", msg);
+                    break;
+                case Diligent::DEBUG_MESSAGE_SEVERITY_FATAL_ERROR:
+                    Log::GraphicsLogger()->critical("Engine: {}", msg);
+                    break;
+                }
+            }
+            else
+            {
+                switch (severity)
+                {
+                case Diligent::DEBUG_MESSAGE_SEVERITY_INFO:
+                    Log::GraphicsLogger()->info("Engine: {}, in function {}, file {}, line {}", msg, function, file,
+                                                std::to_string(line).c_str());
+                    break;
+                case Diligent::DEBUG_MESSAGE_SEVERITY_WARNING:
+                    Log::GraphicsLogger()->warn("Engine: {}, in function {}, file {}, line {}", msg, function, file,
+                                                std::to_string(line).c_str());
+                    break;
+                case Diligent::DEBUG_MESSAGE_SEVERITY_ERROR:
+                    Log::GraphicsLogger()->error("Engine: {}, in function {}, file {}, line {}", msg, function, file,
+                                                 std::to_string(line).c_str());
+                    break;
+                case Diligent::DEBUG_MESSAGE_SEVERITY_FATAL_ERROR:
+                    Log::GraphicsLogger()->critical("Engine: {}, in function {}, file {}, line {}", msg, function, file,
+                                                    std::to_string(line).c_str());
+                    break;
+                }
+            }
+        });
+        
         Diligent::EngineD3D12CreateInfo createInfo;
         
 #ifdef _DEBUG
