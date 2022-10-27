@@ -33,9 +33,13 @@ namespace RL
         {
             ImGui_ImplGlfw_CursorPosCallback(e.GlfWWindow, e.X, e.Y);
         });
+        
+        m_Listener->SubscribeEvent<MouseButtonPressedEvent>([](const MouseButtonPressedEvent e)
+        {
+            ImGui_ImplGlfw_MouseButtonCallback(e.GlfWWindow, static_cast<int>(e.Button), e.Action, e.Mods);
+        });
 
-        // Should use MouseButtonPressedEvent?
-        m_Listener->SubscribeEvent<MouseButtonEvent>([](const MouseButtonEvent e)
+        m_Listener->SubscribeEvent<MouseButtonReleasedEvent>([](const MouseButtonReleasedEvent e)
         {
             ImGui_ImplGlfw_MouseButtonCallback(e.GlfWWindow, static_cast<int>(e.Button), e.Action, e.Mods);
         });
