@@ -89,7 +89,6 @@ namespace RL
 
             platform_io.Renderer_CreateWindow = [](ImGuiViewport* viewport)
             {
-                HWND hwnd = viewport->PlatformHandleRaw ? static_cast<HWND>(viewport->PlatformHandleRaw) : static_cast<HWND>(viewport->PlatformHandle);
                 const auto glfwWindow = static_cast<GLFWwindow*>(viewport->PlatformHandle);
 
                 const auto window = WindowManager::Get().CreateFromRawGlfwWindow(glfwWindow);
@@ -99,7 +98,6 @@ namespace RL
             platform_io.Renderer_DestroyWindow = [](ImGuiViewport* viewport)
             {
                 HWND hwnd = viewport->PlatformHandleRaw ? static_cast<HWND>(viewport->PlatformHandleRaw) : static_cast<HWND>(viewport->PlatformHandle);
-                const auto glfwWindow = static_cast<GLFWwindow*>(viewport->PlatformHandle);
 
                 WindowManager::Get().DestroyWindow(hwnd);
             };
@@ -107,7 +105,6 @@ namespace RL
             platform_io.Renderer_SetWindowSize = [](ImGuiViewport* viewport, ImVec2 size)
             {
                 HWND hwnd = viewport->PlatformHandleRaw ? static_cast<HWND>(viewport->PlatformHandleRaw) : static_cast<HWND>(viewport->PlatformHandle);
-                const auto glfwWindow = static_cast<GLFWwindow*>(viewport->PlatformHandle);
 
                 WindowManager::Get().GetWindow(hwnd)->Resize(static_cast<int>(size.x), static_cast<int>(size.y));
             };
@@ -115,7 +112,6 @@ namespace RL
             platform_io.Renderer_RenderWindow = [](ImGuiViewport* viewport, void* render_arg)
             {
                 HWND hwnd = viewport->PlatformHandleRaw ? static_cast<HWND>(viewport->PlatformHandleRaw) : static_cast<HWND>(viewport->PlatformHandle);
-                const auto glfwWindow = static_cast<GLFWwindow*>(viewport->PlatformHandle);
 
                 if (!hwnd) return;
                 
@@ -138,13 +134,7 @@ namespace RL
 
             platform_io.Renderer_SwapBuffers = [](ImGuiViewport* viewport, void* render_arg)
             {
-                // HWND hwnd = viewport->PlatformHandleRaw ? static_cast<HWND>(viewport->PlatformHandleRaw) : static_cast<HWND>(viewport->PlatformHandle);
-                // const auto glfwWindow = static_cast<GLFWwindow*>(viewport->PlatformHandle);
-                //
-                // if (!hwnd) return;
-                //
-                // const auto window = WindowManager::Get().GetWindow(hwnd);
-                // window->Present();
+
             };
         }
     }
