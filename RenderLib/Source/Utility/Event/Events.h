@@ -3,6 +3,8 @@
 #include "Utility/KeyCodes.h"
 
 typedef struct HWND__ *HWND;
+typedef struct GLFWmonitor GLFWmonitor;
+typedef struct GLFWwindow GLFWwindow;
 
 namespace RL
 {
@@ -15,16 +17,27 @@ namespace RL
     struct WindowEvent
     {
         HWND Hwnd {};
+        GLFWwindow* GlfWWindow {nullptr};
     };
 
-    struct KeyEvent
+    struct KeyEvent : WindowEvent
     {
         KeyCode Key;
+        int ScanCode;
+        int Action;
+        int Mods;
     };
 
-    struct MouseButtonEvent
+    struct MouseEvent : WindowEvent
+    {
+        
+    };
+
+    struct MouseButtonEvent : MouseEvent
     {
         MouseButton Button;
+        int Action;
+        int Mods;
     };
 
     struct Position2DEvent
@@ -60,6 +73,11 @@ namespace RL
         
     };
 
+    struct AppWindowFocusEvent : WindowEvent
+    {
+        bool Focused {true};
+    };
+
     struct KeyPressedEvent : KeyEvent
     {
         
@@ -80,12 +98,17 @@ namespace RL
         
     };
 
-    struct MouseMovedEvent : Position2DEvent, WindowEvent
+    struct MouseMovedEvent : Position2DEvent, MouseEvent
     {
         
     };
 
-    struct MouseScrolledEvent : Position2DEvent
+    struct MouseEnteredEvent : MouseEvent
+    {
+        bool Entered {true};
+    };
+
+    struct MouseScrolledEvent : Position2DEvent, MouseEvent
     {
         
     };
@@ -98,5 +121,11 @@ namespace RL
     struct MouseButtonReleasedEvent : MouseButtonEvent
     {
         
+    };
+
+    struct MonitorEvent
+    {
+        GLFWmonitor* Monitor {nullptr};
+        int Event {0};
     };
 }

@@ -21,13 +21,14 @@ namespace RL
         EventBus& operator=(EventBus&& other) noexcept = delete;
 
         void Init();
+        void Update();
 
         template <typename Event>
         void SpreadEvent(Event event)
         {
             m_EventBus->postpone<Event>(event);
             // Should I move process to main loop?
-            m_EventBus->process();
+            // m_EventBus->process();
         }
         
     private:

@@ -60,7 +60,7 @@
       <ConformanceMode>true</ConformanceMode>
       <LanguageStandard>stdcpp20</LanguageStandard>
       <LanguageStandard_C>stdc17</LanguageStandard_C>
-      <AdditionalIncludeDirectories>$(SolutionDir)ThirdParty\DiligentEngine\DiligentCore\Graphics\GraphicsEngine\interface;$(SolutionDir)ThirdParty\DiligentEngine\DiligentCore\Graphics\GraphicsEngineD3D12\interface;$(SolutionDir)ThirdParty\efsw\include;$(SolutionDir)ThirdParty\spdlog\include;$(SolutionDir)ThirdParty\EventBus\lib\src;$(ProjectDir)Source;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>$(SolutionDir)ThirdParty\DiligentEngine\DiligentCore\Graphics\GraphicsEngine\interface;$(SolutionDir)ThirdParty\DiligentEngine\DiligentCore\Graphics\GraphicsEngineD3D12\interface;$(SolutionDir)ThirdParty\DiligentEngine\DiligentTools\Imgui\interface;$(SolutionDir)ThirdParty\DiligentEngine\DiligentTools\ThirdParty\imgui;$(SolutionDir)ThirdParty\efsw\include;$(SolutionDir)ThirdParty\spdlog\include;$(SolutionDir)ThirdParty\EventBus\lib\src;$(ProjectDir)Source;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
     </ClCompile>
     <Link>
       <SubSystem>Console</SubSystem>
@@ -78,7 +78,7 @@
       <ConformanceMode>true</ConformanceMode>
       <LanguageStandard>stdcpp20</LanguageStandard>
       <LanguageStandard_C>stdc17</LanguageStandard_C>
-      <AdditionalIncludeDirectories>$(SolutionDir)ThirdParty\DiligentEngine\DiligentCore\Graphics\GraphicsEngine\interface;$(SolutionDir)ThirdParty\DiligentEngine\DiligentCore\Graphics\GraphicsEngineD3D12\interface;$(SolutionDir)ThirdParty\efsw\include;$(SolutionDir)ThirdParty\spdlog\include;$(SolutionDir)ThirdParty\EventBus\lib\src;$(ProjectDir)Source;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>$(SolutionDir)ThirdParty\DiligentEngine\DiligentCore\Graphics\GraphicsEngine\interface;$(SolutionDir)ThirdParty\DiligentEngine\DiligentCore\Graphics\GraphicsEngineD3D12\interface;$(SolutionDir)ThirdParty\DiligentEngine\DiligentTools\Imgui\interface;$(SolutionDir)ThirdParty\DiligentEngine\DiligentTools\ThirdParty\imgui;$(SolutionDir)ThirdParty\efsw\include;$(SolutionDir)ThirdParty\spdlog\include;$(SolutionDir)ThirdParty\EventBus\lib\src;$(ProjectDir)Source;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
     </ClCompile>
     <Link>
       <SubSystem>Console</SubSystem>
@@ -92,7 +92,12 @@
     <None Include="packages.config" />
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="..\ThirdParty\DiligentEngine\DiligentTools\ThirdParty\imgui\backends\imgui_impl_glfw.cpp" />
     <ClCompile Include="Source\Function\Graphics\GraphicEngine.cpp" />
+    <ClCompile Include="Source\Function\Graphics\ImGui\GuiBase.cpp" />
+    <ClCompile Include="Source\Function\Graphics\ImGui\GuiSystem.cpp" />
+    <ClCompile Include="Source\Function\Graphics\ImGui\GuiWindowBase.cpp" />
+    <ClCompile Include="Source\Function\Graphics\ImGui\ImGuiImplRenderLib.cpp" />
     <ClCompile Include="Source\Platform\Application.cpp" />
     <ClCompile Include="Source\Platform\Window\Window.cpp" />
     <ClCompile Include="Source\Platform\Window\WindowManager.cpp" />
@@ -114,6 +119,9 @@
     <ProjectReference Include="..\ThirdParty\DiligentEngine\build\Win64\DiligentCore\Primitives\Diligent-Primitives.vcxproj">
       <Project>{94b6e619-da6d-3fed-a3fe-964d2e4570ae}</Project>
     </ProjectReference>
+    <ProjectReference Include="..\ThirdParty\DiligentEngine\build\Win64\DiligentTools\Imgui\Diligent-Imgui.vcxproj">
+      <Project>{bcc33489-d35e-3f30-8fa7-a06933b3555e}</Project>
+    </ProjectReference>
     <ProjectReference Include="..\ThirdParty\DiligentEngine\build\Win64\ZERO_CHECK.vcxproj">
       <Project>{d1038e2b-8dcf-35b2-8d02-ef519946aaa5}</Project>
     </ProjectReference>
@@ -129,6 +137,10 @@
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Source\Function\Graphics\GraphicEngine.h" />
+    <ClInclude Include="Source\Function\Graphics\ImGui\GuiBase.h" />
+    <ClInclude Include="Source\Function\Graphics\ImGui\GuiSystem.h" />
+    <ClInclude Include="Source\Function\Graphics\ImGui\GuiWindowBase.h" />
+    <ClInclude Include="Source\Function\Graphics\ImGui\ImGuiImplRenderLib.h" />
     <ClInclude Include="Source\Platform\Application.h" />
     <ClInclude Include="Source\Platform\Window\Window.h" />
     <ClInclude Include="Source\Platform\Window\WindowManager.h" />

@@ -14,6 +14,7 @@ namespace RL
     //   Load Assets
     //   Perform Preprocess
     //   Init Main Window
+    //   Init GUI System
 
     class EventListener;
     
@@ -45,6 +46,7 @@ namespace RL
         void LoadAsset();
         void Preprocess();
         void InitMainWindow();
+        void InitGuiSystem();
         
         StartupParam m_StartupParam;
 

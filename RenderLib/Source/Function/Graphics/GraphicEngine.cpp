@@ -1,6 +1,7 @@
 ﻿#include "GraphicEngine.h"
 #include "Platform/Window/WindowManager.h"
 #include "Platform/Window/Window.h"
+#include "ImGui/ImGuiImplRenderLib.h"
 
 #include <EngineFactoryD3D12.h>
 
@@ -74,12 +75,30 @@ namespace RL
 
     void GraphicEngine::Update()
     {
+        m_ImGuiImpl->NewFrame();
+    }
+
+    void GraphicEngine::Render()
+    {
+        const auto mainWindow = WindowManager::Get().GetMainWindow();
+        const auto swapChain = mainWindow->GetSwapChain();
+
+        auto* rtv = swapChain->GetCurrentBackBufferRTV();
+        auto* dsv = swapChain->GetDepthBufferDSV();
         
+        constexpr float clearColor[] = {0.45f, 0.55f, 0.60f, 1.00f};
+
+        m_DeviceContext->SetRenderTargets(1, &rtv, dsv, Diligent::RESOURCE_STATE_TRANSITION_MODE_TRANSITION);
+        m_DeviceContext->ClearRenderTarget(
+            WindowManager::Get().GetMainWindow()->GetSwapChain()->GetCurrentBackBufferRTV(),
+            clearColor, Diligent::RESOURCE_STATE_TRANSITION_MODE_TRANSITION);
+        
+        m_ImGuiImpl->Render(m_DeviceContext);
     }
 
     void GraphicEngine::Shutdown()
     {
-        
+        delete m_ImGuiImpl;
     }
 
     void GraphicEngine::AttachMainWindow()
@@ -99,5 +118,11 @@ namespace RL
 
         m_EngineFactory->CreateSwapChainD3D12(m_RenderDevice, m_DeviceContext, swapChainDesc, {}, window, &swapChain);
         mainWindow->SetSwapChain(swapChain);
+    }
+
+    void GraphicEngine::AttachGuiBackend()
+    {
+        const auto mainWindow = WindowManager::Get().GetMainWindow();
+        m_ImGuiImpl = new ImGuiImplRenderLib(mainWindow, m_RenderDevice);
     }
 }

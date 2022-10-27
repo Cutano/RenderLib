@@ -11,6 +11,12 @@
     <ClCompile Include="Source\Platform\Window\WindowManager.cpp" />
     <ClCompile Include="Source\Platform\Workspace\Workspace.cpp" />
     <ClCompile Include="Source\Platform\Workspace\FileWatcher.cpp" />
+    <ClCompile Include="Source\Function\Graphics\GraphicEngine.cpp" />
+    <ClCompile Include="Source\Function\Graphics\ImGui\ImGuiImplRenderLib.cpp" />
+    <ClCompile Include="Source\Utility\Event\EventBus.cpp" />
+    <ClCompile Include="Source\Utility\Event\EventListener.cpp" />
+    <ClCompile Include="Source\Utility\Event\Events.cpp" />
+    <ClCompile Include="..\ThirdParty\DiligentEngine\DiligentTools\ThirdParty\imgui\backends\imgui_impl_glfw.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Source\Base.h" />
@@ -20,5 +26,11 @@
     <ClInclude Include="Source\Platform\Window\WindowManager.h" />
     <ClInclude Include="Source\Platform\Workspace\Workspace.h" />
     <ClInclude Include="Source\Platform\Workspace\FileWatcher.h" />
+    <ClInclude Include="Source\Function\Graphics\GraphicEngine.h" />
+    <ClInclude Include="Source\Function\Graphics\ImGui\ImGuiImplRenderLib.h" />
+    <ClInclude Include="Source\Utility\Event\EventBus.h" />
+    <ClInclude Include="Source\Utility\Event\EventListener.h" />
+    <ClInclude Include="Source\Utility\Event\Events.h" />
+    <ClInclude Include="Source\Utility\KeyCodes.h" />
   </ItemGroup>
 </Project>

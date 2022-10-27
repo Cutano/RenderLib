@@ -11,6 +11,8 @@ namespace Diligent
 
 namespace RL
 {
+    class ImGuiImplRenderLib;
+    
     class GraphicEngine
     {
     public:
@@ -28,9 +30,11 @@ namespace RL
 
         void Init();
         void Update();
+        void Render();
         void Shutdown();
 
         void AttachMainWindow();
+        void AttachGuiBackend();
         
     private:
         GraphicEngine() = default;
@@ -38,5 +42,7 @@ namespace RL
         Diligent::IEngineFactoryD3D12* m_EngineFactory {nullptr};
         Diligent::IRenderDevice* m_RenderDevice {nullptr};
         Diligent::IDeviceContext* m_DeviceContext {nullptr};
+
+        ImGuiImplRenderLib* m_ImGuiImpl;
     };
 }

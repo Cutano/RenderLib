@@ -7,6 +7,7 @@
 #include "Utility/Event/Events.h"
 #include "Utility/Event/EventBus.h"
 #include "Utility/Event/EventListener.h"
+#include "Function/Graphics/ImGui/GuiSystem.h"
 
 #include <filesystem>
 
@@ -42,10 +43,13 @@ namespace RL
         LoadAsset();
         Preprocess();
         InitMainWindow();
+        InitGuiSystem();
     }
 
     Application::~Application()
     {
+        GraphicEngine::Get().Shutdown();
+        
         delete m_Listener;
     }
 
@@ -54,6 +58,11 @@ namespace RL
         while (!m_ShouldExit)
         {
             WindowManager::Get().Update();
+            EventBus::Get().Update();
+            GraphicEngine::Get().Update();
+            GuiSystem::Get().Update();
+
+            GraphicEngine::Get().Render();
         }
     }
 
@@ -106,5 +115,11 @@ namespace RL
         WindowManager::Get().ShowMainWindow("Render Lib");
 
         GraphicEngine::Get().AttachMainWindow();
+    }
+
+    void Application::InitGuiSystem()
+    {
+        GuiSystem::Get().Init();
+        GraphicEngine::Get().AttachGuiBackend();
     }
 }

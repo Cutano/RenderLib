@@ -45,6 +45,7 @@ namespace RL
 	        const auto& hwnd = *static_cast<HWND*>(glfwGetWindowUserPointer(window));
         	
 	        AppWindowResizeEvent e;
+        	e.GlfWWindow = window;
 	        e.Hwnd = hwnd;
 	        e.Width = static_cast<float>(width);
 	        e.Height = static_cast<float>(height);
@@ -57,6 +58,7 @@ namespace RL
 	        const auto& hwnd = *static_cast<HWND*>(glfwGetWindowUserPointer(window));
         	
 	        AppWindowCloseEvent e;
+        	e.GlfWWindow = window;
 	        e.Hwnd = hwnd;
 
 	        EventBus::Get().SpreadEvent<AppWindowCloseEvent>(e);
@@ -64,11 +66,18 @@ namespace RL
 
         glfwSetKeyCallback(m_Window, [](GLFWwindow* window, int key, int scancode, int action, int mods)
         {
+        	const auto& hwnd = *static_cast<HWND*>(glfwGetWindowUserPointer(window));
+        	
 	        switch (action)
 	        {
 	        case GLFW_PRESS:
 		        {
 	        		KeyPressedEvent e;
+	        		e.GlfWWindow = window;
+	        		e.Hwnd = hwnd;
+	        		e.Action = action;
+	        		e.ScanCode = scancode;
+	        		e.Mods = mods;
 			        e.Key = static_cast<KeyCode>(key);
 			        EventBus::Get().SpreadEvent<KeyPressedEvent>(e);
 			        break;
@@ -76,6 +85,11 @@ namespace RL
 	        case GLFW_RELEASE:
 		        {
 	        		KeyReleasedEvent e;
+	        		e.GlfWWindow = window;
+					e.Hwnd = hwnd;
+	        		e.Action = action;
+					e.ScanCode = scancode;
+					e.Mods = mods;
 			        e.Key = static_cast<KeyCode>(key);
 			        EventBus::Get().SpreadEvent<KeyReleasedEvent>(e);
 			        break;
@@ -83,6 +97,11 @@ namespace RL
 	        case GLFW_REPEAT:
 		        {
 	        		KeyRepeatedEvent e;
+	        		e.GlfWWindow = window;
+					e.Hwnd = hwnd;
+	        		e.Action = action;
+					e.ScanCode = scancode;
+					e.Mods = mods;
 			        e.Key = static_cast<KeyCode>(key);
 			        EventBus::Get().SpreadEvent<KeyRepeatedEvent>(e);
 			        break;
@@ -92,18 +111,28 @@ namespace RL
 
         glfwSetCharCallback(m_Window, [](GLFWwindow* window, uint32_t codepoint)
         {
+        	const auto& hwnd = *static_cast<HWND*>(glfwGetWindowUserPointer(window));
+        	
 	        KeyTypedEvent e;
+        	e.GlfWWindow = window;
+        	e.Hwnd = hwnd;
 	        e.Key = static_cast<KeyCode>(codepoint);
 	        EventBus::Get().SpreadEvent<KeyTypedEvent>(e);
         });
 
         glfwSetMouseButtonCallback(m_Window, [](GLFWwindow* window, int button, int action, int mods)
         {
+        	const auto& hwnd = *static_cast<HWND*>(glfwGetWindowUserPointer(window));
+        	
 	        switch (action)
 	        {
 	        case GLFW_PRESS:
 		        {
 	        		MouseButtonPressedEvent e;
+	        		e.GlfWWindow = window;
+					e.Hwnd = hwnd;
+	        		e.Action = action;
+	        		e.Mods = mods;
 			        e.Button = static_cast<MouseButton>(button);
 			        EventBus::Get().SpreadEvent<MouseButtonPressedEvent>(e);
 			        break;
@@ -111,6 +140,10 @@ namespace RL
 	        case GLFW_RELEASE:
 		        {
 	        		MouseButtonReleasedEvent e;
+	        		e.GlfWWindow = window;
+					e.Hwnd = hwnd;
+	        		e.Action = action;
+					e.Mods = mods;
 			        e.Button = static_cast<MouseButton>(button);
 			        EventBus::Get().SpreadEvent<MouseButtonReleasedEvent>(e);
 			        break;
@@ -120,7 +153,11 @@ namespace RL
 
         glfwSetScrollCallback(m_Window, [](GLFWwindow* window, double xOffset, double yOffset)
         {
+        	const auto& hwnd = *static_cast<HWND*>(glfwGetWindowUserPointer(window));
+        	
 	        MouseScrolledEvent e;
+        	e.GlfWWindow = window;
+        	e.Hwnd = hwnd;
 	        e.X = xOffset;
 	        e.Y = yOffset;
         	
@@ -132,6 +169,7 @@ namespace RL
 	        const auto& hwnd = *static_cast<HWND*>(glfwGetWindowUserPointer(window));
 
 	        MouseMovedEvent e;
+        	e.GlfWWindow = window;
 	        e.Hwnd = hwnd;
 	        e.X = x;
 	        e.Y = y;
@@ -144,11 +182,45 @@ namespace RL
 			const auto& hwnd = *static_cast<HWND*>(glfwGetWindowUserPointer(window));
 			
 			AppWindowMinimizeEvent e;
+			e.GlfWWindow = window;
 			e.Hwnd = hwnd;
 			e.Minimized = static_cast<bool>(iconified);
 			
 			EventBus::Get().SpreadEvent<AppWindowMinimizeEvent>(e);
 		});
+
+    	glfwSetWindowFocusCallback(m_Window, [](GLFWwindow* window, int focused)
+    	{
+    		const auto& hwnd = *static_cast<HWND*>(glfwGetWindowUserPointer(window));
+
+    		AppWindowFocusEvent e;
+    		e.GlfWWindow = window;
+    		e.Hwnd = hwnd;
+    		e.Focused = static_cast<bool>(focused);
+
+    		EventBus::Get().SpreadEvent<AppWindowFocusEvent>(e);
+    	});
+
+    	glfwSetCursorEnterCallback(m_Window, [](GLFWwindow* window, int entered)
+    	{
+    		const auto& hwnd = *static_cast<HWND*>(glfwGetWindowUserPointer(window));
+
+			MouseEnteredEvent e;
+    		e.GlfWWindow = window;
+			e.Hwnd = hwnd;
+			e.Entered = static_cast<bool>(entered);
+
+			EventBus::Get().SpreadEvent<MouseEnteredEvent>(e);
+    	});
+
+    	glfwSetMonitorCallback([](GLFWmonitor* monitor, int event)
+    	{
+    		MonitorEvent e;
+    		e.Monitor = monitor;
+    		e.Event = event;
+
+    		EventBus::Get().SpreadEvent<MonitorEvent>(e);
+    	});
 
     	// Update window size to actual size
     	{
@@ -229,6 +301,16 @@ namespace RL
     HWND Window::GetHwnd() const
     {
         return m_Hwnd;
+    }
+
+    GLFWwindow* Window::GetGlfWWindow() const
+    {
+    	return m_Window;
+    }
+
+    std::shared_ptr<Diligent::ISwapChain> Window::GetSwapChain() const
+    {
+    	return m_SwapChain;
     }
 
     void Window::SetHeight(const int height)

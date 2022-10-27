@@ -30,6 +30,8 @@ namespace RL
         [[nodiscard]] int GetHeight() const;
         [[nodiscard]] bool IsMinimized() const;
         [[nodiscard]] HWND GetHwnd() const;
+        [[nodiscard]] GLFWwindow* GetGlfWWindow() const;
+        [[nodiscard]] std::shared_ptr<Diligent::ISwapChain> GetSwapChain() const;
         void SetWidth(int width);
         void SetHeight(int height);
         void SetSwapChain(const std::shared_ptr<Diligent::ISwapChain>& swapChain);
