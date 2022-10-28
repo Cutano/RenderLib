@@ -7,7 +7,7 @@ Graphics laboratory for realtime rendering, Windows platform only.
 Requirements: **VS2022, CMake, Python 3**
 ### Clone
 ```powershell
-git clone --recursive https://github.com/Cutano/eventbus.git
+git clone --recursive https://github.com/Cutano/RenderLib.git
 ```  
 Don't forget the `--recursive` flag, for this repo contains git submodules.
 ### Generate Project Files
