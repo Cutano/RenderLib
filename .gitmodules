@@ -19,6 +19,6 @@
 [submodule "ThirdParty/efsw"]
 	path = ThirdParty/efsw
 	url = https://github.com/Cutano/efsw.git
-[submodule "ThirdParty/EventBus"]
-	path = ThirdParty/EventBus
-	url = https://github.com/gelldur/EventBus.git
+[submodule "ThirdParty/eventbus"]
+	path = ThirdParty/eventbus
+	url = https://github.com/Cutano/eventbus.git
