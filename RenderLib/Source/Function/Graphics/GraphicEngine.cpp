@@ -64,9 +64,9 @@ namespace RL
         createInfo.D3D12ValidationFlags = Diligent::D3D12_VALIDATION_FLAG_ENABLE_GPU_BASED_VALIDATION;
         createInfo.SetValidationLevel(Diligent::VALIDATION_LEVEL_2);
 #else
-        engineCI.EnableValidation = false;
-        engineCI.D3D12ValidationFlags = Diligent::D3D12_VALIDATION_FLAG_NONE;
-        engineCI.SetValidationLevel(Diligent::VALIDATION_LEVEL_DISABLED);
+        createInfo.EnableValidation = false;
+        createInfo.D3D12ValidationFlags = Diligent::D3D12_VALIDATION_FLAG_NONE;
+        createInfo.SetValidationLevel(Diligent::VALIDATION_LEVEL_DISABLED);
 #endif
         
         m_EngineFactory = Diligent::GetEngineFactoryD3D12();

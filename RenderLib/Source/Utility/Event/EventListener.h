@@ -15,7 +15,7 @@ namespace RL
         template <class Event, typename _ = void>
         void SubscribeEvent(std::function<void(const Event&)>&& callback)
         {
-            m_Listener->listen(callback);
+            m_Listener->listen<Event>(std::forward<std::function<void(const Event&)>>(callback));
         }
 
     private:
