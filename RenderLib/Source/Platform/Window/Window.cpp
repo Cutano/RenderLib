@@ -87,7 +87,7 @@ namespace RL
 
     void Window::Update()
     {
-    	glfwWaitEventsTimeout(0.005);
+    	glfwPollEvents();
     }
 
     void Window::Present()
