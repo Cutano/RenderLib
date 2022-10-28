@@ -81,7 +81,7 @@ namespace RL
     void GraphicEngine::Render()
     {
         const auto mainWindow = WindowManager::Get().GetMainWindow();
-        const auto swapChain = mainWindow->GetSwapChain();
+        auto swapChain = mainWindow->GetSwapChain();
 
         auto* rtv = swapChain->GetCurrentBackBufferRTV();
         auto* dsv = swapChain->GetDepthBufferDSV();
@@ -100,6 +100,16 @@ namespace RL
     void GraphicEngine::Shutdown()
     {
         delete m_ImGuiImpl;
+
+        m_DeviceContext->Flush();
+        m_DeviceContext->Release();
+        m_DeviceContext = nullptr;
+
+        m_RenderDevice->Release();
+        m_RenderDevice = nullptr;
+
+        m_EngineFactory->Release();
+        m_EngineFactory = nullptr;
     }
 
     void GraphicEngine::AttachMainWindow()
@@ -114,7 +124,7 @@ namespace RL
         swapChainDesc.BufferCount = 2;
         swapChainDesc.DefaultDepthValue = 0;
 
-        Diligent::ISwapChain* swapChain;
+        Diligent::RefCntAutoPtr<Diligent::ISwapChain> swapChain;
         const Diligent::Win32NativeWindow window(mainWindow->GetHwnd());
 
         m_EngineFactory->CreateSwapChainD3D12(m_RenderDevice, m_DeviceContext, swapChainDesc, {}, window, &swapChain);
@@ -135,7 +145,7 @@ namespace RL
         swapChainDesc.BufferCount = 2;
         swapChainDesc.DefaultDepthValue = 0;
         
-        Diligent::ISwapChain* swapChain;
+        Diligent::RefCntAutoPtr<Diligent::ISwapChain> swapChain;
         const Diligent::Win32NativeWindow nativeWindow(window->GetHwnd());
 
         m_EngineFactory->CreateSwapChainD3D12(m_RenderDevice, m_DeviceContext, swapChainDesc, {}, nativeWindow, &swapChain);

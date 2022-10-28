@@ -30,6 +30,7 @@ namespace RL
         void Init();
         void Update();
         void Present();
+        void Shutdown();
 
         void ShowMainWindow(const std::string& title);
         std::shared_ptr<Window> GetMainWindow();

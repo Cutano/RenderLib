@@ -60,7 +60,7 @@
       <ConformanceMode>true</ConformanceMode>
       <LanguageStandard>stdcpp20</LanguageStandard>
       <LanguageStandard_C>stdc17</LanguageStandard_C>
-      <AdditionalIncludeDirectories>$(SolutionDir)ThirdParty\DiligentEngine\DiligentCore\Graphics\GraphicsEngine\interface;$(SolutionDir)ThirdParty\DiligentEngine\DiligentCore\Graphics\GraphicsEngineD3D12\interface;$(SolutionDir)ThirdParty\DiligentEngine\DiligentTools\Imgui\interface;$(SolutionDir)ThirdParty\DiligentEngine\DiligentTools\ThirdParty\imgui;$(SolutionDir)ThirdParty\efsw\include;$(SolutionDir)ThirdParty\spdlog\include;$(SolutionDir)ThirdParty\eventbus\eventbus\include;$(ProjectDir)Source;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>$(SolutionDir)ThirdParty\DiligentEngine\DiligentCore\Common\interface;$(SolutionDir)ThirdParty\DiligentEngine\DiligentCore\Graphics\GraphicsEngine\interface;$(SolutionDir)ThirdParty\DiligentEngine\DiligentCore\Graphics\GraphicsEngineD3D12\interface;$(SolutionDir)ThirdParty\DiligentEngine\DiligentTools\Imgui\interface;$(SolutionDir)ThirdParty\DiligentEngine\DiligentTools\ThirdParty\imgui;$(SolutionDir)ThirdParty\efsw\include;$(SolutionDir)ThirdParty\spdlog\include;$(SolutionDir)ThirdParty\eventbus\eventbus\include;$(ProjectDir)Source;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
     </ClCompile>
     <Link>
       <SubSystem>Console</SubSystem>
@@ -78,7 +78,7 @@
       <ConformanceMode>true</ConformanceMode>
       <LanguageStandard>stdcpp20</LanguageStandard>
       <LanguageStandard_C>stdc17</LanguageStandard_C>
-      <AdditionalIncludeDirectories>$(SolutionDir)ThirdParty\DiligentEngine\DiligentCore\Graphics\GraphicsEngine\interface;$(SolutionDir)ThirdParty\DiligentEngine\DiligentCore\Graphics\GraphicsEngineD3D12\interface;$(SolutionDir)ThirdParty\DiligentEngine\DiligentTools\Imgui\interface;$(SolutionDir)ThirdParty\DiligentEngine\DiligentTools\ThirdParty\imgui;$(SolutionDir)ThirdParty\efsw\include;$(SolutionDir)ThirdParty\spdlog\include;$(SolutionDir)ThirdParty\eventbus\eventbus\include;$(ProjectDir)Source;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>$(SolutionDir)ThirdParty\DiligentEngine\DiligentCore\Common\interface;$(SolutionDir)ThirdParty\DiligentEngine\DiligentCore\Graphics\GraphicsEngine\interface;$(SolutionDir)ThirdParty\DiligentEngine\DiligentCore\Graphics\GraphicsEngineD3D12\interface;$(SolutionDir)ThirdParty\DiligentEngine\DiligentTools\Imgui\interface;$(SolutionDir)ThirdParty\DiligentEngine\DiligentTools\ThirdParty\imgui;$(SolutionDir)ThirdParty\efsw\include;$(SolutionDir)ThirdParty\spdlog\include;$(SolutionDir)ThirdParty\eventbus\eventbus\include;$(ProjectDir)Source;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
     </ClCompile>
     <Link>
       <SubSystem>Console</SubSystem>

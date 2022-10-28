@@ -48,8 +48,6 @@ namespace RL
 
     Application::~Application()
     {
-        GraphicEngine::Get().Shutdown();
-        
         delete m_Listener;
     }
 
@@ -65,6 +63,8 @@ namespace RL
             GraphicEngine::Get().Render();
             WindowManager::Get().Present();
         }
+
+        BeforeClose();
     }
 
     void Application::OnAppWindowClose()
@@ -122,5 +122,11 @@ namespace RL
     {
         GuiSystem::Get().Init();
         GraphicEngine::Get().AttachGuiBackend();
+    }
+
+    void Application::BeforeClose()
+    {
+        WindowManager::Get().Shutdown();
+        GraphicEngine::Get().Shutdown();
     }
 }

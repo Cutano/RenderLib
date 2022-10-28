@@ -8,10 +8,8 @@
 #define GLFW_EXPOSE_NATIVE_WIN32
 #include <glfw/glfw3native.h>
 
-namespace Diligent
-{
-    struct ISwapChain;
-}
+#include <RefCntAutoPtr.hpp>
+#include <SwapChain.h>
 
 namespace RL
 {
@@ -33,11 +31,10 @@ namespace RL
         [[nodiscard]] bool IsMinimized() const;
         [[nodiscard]] HWND GetHwnd() const;
         [[nodiscard]] GLFWwindow* GetGlfWWindow() const;
-        [[nodiscard]] std::shared_ptr<Diligent::ISwapChain> GetSwapChain() const;
+        [[nodiscard]] Diligent::RefCntAutoPtr<Diligent::ISwapChain> GetSwapChain() const;
         void SetWidth(int width);
         void SetHeight(int height);
-        void SetSwapChain(const std::shared_ptr<Diligent::ISwapChain>& swapChain);
-        void SetSwapChain(Diligent::ISwapChain* swapChain);
+        void SetSwapChain(const Diligent::RefCntAutoPtr<Diligent::ISwapChain>& swapChain);
 
     private:
         void RegisterCallbacks();
@@ -52,6 +49,6 @@ namespace RL
         GLFWwindow* m_Window {nullptr};
 
         std::shared_ptr<EventListener> m_Listener;
-        std::shared_ptr<Diligent::ISwapChain> m_SwapChain;
+        Diligent::RefCntAutoPtr<Diligent::ISwapChain> m_SwapChain;
     };
 }

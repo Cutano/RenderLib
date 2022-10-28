@@ -4,8 +4,6 @@
 #include "Utility/Event/EventBus.h"
 #include "Utility/Event/EventListener.h"
 
-#include <SwapChain.h>
-
 namespace RL
 {
     static bool s_GLFWInitialized = false;
@@ -74,7 +72,7 @@ namespace RL
     	RegisterCallbacks();
     }
 
-    void Window::Resize(const int width, const int height)
+	void Window::Resize(const int width, const int height)
     {
         m_Width = width;
         m_Height = height;
@@ -130,7 +128,7 @@ namespace RL
     	return m_Window;
     }
 
-    std::shared_ptr<Diligent::ISwapChain> Window::GetSwapChain() const
+    Diligent::RefCntAutoPtr<Diligent::ISwapChain> Window::GetSwapChain() const
     {
     	return m_SwapChain;
     }
@@ -140,14 +138,9 @@ namespace RL
         m_Height = height;
     }
 
-    void Window::SetSwapChain(const std::shared_ptr<Diligent::ISwapChain>& swapChain)
+    void Window::SetSwapChain(const Diligent::RefCntAutoPtr<Diligent::ISwapChain>& swapChain)
     {
 	    m_SwapChain = swapChain;
-    }
-
-    void Window::SetSwapChain(Diligent::ISwapChain* swapChain)
-    {
-    	m_SwapChain.reset(swapChain);
     }
 
     void Window::RegisterCallbacks()

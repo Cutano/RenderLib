@@ -47,6 +47,8 @@ namespace RL
         void Preprocess();
         void InitMainWindow();
         void InitGuiSystem();
+
+        void BeforeClose();
         
         StartupParam m_StartupParam;
 

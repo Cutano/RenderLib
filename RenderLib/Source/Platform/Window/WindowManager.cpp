@@ -24,6 +24,17 @@ namespace RL
         }
     }
 
+    void WindowManager::Shutdown()
+    {
+        for (auto& [handle, window] : m_WindowRegistry)
+        {
+            window.reset();
+        }
+        
+        m_WindowRegistry.clear();
+        m_MainWindowHwnd = nullptr;
+    }
+
     void WindowManager::ShowMainWindow(const std::string& title)
     {
         const auto window = std::make_shared<Window>(title, 1440, 900, true);
@@ -53,6 +64,7 @@ namespace RL
 
     void WindowManager::DestroyWindow(const HWND hwnd)
     {
+        m_WindowRegistry[hwnd].reset();
         m_WindowRegistry.erase(hwnd);
     }
 

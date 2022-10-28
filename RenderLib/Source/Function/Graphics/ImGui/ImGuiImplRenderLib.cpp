@@ -116,7 +116,7 @@ namespace RL
                 if (!hwnd) return;
                 
                 const auto window = WindowManager::Get().GetWindow(hwnd);
-                const auto swapChain = window->GetSwapChain();
+                auto swapChain = window->GetSwapChain();
                 const auto desc = window->GetSwapChain()->GetDesc();
                 
                 auto* rtv = swapChain->GetCurrentBackBufferRTV();
