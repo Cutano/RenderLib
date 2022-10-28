@@ -1,7 +1,7 @@
 #pragma once
 
 #include <memory>
-#include <dexode/EventBus.hpp>
+#include <eventbus/event_bus.hpp>
 
 namespace RL
 {
@@ -24,17 +24,15 @@ namespace RL
         void Update();
 
         template <typename Event>
-        void SpreadEvent(Event event)
+        void SpreadEvent(Event&& event)
         {
-            m_EventBus->postpone<Event>(event);
-            // Should I move process to main loop?
-            m_EventBus->process();
+            m_EventBus->fire_event<Event>(std::forward<Event>(event));
         }
         
     private:
         EventBus() = default;
 
-        std::shared_ptr<dexode::EventBus> m_EventBus;
+        std::shared_ptr<dp::event_bus> m_EventBus;
 
         friend class EventListener;
     };

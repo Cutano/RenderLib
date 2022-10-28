@@ -60,7 +60,7 @@
       <ConformanceMode>true</ConformanceMode>
       <LanguageStandard>stdcpp20</LanguageStandard>
       <LanguageStandard_C>stdc17</LanguageStandard_C>
-      <AdditionalIncludeDirectories>$(SolutionDir)ThirdParty\DiligentEngine\DiligentCore\Graphics\GraphicsEngine\interface;$(SolutionDir)ThirdParty\DiligentEngine\DiligentCore\Graphics\GraphicsEngineD3D12\interface;$(SolutionDir)ThirdParty\DiligentEngine\DiligentTools\Imgui\interface;$(SolutionDir)ThirdParty\DiligentEngine\DiligentTools\ThirdParty\imgui;$(SolutionDir)ThirdParty\efsw\include;$(SolutionDir)ThirdParty\spdlog\include;$(SolutionDir)ThirdParty\EventBus\lib\src;$(ProjectDir)Source;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>$(SolutionDir)ThirdParty\DiligentEngine\DiligentCore\Graphics\GraphicsEngine\interface;$(SolutionDir)ThirdParty\DiligentEngine\DiligentCore\Graphics\GraphicsEngineD3D12\interface;$(SolutionDir)ThirdParty\DiligentEngine\DiligentTools\Imgui\interface;$(SolutionDir)ThirdParty\DiligentEngine\DiligentTools\ThirdParty\imgui;$(SolutionDir)ThirdParty\efsw\include;$(SolutionDir)ThirdParty\spdlog\include;$(SolutionDir)ThirdParty\eventbus\eventbus\include;$(ProjectDir)Source;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
     </ClCompile>
     <Link>
       <SubSystem>Console</SubSystem>
@@ -78,7 +78,7 @@
       <ConformanceMode>true</ConformanceMode>
       <LanguageStandard>stdcpp20</LanguageStandard>
       <LanguageStandard_C>stdc17</LanguageStandard_C>
-      <AdditionalIncludeDirectories>$(SolutionDir)ThirdParty\DiligentEngine\DiligentCore\Graphics\GraphicsEngine\interface;$(SolutionDir)ThirdParty\DiligentEngine\DiligentCore\Graphics\GraphicsEngineD3D12\interface;$(SolutionDir)ThirdParty\DiligentEngine\DiligentTools\Imgui\interface;$(SolutionDir)ThirdParty\DiligentEngine\DiligentTools\ThirdParty\imgui;$(SolutionDir)ThirdParty\efsw\include;$(SolutionDir)ThirdParty\spdlog\include;$(SolutionDir)ThirdParty\EventBus\lib\src;$(ProjectDir)Source;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>$(SolutionDir)ThirdParty\DiligentEngine\DiligentCore\Graphics\GraphicsEngine\interface;$(SolutionDir)ThirdParty\DiligentEngine\DiligentCore\Graphics\GraphicsEngineD3D12\interface;$(SolutionDir)ThirdParty\DiligentEngine\DiligentTools\Imgui\interface;$(SolutionDir)ThirdParty\DiligentEngine\DiligentTools\ThirdParty\imgui;$(SolutionDir)ThirdParty\efsw\include;$(SolutionDir)ThirdParty\spdlog\include;$(SolutionDir)ThirdParty\eventbus\eventbus\include;$(ProjectDir)Source;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
     </ClCompile>
     <Link>
       <SubSystem>Console</SubSystem>
@@ -129,9 +129,6 @@
     </ProjectReference>
     <ProjectReference Include="..\ThirdParty\efsw\make\windows\efsw-static-lib.vcxproj">
       <Project>{73408775-dfcb-f439-e8dc-772e54e7503a}</Project>
-    </ProjectReference>
-    <ProjectReference Include="..\ThirdParty\EventBus\build\lib\EventBus.vcxproj">
-      <Project>{41962e89-096d-36b2-8940-94196c106a88}</Project>
     </ProjectReference>
     <ProjectReference Include="..\ThirdParty\spdlog\build\spdlog.vcxproj">
       <Project>{32460ddc-499e-354a-8919-5424e91529e6}</Project>

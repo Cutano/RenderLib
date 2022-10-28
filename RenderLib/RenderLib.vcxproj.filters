@@ -17,6 +17,11 @@
     <ClCompile Include="Source\Utility\Event\EventListener.cpp" />
     <ClCompile Include="Source\Utility\Event\Events.cpp" />
     <ClCompile Include="..\ThirdParty\DiligentEngine\DiligentTools\ThirdParty\imgui\backends\imgui_impl_glfw.cpp" />
+    <ClCompile Include="Source\Function\Graphics\ImGui\GuiBase.cpp" />
+    <ClCompile Include="Source\Function\Graphics\ImGui\GuiComponent\Window\DemoWindow.cpp" />
+    <ClCompile Include="Source\Function\Graphics\ImGui\GuiComponent\Window\imgui_demo.cpp" />
+    <ClCompile Include="Source\Function\Graphics\ImGui\GuiSystem.cpp" />
+    <ClCompile Include="Source\Function\Graphics\ImGui\GuiWindowBase.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Source\Base.h" />
@@ -32,5 +37,9 @@
     <ClInclude Include="Source\Utility\Event\EventListener.h" />
     <ClInclude Include="Source\Utility\Event\Events.h" />
     <ClInclude Include="Source\Utility\KeyCodes.h" />
+    <ClInclude Include="Source\Function\Graphics\ImGui\GuiBase.h" />
+    <ClInclude Include="Source\Function\Graphics\ImGui\GuiComponent\Window\DemoWindow.h" />
+    <ClInclude Include="Source\Function\Graphics\ImGui\GuiSystem.h" />
+    <ClInclude Include="Source\Function\Graphics\ImGui\GuiWindowBase.h" />
   </ItemGroup>
 </Project>

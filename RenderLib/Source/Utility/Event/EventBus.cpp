@@ -4,11 +4,11 @@ namespace RL
 {
     void EventBus::Init()
     {
-        m_EventBus = std::make_shared<dexode::EventBus>();
+        m_EventBus = std::make_shared<dp::event_bus>();
     }
 
     void EventBus::Update()
     {
-        m_EventBus->process();
+        
     }
 }

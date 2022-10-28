@@ -162,7 +162,7 @@ namespace RL
 	        e.Width = static_cast<float>(width);
 	        e.Height = static_cast<float>(height);
         	
-	        EventBus::Get().SpreadEvent<AppWindowResizeEvent>(e);
+	        EventBus::Get().SpreadEvent(e);
         });
 
         glfwSetWindowCloseCallback(m_Window, [](GLFWwindow* window)
@@ -173,7 +173,7 @@ namespace RL
         	e.GlfWWindow = window;
 	        e.Hwnd = hwnd;
 
-	        EventBus::Get().SpreadEvent<AppWindowCloseEvent>(e);
+	        EventBus::Get().SpreadEvent(e);
         });
 
         glfwSetKeyCallback(m_Window, [](GLFWwindow* window, int key, int scancode, int action, int mods)
@@ -191,7 +191,7 @@ namespace RL
 	        		e.ScanCode = scancode;
 	        		e.Mods = mods;
 			        e.Key = static_cast<KeyCode>(key);
-			        EventBus::Get().SpreadEvent<KeyPressedEvent>(e);
+			        EventBus::Get().SpreadEvent(e);
 			        break;
 		        }
 	        case GLFW_RELEASE:
@@ -203,7 +203,7 @@ namespace RL
 					e.ScanCode = scancode;
 					e.Mods = mods;
 			        e.Key = static_cast<KeyCode>(key);
-			        EventBus::Get().SpreadEvent<KeyReleasedEvent>(e);
+			        EventBus::Get().SpreadEvent(e);
 			        break;
 		        }
 	        case GLFW_REPEAT:
@@ -215,7 +215,7 @@ namespace RL
 					e.ScanCode = scancode;
 					e.Mods = mods;
 			        e.Key = static_cast<KeyCode>(key);
-			        EventBus::Get().SpreadEvent<KeyRepeatedEvent>(e);
+			        EventBus::Get().SpreadEvent(e);
 			        break;
 		        }
 	        }
@@ -229,7 +229,7 @@ namespace RL
         	e.GlfWWindow = window;
         	e.Hwnd = hwnd;
 	        e.Key = static_cast<KeyCode>(codepoint);
-	        EventBus::Get().SpreadEvent<KeyTypedEvent>(e);
+	        EventBus::Get().SpreadEvent(e);
         });
 
         glfwSetMouseButtonCallback(m_Window, [](GLFWwindow* window, int button, int action, int mods)
@@ -246,7 +246,7 @@ namespace RL
 	        		e.Action = action;
 	        		e.Mods = mods;
 			        e.Button = static_cast<MouseButton>(button);
-			        EventBus::Get().SpreadEvent<MouseButtonPressedEvent>(e);
+			        EventBus::Get().SpreadEvent(e);
 			        break;
 		        }
 	        case GLFW_RELEASE:
@@ -257,7 +257,7 @@ namespace RL
 	        		e.Action = action;
 					e.Mods = mods;
 			        e.Button = static_cast<MouseButton>(button);
-			        EventBus::Get().SpreadEvent<MouseButtonReleasedEvent>(e);
+			        EventBus::Get().SpreadEvent(e);
 			        break;
 		        }
 	        }
@@ -273,7 +273,7 @@ namespace RL
 	        e.X = xOffset;
 	        e.Y = yOffset;
         	
-	        EventBus::Get().SpreadEvent<MouseScrolledEvent>(e);
+	        EventBus::Get().SpreadEvent(e);
         });
 
         glfwSetCursorPosCallback(m_Window, [](GLFWwindow* window, double x, double y)
@@ -286,7 +286,7 @@ namespace RL
 	        e.X = x;
 	        e.Y = y;
 
-	        EventBus::Get().SpreadEvent<MouseMovedEvent>(e);
+	        EventBus::Get().SpreadEvent(e);
         });
 
 		glfwSetWindowIconifyCallback(m_Window, [](GLFWwindow* window, int iconified)
@@ -298,7 +298,7 @@ namespace RL
 			e.Hwnd = hwnd;
 			e.Minimized = static_cast<bool>(iconified);
 			
-			EventBus::Get().SpreadEvent<AppWindowMinimizeEvent>(e);
+			EventBus::Get().SpreadEvent(e);
 		});
 
     	glfwSetWindowFocusCallback(m_Window, [](GLFWwindow* window, int focused)
@@ -310,7 +310,7 @@ namespace RL
     		e.Hwnd = hwnd;
     		e.Focused = static_cast<bool>(focused);
 
-    		EventBus::Get().SpreadEvent<AppWindowFocusEvent>(e);
+    		EventBus::Get().SpreadEvent(e);
     	});
 
     	glfwSetCursorEnterCallback(m_Window, [](GLFWwindow* window, int entered)
@@ -322,7 +322,7 @@ namespace RL
 			e.Hwnd = hwnd;
 			e.Entered = static_cast<bool>(entered);
 
-			EventBus::Get().SpreadEvent<MouseEnteredEvent>(e);
+			EventBus::Get().SpreadEvent(e);
     	});
 
     	glfwSetMonitorCallback([](GLFWmonitor* monitor, int event)
@@ -331,7 +331,7 @@ namespace RL
     		e.Monitor = monitor;
     		e.Event = event;
 
-    		EventBus::Get().SpreadEvent<MonitorEvent>(e);
+    		EventBus::Get().SpreadEvent(e);
     	});
 
     	m_Listener = std::make_shared<EventListener>();
