@@ -10,6 +10,7 @@ namespace RL
     // Application Startup Routine:
     //   Init Event Bus
     //   Setup Workspace
+    //   Init Scripting Engine
     //   Init Graphics Engine
     //   Load Assets
     //   Perform Preprocess
@@ -42,6 +43,7 @@ namespace RL
     private:
         void InitEventBus();
         void SetupWorkspace();
+        void InitScriptingEngine();
         void InitGraphicsEngine();
         void LoadAsset();
         void Preprocess();

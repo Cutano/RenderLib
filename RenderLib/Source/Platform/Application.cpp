@@ -2,6 +2,7 @@
 #include "Application.h"
 #include "Workspace/Workspace.h"
 #include "Function/Graphics/GraphicEngine.h"
+#include "Function/Scripting/ScriptingEngine.h"
 #include "Platform/Window/Window.h"
 #include "Platform/Window/WindowManager.h"
 #include "Utility/Event/Events.h"
@@ -57,6 +58,7 @@ namespace RL
         {
             WindowManager::Get().Update();
             EventBus::Get().Update();
+            ScriptingEngine::Get().Update();
             GraphicEngine::Get().Update();
             GuiSystem::Get().Update();
 
@@ -93,6 +95,12 @@ namespace RL
         Workspace::Get().Init(m_StartupParam.WorkspaceDir);
     }
 
+    void Application::InitScriptingEngine()
+    {
+        Log::Logger()->info("Initiating scripting engine...");
+        ScriptingEngine::Get().Init();
+    }
+
     void Application::InitGraphicsEngine()
     {
         Log::Logger()->info("Initiating graphics engine...");
@@ -127,6 +135,7 @@ namespace RL
     void Application::BeforeClose()
     {
         WindowManager::Get().Shutdown();
+        ScriptingEngine::Get().Shutdown();
         GraphicEngine::Get().Shutdown();
     }
 }

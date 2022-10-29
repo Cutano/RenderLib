@@ -100,6 +100,7 @@
     <ClCompile Include="Source\Function\Graphics\ImGui\GuiSystem.cpp" />
     <ClCompile Include="Source\Function\Graphics\ImGui\GuiWindowBase.cpp" />
     <ClCompile Include="Source\Function\Graphics\ImGui\ImGuiImplRenderLib.cpp" />
+    <ClCompile Include="Source\Function\Scripting\ScriptingEngine.cpp" />
     <ClCompile Include="Source\Platform\Application.cpp" />
     <ClCompile Include="Source\Platform\Window\Window.cpp" />
     <ClCompile Include="Source\Platform\Window\WindowManager.cpp" />
@@ -141,6 +142,7 @@
     <ClInclude Include="Source\Function\Graphics\ImGui\GuiSystem.h" />
     <ClInclude Include="Source\Function\Graphics\ImGui\GuiWindowBase.h" />
     <ClInclude Include="Source\Function\Graphics\ImGui\ImGuiImplRenderLib.h" />
+    <ClInclude Include="Source\Function\Scripting\ScriptingEngine.h" />
     <ClInclude Include="Source\Platform\Application.h" />
     <ClInclude Include="Source\Platform\Window\Window.h" />
     <ClInclude Include="Source\Platform\Window\WindowManager.h" />
