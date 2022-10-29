@@ -11,4 +11,9 @@ namespace RL
     {
         
     }
+
+    void EventBus::Shutdown()
+    {
+        m_EventBus->remove_handlers();
+    }
 }

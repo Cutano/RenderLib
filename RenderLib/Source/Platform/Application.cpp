@@ -48,7 +48,7 @@ namespace RL
 
     Application::~Application()
     {
-        delete m_Listener;
+        
     }
 
     void Application::Run()
@@ -126,7 +126,10 @@ namespace RL
 
     void Application::BeforeClose()
     {
+        delete m_Listener;
+        
         WindowManager::Get().Shutdown();
         GraphicEngine::Get().Shutdown();
+        EventBus::Get().Shutdown();
     }
 }

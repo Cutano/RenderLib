@@ -7,6 +7,8 @@ namespace RL
 {
     class EventBus
     {
+        friend class EventListener;
+        
     public:
         static EventBus& Get()
         {
@@ -22,6 +24,7 @@ namespace RL
 
         void Init();
         void Update();
+        void Shutdown();
 
         template <typename Event>
         void SpreadEvent(Event&& event)
@@ -33,7 +36,5 @@ namespace RL
         EventBus() = default;
 
         std::shared_ptr<dp::event_bus> m_EventBus;
-
-        friend class EventListener;
     };
 }
