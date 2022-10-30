@@ -24,12 +24,15 @@ namespace RL
         Workspace& operator=(const Workspace& other) = delete;
         Workspace& operator=(Workspace&& other) noexcept = delete;
 
-        void Init(const std::string& dir);
+        void Init(const std::string& appPath, const std::string& workDir);
+        std::string GetWorkspaceDir();
+        std::string GetApplicationPath();
 
     private:
         Workspace() = default;
         
         std::string m_WorkspaceDir;
+        std::string m_ApplicationPath;
         std::unique_ptr<FileWatcher> m_Watcher;
     };
 }

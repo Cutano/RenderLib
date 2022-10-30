@@ -4,9 +4,20 @@
 
 namespace RL
 {
-    void Workspace::Init(const std::string& dir)
+    void Workspace::Init(const std::string& appPath, const std::string& workDir)
     {
-        m_WorkspaceDir = dir;
+        m_WorkspaceDir = workDir;
+        m_ApplicationPath = appPath;
         m_Watcher = std::make_unique<FileWatcher>(m_WorkspaceDir);
+    }
+
+    std::string Workspace::GetWorkspaceDir()
+    {
+        return m_WorkspaceDir;
+    }
+
+    std::string Workspace::GetApplicationPath()
+    {
+        return m_ApplicationPath;
     }
 }

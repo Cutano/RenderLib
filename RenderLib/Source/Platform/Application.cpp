@@ -40,6 +40,7 @@ namespace RL
 
         InitEventBus();
         SetupWorkspace();
+        InitScriptingEngine();
         InitGraphicsEngine();
         LoadAsset();
         Preprocess();
@@ -92,7 +93,7 @@ namespace RL
     void Application::SetupWorkspace()
     {
         Log::Logger()->info("Initiating workspace...");
-        Workspace::Get().Init(m_StartupParam.WorkspaceDir);
+        Workspace::Get().Init(m_StartupParam.ExePath, m_StartupParam.WorkspaceDir);
     }
 
     void Application::InitScriptingEngine()

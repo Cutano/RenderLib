@@ -2,6 +2,11 @@
 
 namespace RL
 {
+    struct DirParam
+    {
+        
+    };
+    
     class ScriptingEngine
     {
     public:
@@ -23,5 +28,7 @@ namespace RL
 
     private:
         ScriptingEngine() = default;
+
+        bool LoadHostFxr();
     };
 }

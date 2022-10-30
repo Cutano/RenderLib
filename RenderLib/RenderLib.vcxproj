@@ -60,12 +60,13 @@
       <ConformanceMode>true</ConformanceMode>
       <LanguageStandard>stdcpp20</LanguageStandard>
       <LanguageStandard_C>stdc17</LanguageStandard_C>
-      <AdditionalIncludeDirectories>$(SolutionDir)ThirdParty\DiligentEngine\DiligentCore\Common\interface;$(SolutionDir)ThirdParty\DiligentEngine\DiligentCore\Graphics\GraphicsEngine\interface;$(SolutionDir)ThirdParty\DiligentEngine\DiligentCore\Graphics\GraphicsEngineD3D12\interface;$(SolutionDir)ThirdParty\DiligentEngine\DiligentTools\Imgui\interface;$(SolutionDir)ThirdParty\DiligentEngine\DiligentTools\ThirdParty\imgui;$(SolutionDir)ThirdParty\efsw\include;$(SolutionDir)ThirdParty\spdlog\include;$(SolutionDir)ThirdParty\eventbus\eventbus\include;$(ProjectDir)Source;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>$(SolutionDir)ThirdParty\DiligentEngine\DiligentCore\Common\interface;$(SolutionDir)ThirdParty\DiligentEngine\DiligentCore\Graphics\GraphicsEngine\interface;$(SolutionDir)ThirdParty\DiligentEngine\DiligentCore\Graphics\GraphicsEngineD3D12\interface;$(SolutionDir)ThirdParty\DiligentEngine\DiligentTools\Imgui\interface;$(SolutionDir)ThirdParty\DiligentEngine\DiligentTools\ThirdParty\imgui;$(SolutionDir)ThirdParty\efsw\include;$(SolutionDir)ThirdParty\spdlog\include;$(SolutionDir)ThirdParty\eventbus\eventbus\include;$(ProjectDir)Source;$(SolutionDir)ThirdParty\DotnetAppHost\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
     </ClCompile>
     <Link>
       <SubSystem>Console</SubSystem>
       <GenerateDebugInformation>true</GenerateDebugInformation>
-      <AdditionalDependencies>dxguid.lib;DXGI.lib;D3d12.lib;d3dcompiler.lib;$(CoreLibraryDependencies);%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalDependencies>dxguid.lib;DXGI.lib;D3d12.lib;d3dcompiler.lib;nethost.lib;$(CoreLibraryDependencies);%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalLibraryDirectories>$(SolutionDir)ThirdParty\DotnetAppHost\debug;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
     </Link>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
@@ -78,14 +79,15 @@
       <ConformanceMode>true</ConformanceMode>
       <LanguageStandard>stdcpp20</LanguageStandard>
       <LanguageStandard_C>stdc17</LanguageStandard_C>
-      <AdditionalIncludeDirectories>$(SolutionDir)ThirdParty\DiligentEngine\DiligentCore\Common\interface;$(SolutionDir)ThirdParty\DiligentEngine\DiligentCore\Graphics\GraphicsEngine\interface;$(SolutionDir)ThirdParty\DiligentEngine\DiligentCore\Graphics\GraphicsEngineD3D12\interface;$(SolutionDir)ThirdParty\DiligentEngine\DiligentTools\Imgui\interface;$(SolutionDir)ThirdParty\DiligentEngine\DiligentTools\ThirdParty\imgui;$(SolutionDir)ThirdParty\efsw\include;$(SolutionDir)ThirdParty\spdlog\include;$(SolutionDir)ThirdParty\eventbus\eventbus\include;$(ProjectDir)Source;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>$(SolutionDir)ThirdParty\DiligentEngine\DiligentCore\Common\interface;$(SolutionDir)ThirdParty\DiligentEngine\DiligentCore\Graphics\GraphicsEngine\interface;$(SolutionDir)ThirdParty\DiligentEngine\DiligentCore\Graphics\GraphicsEngineD3D12\interface;$(SolutionDir)ThirdParty\DiligentEngine\DiligentTools\Imgui\interface;$(SolutionDir)ThirdParty\DiligentEngine\DiligentTools\ThirdParty\imgui;$(SolutionDir)ThirdParty\efsw\include;$(SolutionDir)ThirdParty\spdlog\include;$(SolutionDir)ThirdParty\eventbus\eventbus\include;$(ProjectDir)Source;$(SolutionDir)ThirdParty\DotnetAppHost\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
     </ClCompile>
     <Link>
       <SubSystem>Console</SubSystem>
       <EnableCOMDATFolding>true</EnableCOMDATFolding>
       <OptimizeReferences>true</OptimizeReferences>
       <GenerateDebugInformation>true</GenerateDebugInformation>
-      <AdditionalDependencies>dxguid.lib;DXGI.lib;D3d12.lib;d3dcompiler.lib;$(CoreLibraryDependencies);%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalDependencies>dxguid.lib;DXGI.lib;D3d12.lib;d3dcompiler.lib;nethost.lib;$(CoreLibraryDependencies);%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalLibraryDirectories>$(SolutionDir)ThirdParty\DotnetAppHost\release;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
@@ -151,9 +153,21 @@
     <ClInclude Include="Source\Utility\Event\EventBus.h" />
     <ClInclude Include="Source\Utility\Event\EventListener.h" />
     <ClInclude Include="Source\Utility\Event\Events.h" />
+    <ClInclude Include="Source\Utility\Functions.h" />
     <ClInclude Include="Source\Utility\KeyCodes.h" />
     <ClInclude Include="Source\Utility\Log.h" />
     <ClInclude Include="Source\Base.h" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="Resource\**">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="..\ThirdParty\DotnetAppHost\debug\nethost.dll" Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="..\ThirdParty\DotnetAppHost\release\nethost.dll" Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
