@@ -8,6 +8,7 @@
     <BaseOutputPath>$(SolutionDir)Build\Bin\</BaseOutputPath>
     <Platforms>x64</Platforms>
     <AllowUnsafeBlocks>True</AllowUnsafeBlocks>
+    <EnableDynamicLoading>true</EnableDynamicLoading>
     <Authors>Cutano</Authors>
   </PropertyGroup>
 

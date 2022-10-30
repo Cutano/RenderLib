@@ -52,6 +52,7 @@ public unsafe class Workspace
         propertyGroup.AddProperty("TargetFramework", "net6.0");
         propertyGroup.AddProperty("BaseOutputPath", @"Library\");
         propertyGroup.AddProperty("Platforms", "x64");
+        propertyGroup.AddProperty("EnableDynamicLoading", "true");
 
         var itemGroup = root.AddItemGroup();
         var refItem = itemGroup.AddItem("Reference", "ScriptingCore");
