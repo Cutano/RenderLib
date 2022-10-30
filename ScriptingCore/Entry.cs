@@ -13,7 +13,7 @@ namespace ScriptingCore
         public static void Init(IntPtr msg)
         {
             Console.WriteLine("Init C# Scripting Core...");
-            var msgStr = Marshal.PtrToStringUTF8(msg);
+            var msgStr = Marshal.PtrToStringUni(msg);
             Console.WriteLine(msgStr);
         }
     }
