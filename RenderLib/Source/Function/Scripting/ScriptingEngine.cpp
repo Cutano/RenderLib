@@ -18,6 +18,13 @@ namespace RL
 
     using string_t = std::basic_string<char_t>;
 
+    std::function<void(double)> UpdateManaged;
+
+    struct ManagedFunctionPayload
+    {
+        void* Update {nullptr};
+    };
+
     void* get_export(void* h, const char* name)
     {
         void* f = GetProcAddress(static_cast<HMODULE>(h), name);
@@ -44,6 +51,7 @@ namespace RL
 
         // Load .NET Core
         void *load_assembly_and_get_function_pointer_void = nullptr;
+        void *get_function_pointer_void = nullptr;
         hostfxr_handle cxt = nullptr;
         int rc = init_fptr(config_path.c_str(), nullptr, &cxt);
         if (rc != 0 || cxt == nullptr)
@@ -61,6 +69,13 @@ namespace RL
         if (rc != 0 || load_assembly_and_get_function_pointer_void == nullptr)
             Log::Logger()->error("Get delegate failed: {}", rc);
 
+        rc = get_delegate_fptr(
+            cxt,
+            hdt_get_function_pointer,
+            &get_function_pointer_void);
+        if (rc != 0 || get_function_pointer_void == nullptr)
+            Log::Logger()->error("Get delegate failed: {}", rc);
+
         close_fptr(cxt);
         const auto load_assembly_and_get_function_pointer =
             static_cast<load_assembly_and_get_function_pointer_fn>(load_assembly_and_get_function_pointer_void);
@@ -69,7 +84,7 @@ namespace RL
 
         const string_t dotnetlib_path = rootDir / "net6.0" / "ScriptingCore.dll";
         const char_t *dotnet_type = L"ScriptingCore.Entry, ScriptingCore";
-        typedef void (CORECLR_DELEGATE_CALLTYPE *custom_entry_point_fn)(const char_t* args);
+        typedef ManagedFunctionPayload (CORECLR_DELEGATE_CALLTYPE *custom_entry_point_fn)(const char_t* args);
         custom_entry_point_fn init = nullptr;
         rc = load_assembly_and_get_function_pointer(
             dotnetlib_path.c_str(),
@@ -81,7 +96,8 @@ namespace RL
 
         RL_ASSERT(rc == 0 && init != nullptr, "Failure: load_assembly_and_get_function_pointer()")
 
-        init(L"Hello 你好");
+        const auto payload = init(L"Hello 你好");
+        UpdateManaged = static_cast<void(*)(double)>(payload.Update);
     }
 
     void ScriptingEngine::Shutdown()
@@ -91,7 +107,7 @@ namespace RL
 
     void ScriptingEngine::Update()
     {
-        
+        UpdateManaged(0);
     }
 
     bool ScriptingEngine::LoadHostFxr()

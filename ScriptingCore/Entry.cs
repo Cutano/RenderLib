@@ -9,12 +9,29 @@ namespace ScriptingCore
 {
     public static class Entry
     {
+        public unsafe struct ManagedFunctionPayload
+        {
+            public delegate* unmanaged<double, void> UpdateManaged;
+        }
+        
         [UnmanagedCallersOnly]
-        public static void Init(IntPtr msg)
+        public static unsafe ManagedFunctionPayload Init(IntPtr msg)
         {
             Console.WriteLine("Init C# Scripting Core...");
             var msgStr = Marshal.PtrToStringUni(msg);
             Console.WriteLine(msgStr);
+
+            ScriptingCore.Instance.Init();
+
+            ManagedFunctionPayload payload;
+            payload.UpdateManaged = &Update;
+            return payload;
+        }
+
+        [UnmanagedCallersOnly]
+        public static void Update(double dt)
+        {
+            ScriptingCore.Instance.Update(dt);
         }
     }
 }
