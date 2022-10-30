@@ -67,7 +67,21 @@ namespace RL
         
         RL_ASSERT(load_assembly_and_get_function_pointer != nullptr, "Failure: get_dotnet_load_assembly()")
 
-        
+        const string_t dotnetlib_path = rootDir / "net6.0" / "ScriptingCore.dll";
+        const char_t *dotnet_type = L"ScriptingCore.Entry, ScriptingCore";
+        typedef void (CORECLR_DELEGATE_CALLTYPE *custom_entry_point_fn)(const char8_t* args);
+        custom_entry_point_fn init = nullptr;
+        rc = load_assembly_and_get_function_pointer(
+            dotnetlib_path.c_str(),
+            dotnet_type,
+            L"Init" /*method_name*/,
+            UNMANAGEDCALLERSONLY_METHOD,
+            nullptr,
+            (void**)&init);
+
+        RL_ASSERT(rc == 0 && init != nullptr, "Failure: load_assembly_and_get_function_pointer()")
+
+        init(u8"Hello 你好");
     }
 
     void ScriptingEngine::Shutdown()

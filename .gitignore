@@ -19,6 +19,7 @@
 
 # Build
 Build/
+obj/
 
 # Nuget
 /packages/

@@ -115,6 +115,9 @@
     <ClCompile Include="Source\main.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="..\ScriptingCore\ScriptingCore.csproj">
+      <Project>{45a36825-ffb7-4273-b521-83c776905f44}</Project>
+    </ProjectReference>
     <ProjectReference Include="..\ThirdParty\DiligentEngine\build\Win64\DiligentCore\DiligentCore-static.vcxproj">
       <Project>{d0666570-8d99-3a7a-8a86-656b49023938}</Project>
     </ProjectReference>

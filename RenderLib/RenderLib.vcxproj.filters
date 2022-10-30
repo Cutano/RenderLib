@@ -43,5 +43,6 @@
     <ClInclude Include="Source\Function\Graphics\ImGui\GuiSystem.h" />
     <ClInclude Include="Source\Function\Graphics\ImGui\GuiWindowBase.h" />
     <ClInclude Include="Source\Function\Scripting\ScriptingEngine.h" />
+    <ClInclude Include="Source\Utility\Functions.h" />
   </ItemGroup>
 </Project>

@@ -2,7 +2,7 @@
 
   <PropertyGroup>
     <BaseOutputPath>$(SolutionDir)Build\Bin\</BaseOutputPath>
-    <BaseIntermediateOutputPath>$(SolutionDir)Build\Obj\</BaseIntermediateOutputPath>
+    <BaseIntermediateOutputPath>obj\</BaseIntermediateOutputPath>
     <OutputType>WinExe</OutputType>
     <TargetFramework>net6.0-windows</TargetFramework>
     <Nullable>enable</Nullable>
