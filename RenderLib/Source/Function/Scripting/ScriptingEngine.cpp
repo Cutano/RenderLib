@@ -1,6 +1,7 @@
 ﻿#include "Base.h"
 #include "ScriptingEngine.h"
 #include "Platform/Workspace/Workspace.h"
+#include "Bindings.h"
 
 #include <nethost.h>
 #include <hostfxr.h>
@@ -22,6 +23,12 @@ namespace RL
     {
         void(*Update)(double);
     } managedPayload;
+
+    struct UnmanagedFunctionPayload
+    {
+        char*(*WorkspaceGetAppPath)();
+        char*(*WorkspaceGetWorkspaceDir)();
+    } unmanagedFunctionPayload;
 
     void* get_export(void* h, const char* name)
     {
@@ -74,7 +81,7 @@ namespace RL
 
         const string_t dotnetLibPath = rootDir / "net6.0" / "ScriptingCore.dll";
         const char_t *dotnet_type = L"ScriptingCore.Entry, ScriptingCore";
-        typedef ManagedFunctionPayload (CORECLR_DELEGATE_CALLTYPE *custom_entry_point_fn)(const char_t* args);
+        typedef ManagedFunctionPayload (CORECLR_DELEGATE_CALLTYPE *custom_entry_point_fn)(UnmanagedFunctionPayload args);
         custom_entry_point_fn init = nullptr;
         rc = loadAssemblyAndGetFunctionPointer(
             dotnetLibPath.c_str(),
@@ -86,7 +93,9 @@ namespace RL
 
         RL_ASSERT(rc == 0 && init != nullptr, "Failure: load_assembly_and_get_function_pointer()")
 
-        managedPayload = init(L"Hello 你好");
+        unmanagedFunctionPayload.WorkspaceGetAppPath = WorkspaceGetAppPath;
+        unmanagedFunctionPayload.WorkspaceGetWorkspaceDir = WorkspaceGetWorkspaceDir;
+        managedPayload = init(unmanagedFunctionPayload);
     }
 
     void ScriptingEngine::Shutdown()

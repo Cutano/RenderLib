@@ -4,6 +4,7 @@ using System.Linq;
 using System.Runtime.InteropServices;
 using System.Text;
 using System.Threading.Tasks;
+using Microsoft.Build.Locator;
 
 namespace ScriptingCore
 {
@@ -15,6 +16,8 @@ namespace ScriptingCore
         {
             Console.WriteLine("Init C# Scripting Core...");
 
+            MSBuildLocator.RegisterDefaults();
+            
             Workspace.Instance.Init(unmanagedPayload);
             ScriptingCore.Instance.Init();
 
