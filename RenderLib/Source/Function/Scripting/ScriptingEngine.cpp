@@ -11,19 +11,17 @@
 namespace RL
 {
     // Globals to hold hostfxr exports
-    hostfxr_initialize_for_runtime_config_fn init_fptr;
-    hostfxr_get_runtime_delegate_fn get_delegate_fptr;
-    hostfxr_set_error_writer_fn set_error_writer_fptr;
-    hostfxr_close_fn close_fptr;
+    hostfxr_initialize_for_runtime_config_fn InitRuntimeConfigDelegate;
+    hostfxr_get_runtime_delegate_fn GetRuntimeDelegateDelegate;
+    hostfxr_set_error_writer_fn SetErrorWriterDelegate;
+    hostfxr_close_fn CloseFxrDelegate;
 
     using string_t = std::basic_string<char_t>;
 
-    std::function<void(double)> UpdateManaged;
-
     struct ManagedFunctionPayload
     {
-        void* Update {nullptr};
-    };
+        void(*Update)(double);
+    } managedPayload;
 
     void* get_export(void* h, const char* name)
     {
@@ -39,7 +37,7 @@ namespace RL
             Log::Logger()->error("Cannot load Dotnet hostfxr, check if Dotnet 6 installed!");
         }
 
-        set_error_writer_fptr([](const char_t *message)
+        SetErrorWriterDelegate([](const char_t *message)
         {
             Log::Logger()->error("Scripting: {}", ConvertString(message));
         });
@@ -50,54 +48,45 @@ namespace RL
         const string_t config_path = rootDir / "Resource" / "Config" / "RenderLib.runtimeconfig.json";
 
         // Load .NET Core
-        void *load_assembly_and_get_function_pointer_void = nullptr;
-        void *get_function_pointer_void = nullptr;
+        void *loadAssemblyAndGetFunctionPointerVoid = nullptr;
         hostfxr_handle cxt = nullptr;
-        int rc = init_fptr(config_path.c_str(), nullptr, &cxt);
+        int rc = InitRuntimeConfigDelegate(config_path.c_str(), nullptr, &cxt);
         if (rc != 0 || cxt == nullptr)
         {
             Log::Logger()->error("Init failed: {}", rc);
-            close_fptr(cxt);
+            CloseFxrDelegate(cxt);
             assert(false);
         }
 
         // Get the load assembly function pointer
-        rc = get_delegate_fptr(
+        rc = GetRuntimeDelegateDelegate(
             cxt,
             hdt_load_assembly_and_get_function_pointer,
-            &load_assembly_and_get_function_pointer_void);
-        if (rc != 0 || load_assembly_and_get_function_pointer_void == nullptr)
+            &loadAssemblyAndGetFunctionPointerVoid);
+        if (rc != 0 || loadAssemblyAndGetFunctionPointerVoid == nullptr)
             Log::Logger()->error("Get delegate failed: {}", rc);
 
-        rc = get_delegate_fptr(
-            cxt,
-            hdt_get_function_pointer,
-            &get_function_pointer_void);
-        if (rc != 0 || get_function_pointer_void == nullptr)
-            Log::Logger()->error("Get delegate failed: {}", rc);
-
-        close_fptr(cxt);
-        const auto load_assembly_and_get_function_pointer =
-            static_cast<load_assembly_and_get_function_pointer_fn>(load_assembly_and_get_function_pointer_void);
+        CloseFxrDelegate(cxt);
+        const auto loadAssemblyAndGetFunctionPointer =
+            static_cast<load_assembly_and_get_function_pointer_fn>(loadAssemblyAndGetFunctionPointerVoid);
         
-        RL_ASSERT(load_assembly_and_get_function_pointer != nullptr, "Failure: get_dotnet_load_assembly()")
+        RL_ASSERT(loadAssemblyAndGetFunctionPointer != nullptr, "Failure: get_dotnet_load_assembly()")
 
-        const string_t dotnetlib_path = rootDir / "net6.0" / "ScriptingCore.dll";
+        const string_t dotnetLibPath = rootDir / "net6.0" / "ScriptingCore.dll";
         const char_t *dotnet_type = L"ScriptingCore.Entry, ScriptingCore";
         typedef ManagedFunctionPayload (CORECLR_DELEGATE_CALLTYPE *custom_entry_point_fn)(const char_t* args);
         custom_entry_point_fn init = nullptr;
-        rc = load_assembly_and_get_function_pointer(
-            dotnetlib_path.c_str(),
+        rc = loadAssemblyAndGetFunctionPointer(
+            dotnetLibPath.c_str(),
             dotnet_type,
             L"Init" /*method_name*/,
             UNMANAGEDCALLERSONLY_METHOD,
             nullptr,
-            (void**)&init);
+            reinterpret_cast<void**>(&init));
 
         RL_ASSERT(rc == 0 && init != nullptr, "Failure: load_assembly_and_get_function_pointer()")
 
-        const auto payload = init(L"Hello 你好");
-        UpdateManaged = static_cast<void(*)(double)>(payload.Update);
+        managedPayload = init(L"Hello 你好");
     }
 
     void ScriptingEngine::Shutdown()
@@ -107,7 +96,7 @@ namespace RL
 
     void ScriptingEngine::Update()
     {
-        UpdateManaged(0);
+        managedPayload.Update(0);
     }
 
     bool ScriptingEngine::LoadHostFxr()
@@ -123,11 +112,11 @@ namespace RL
         assert(h != nullptr);
         void *lib = h;
 
-        init_fptr = static_cast<hostfxr_initialize_for_runtime_config_fn>(get_export(lib, "hostfxr_initialize_for_runtime_config"));
-        get_delegate_fptr = static_cast<hostfxr_get_runtime_delegate_fn>(get_export(lib, "hostfxr_get_runtime_delegate"));
-        set_error_writer_fptr = static_cast<hostfxr_set_error_writer_fn>(get_export(lib, "hostfxr_set_error_writer"));
-        close_fptr = static_cast<hostfxr_close_fn>(get_export(lib, "hostfxr_close"));
+        InitRuntimeConfigDelegate = static_cast<hostfxr_initialize_for_runtime_config_fn>(get_export(lib, "hostfxr_initialize_for_runtime_config"));
+        GetRuntimeDelegateDelegate = static_cast<hostfxr_get_runtime_delegate_fn>(get_export(lib, "hostfxr_get_runtime_delegate"));
+        SetErrorWriterDelegate = static_cast<hostfxr_set_error_writer_fn>(get_export(lib, "hostfxr_set_error_writer"));
+        CloseFxrDelegate = static_cast<hostfxr_close_fn>(get_export(lib, "hostfxr_close"));
 
-        return init_fptr && get_delegate_fptr && set_error_writer_fptr && close_fptr;
+        return InitRuntimeConfigDelegate && GetRuntimeDelegateDelegate && SetErrorWriterDelegate && CloseFxrDelegate;
     }
 }
