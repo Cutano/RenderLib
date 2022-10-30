@@ -7,25 +7,20 @@ using System.Threading.Tasks;
 
 namespace ScriptingCore
 {
-    public static class Entry
+    public static partial class Entry
     {
-        public unsafe struct ManagedFunctionPayload
-        {
-            public delegate* unmanaged<double, void> UpdateManaged;
-        }
-        
         [UnmanagedCallersOnly]
-        public static unsafe ManagedFunctionPayload Init(IntPtr msg)
+        // ReSharper disable once UnusedMember.Global
+        public static unsafe ManagedFunctionPayload Init(UnmanagedFunctionPayload unmanagedPayload)
         {
             Console.WriteLine("Init C# Scripting Core...");
-            var msgStr = Marshal.PtrToStringUni(msg);
-            Console.WriteLine(msgStr);
 
+            Workspace.Instance.Init(unmanagedPayload);
             ScriptingCore.Instance.Init();
 
-            ManagedFunctionPayload payload;
-            payload.UpdateManaged = &Update;
-            return payload;
+            ManagedFunctionPayload managedPayload;
+            managedPayload.UpdateManaged = &Update;
+            return managedPayload;
         }
 
         [UnmanagedCallersOnly]
