@@ -52,7 +52,7 @@ namespace RL
         std::filesystem::path rootPath {Workspace::Get().GetApplicationPath()};
         std::filesystem::path rootDir = rootPath.parent_path();
 
-        const string_t config_path = rootDir / "Resource" / "Config" / "RenderLib.runtimeconfig.json";
+        const string_t config_path = rootDir / "net6.0" / "ScriptingCore.runtimeconfig.json";
 
         // Load .NET Core
         void *loadAssemblyAndGetFunctionPointerVoid = nullptr;
