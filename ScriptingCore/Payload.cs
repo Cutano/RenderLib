@@ -5,15 +5,16 @@ namespace ScriptingCore;
 partial class Entry
 {
     [StructLayout(LayoutKind.Sequential)]
-    public unsafe struct ManagedFunctionPayload
+    internal unsafe struct ManagedFunctionPayload
     {
-        public delegate* unmanaged<double, void> UpdateManaged;
+        internal delegate* unmanaged<double, void> UpdateManaged;
+        internal delegate* unmanaged<Workspace.FileAction, IntPtr, void> OnCsharpFileChangedManaged;
     }
 
     [StructLayout(LayoutKind.Sequential)]
-    public unsafe struct UnmanagedFunctionPayload
+    internal unsafe struct UnmanagedFunctionPayload
     {
-        public delegate* unmanaged<IntPtr> WorkspaceGetAppPath;
-        public delegate* unmanaged<IntPtr> WorkspaceGetWorkspaceDir;
+        internal delegate* unmanaged<IntPtr> WorkspaceGetAppPath;
+        internal delegate* unmanaged<IntPtr> WorkspaceGetWorkspaceDir;
     }
 }

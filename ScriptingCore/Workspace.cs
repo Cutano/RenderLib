@@ -3,12 +3,24 @@ using Microsoft.Build.Construction;
 
 namespace ScriptingCore;
 
-public unsafe class Workspace
+internal unsafe class Workspace
 {
-    public static Workspace Instance { get; } = new();
+    internal static Workspace Instance { get; } = new();
     
     private delegate* unmanaged<IntPtr> _workspaceGetAppPath;
     private delegate* unmanaged<IntPtr> _workspaceGetWorkspaceDir;
+
+    internal enum FileAction
+    {
+        /// Sent when a file is created or renamed
+        Add = 1,
+        /// Sent when a file is deleted or renamed
+        Delete = 2,
+        /// Sent when a file is modified
+        Modified = 3,
+        /// Sent when a file is moved
+        Moved = 4
+    }
         
     static Workspace()
     {
@@ -19,7 +31,7 @@ public unsafe class Workspace
             
     }
 
-    public void Init(Entry.UnmanagedFunctionPayload payload)
+    internal void Init(Entry.UnmanagedFunctionPayload payload)
     {
         _workspaceGetAppPath = payload.WorkspaceGetAppPath;
         _workspaceGetWorkspaceDir = payload.WorkspaceGetWorkspaceDir;
@@ -30,14 +42,22 @@ public unsafe class Workspace
         }
     }
 
-    public string GetAppPath()
+    internal string GetAppPath()
     {
         return Marshal.PtrToStringAnsi(_workspaceGetAppPath()) ?? string.Empty;
     }
 
-    public string GetWorkspaceDir()
+    internal string GetWorkspaceDir()
     {
         return Marshal.PtrToStringAnsi(_workspaceGetWorkspaceDir()) ?? string.Empty;
+    }
+
+    [UnmanagedCallersOnly]
+    internal static void OnCsharpFileChanged(FileAction action, IntPtr path)
+    {
+        var pathStr = Marshal.PtrToStringUni(path) ?? string.Empty;
+        Marshal.FreeBSTR(path);
+        Console.WriteLine(pathStr);
     }
 
     private void GenerateCsproj()

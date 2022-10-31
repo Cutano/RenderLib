@@ -8,7 +8,7 @@ namespace ScriptingCore
 {
     internal sealed class ScriptingCore
     {
-        public static ScriptingCore Instance { get; } = new();
+        internal static ScriptingCore Instance { get; } = new();
         
         static ScriptingCore()
         {
@@ -19,14 +19,14 @@ namespace ScriptingCore
             
         }
 
-        public void Init()
+        internal void Init()
         {
             
         }
 
-        public void Update(double dt)
+        internal void Update(double dt)
         {
-            Console.WriteLine("ScriptingCore Update");
+            // Console.WriteLine("ScriptingCore Update");
         }
     }
 }

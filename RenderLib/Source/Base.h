@@ -24,6 +24,7 @@
 #define WIN32_LEAN_AND_MEAN
 
 #include <Windows.h>
+#include <oleauto.h>
 #include <cassert>
 
 #include "Utility/Log.h"

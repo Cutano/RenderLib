@@ -8,11 +8,11 @@ using Microsoft.Build.Locator;
 
 namespace ScriptingCore
 {
-    public static partial class Entry
+    internal static partial class Entry
     {
         [UnmanagedCallersOnly]
         // ReSharper disable once UnusedMember.Global
-        public static unsafe ManagedFunctionPayload Init(UnmanagedFunctionPayload unmanagedPayload)
+        internal static unsafe ManagedFunctionPayload Init(UnmanagedFunctionPayload unmanagedPayload)
         {
             Console.WriteLine("Init C# Scripting Core...");
 
@@ -23,11 +23,12 @@ namespace ScriptingCore
 
             ManagedFunctionPayload managedPayload;
             managedPayload.UpdateManaged = &Update;
+            managedPayload.OnCsharpFileChangedManaged = &Workspace.OnCsharpFileChanged;
             return managedPayload;
         }
 
         [UnmanagedCallersOnly]
-        public static void Update(double dt)
+        internal static void Update(double dt)
         {
             ScriptingCore.Instance.Update(dt);
         }

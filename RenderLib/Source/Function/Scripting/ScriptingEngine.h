@@ -26,6 +26,8 @@ namespace RL
         ScriptingEngine& operator=(const ScriptingEngine& other) = delete;
         ScriptingEngine& operator=(ScriptingEngine&& other) noexcept = delete;
 
+        void CsharpFileChanged(int action, const std::wstring& path);
+
     private:
         ScriptingEngine() = default;
 
