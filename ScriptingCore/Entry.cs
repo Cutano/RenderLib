@@ -5,6 +5,7 @@ using System.Runtime.InteropServices;
 using System.Text;
 using System.Threading.Tasks;
 using Microsoft.Build.Locator;
+using Serilog;
 
 namespace ScriptingCore
 {
@@ -14,6 +15,11 @@ namespace ScriptingCore
         // ReSharper disable once UnusedMember.Global
         internal static unsafe ManagedFunctionPayload Init(UnmanagedFunctionPayload unmanagedPayload)
         {
+            Log.Logger = new LoggerConfiguration()
+                .MinimumLevel.Information()
+                .WriteTo.Console()
+                .CreateLogger();
+            
             Console.WriteLine("Init C# Scripting Core...");
 
             MSBuildLocator.RegisterDefaults();
@@ -24,6 +30,8 @@ namespace ScriptingCore
             ManagedFunctionPayload managedPayload;
             managedPayload.UpdateManaged = &Update;
             managedPayload.OnCsharpFileChangedManaged = &Workspace.OnCsharpFileChanged;
+            managedPayload.RecompileAssemblyManaged = &Workspace.RecompileAssembly;
+            managedPayload.ReloadAssemblyManaged = &Workspace.ReloadAssembly;
             return managedPayload;
         }
 

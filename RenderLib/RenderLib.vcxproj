@@ -97,6 +97,7 @@
     <ClCompile Include="..\ThirdParty\DiligentEngine\DiligentTools\ThirdParty\imgui\backends\imgui_impl_glfw.cpp" />
     <ClCompile Include="Source\Function\Graphics\GraphicEngine.cpp" />
     <ClCompile Include="Source\Function\Graphics\ImGui\GuiBase.cpp" />
+    <ClCompile Include="Source\Function\Graphics\ImGui\GuiComponent\MenuBar\MainMenuBar.cpp" />
     <ClCompile Include="Source\Function\Graphics\ImGui\GuiComponent\Window\DemoWindow.cpp" />
     <ClCompile Include="Source\Function\Graphics\ImGui\GuiComponent\Window\imgui_demo.cpp" />
     <ClCompile Include="Source\Function\Graphics\ImGui\GuiSystem.cpp" />
@@ -144,6 +145,7 @@
   <ItemGroup>
     <ClInclude Include="Source\Function\Graphics\GraphicEngine.h" />
     <ClInclude Include="Source\Function\Graphics\ImGui\GuiBase.h" />
+    <ClInclude Include="Source\Function\Graphics\ImGui\GuiComponent\MenuBar\MainMenuBar.h" />
     <ClInclude Include="Source\Function\Graphics\ImGui\GuiComponent\Window\DemoWindow.h" />
     <ClInclude Include="Source\Function\Graphics\ImGui\GuiSystem.h" />
     <ClInclude Include="Source\Function\Graphics\ImGui\GuiWindowBase.h" />

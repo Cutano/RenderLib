@@ -9,6 +9,8 @@ partial class Entry
     {
         internal delegate* unmanaged<double, void> UpdateManaged;
         internal delegate* unmanaged<Workspace.FileAction, IntPtr, void> OnCsharpFileChangedManaged;
+        internal delegate* unmanaged<void> RecompileAssemblyManaged;
+        internal delegate* unmanaged<void> ReloadAssemblyManaged;
     }
 
     [StructLayout(LayoutKind.Sequential)]

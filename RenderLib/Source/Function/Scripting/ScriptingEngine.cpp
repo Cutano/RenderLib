@@ -23,6 +23,8 @@ namespace RL
     {
         void(*Update)(double);
         void(*OnCsharpFileChanged)(int, const wchar_t*);
+        void(*RecompileAssembly)();
+        void(*ReloadAssembly)();
     } managedPayload;
 
     struct UnmanagedFunctionPayload
@@ -112,6 +114,16 @@ namespace RL
     void ScriptingEngine::CsharpFileChanged(int action, const std::wstring& path)
     {
         managedPayload.OnCsharpFileChanged(action, SysAllocString(path.c_str()));
+    }
+
+    void ScriptingEngine::RecompileAssembly()
+    {
+        managedPayload.RecompileAssembly();
+    }
+
+    void ScriptingEngine::ReloadAssembly()
+    {
+        managedPayload.ReloadAssembly();
     }
 
     bool ScriptingEngine::LoadHostFxr()
