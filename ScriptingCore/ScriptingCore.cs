@@ -3,13 +3,31 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using ScriptingInterface;
 
 namespace ScriptingCore
 {
     internal sealed class ScriptingCore
     {
         internal static ScriptingCore Instance { get; } = new();
-        
+
+        internal List<IUpdatable> Updatables { get; set; } = new ();
+        internal List<IRenderable> Renderables { get; set; } = new ();
+        internal List<IScript> Scripts
+        {
+            get => _scripts;
+            set
+            {
+                _scripts = value;
+                foreach (var script in Scripts)
+                {
+                    script.Init();
+                }
+            }
+        }
+
+        private List<IScript> _scripts = new ();
+
         static ScriptingCore()
         {
         }
@@ -26,7 +44,18 @@ namespace ScriptingCore
 
         internal void Update(double dt)
         {
-            // Console.WriteLine("ScriptingCore Update");
+            foreach (var script in Scripts)
+            {
+                script.Update(dt);
+            }
+        }
+
+        internal void Render(RenderContext context)
+        {
+            foreach (var script in Scripts)
+            {
+                script.Render(context);
+            }
         }
     }
 }

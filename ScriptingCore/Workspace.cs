@@ -1,9 +1,11 @@
 ﻿using System.Diagnostics;
+using System.Reflection;
 using System.Runtime.InteropServices;
 using Microsoft.Build.Construction;
 using Microsoft.Build.Evaluation;
 using Microsoft.Build.Execution;
 using Microsoft.Build.Framework;
+using ScriptingInterface;
 using Serilog;
 
 namespace ScriptingCore;
@@ -15,7 +17,8 @@ internal unsafe class Workspace
     private delegate* unmanaged<IntPtr> _workspaceGetAppPath;
     private delegate* unmanaged<IntPtr> _workspaceGetWorkspaceDir;
 
-    private bool _isBuilding = false;
+    private bool _isBuilding;
+    private bool _isLoading;
 
     internal enum FileAction
     {
@@ -81,62 +84,143 @@ internal unsafe class Workspace
             return;
         }
         
-        Task.Run(() =>
-        {
-            Instance._isBuilding = true;
-            
-            var logger = new MSBuildSerilog();
-
-            using (var process = new Process())
-            {
-                process.StartInfo = new ProcessStartInfo
-                {
-                    FileName = "dotnet.exe",
-                    Arguments = $"restore {Instance.GetWorkspaceDir()}",
-                    UseShellExecute = false,
-                    CreateNoWindow = true
-                };
-
-                process.Start();
-                process.WaitForExit();
-            }
-
-            var projectCollection = new ProjectCollection();
-            var buildParams = new BuildParameters(projectCollection)
-            {
-                Loggers = new List<Microsoft.Build.Framework.ILogger> { logger }
-            };
-
-            var globalProperty = new Dictionary<string, string>
-            {
-                { "Configuration", "Debug" },
-                { "Platform", "x64" }
-            };
-
-            BuildManager.DefaultBuildManager.ResetCaches();
-            var path = Instance.GetCsprojPath();
-            var buildRequest = new BuildRequestData(path, globalProperty, null, new[] { "Build" }, null);
-            var buildResult = BuildManager.DefaultBuildManager.Build(buildParams, buildRequest);
-            if (buildResult.OverallResult == BuildResultCode.Failure)
-            {
-                Log.Error("Failed compiling scripts!");
-                Console.WriteLine("Failed compiling scripts!");
-            }
-            
-            Instance._isBuilding = false;
-        });
+        Task.Run(BuildAssembly);
     }
 
     [UnmanagedCallersOnly]
     internal static void ReloadAssembly()
     {
+        if (Instance._isLoading)
+        {
+            Log.Warning("Still loading, wait until done.");
+            return;
+        }
         
+        Task.Run(LoadAssembly);
+    }
+
+    private static void BuildAssembly()
+    {
+        Instance._isBuilding = true;
+        Log.Information("Building..");
+            
+        var logger = new MSBuildSerilog();
+
+        using (var process = new Process())
+        {
+            process.StartInfo = new ProcessStartInfo
+            {
+                FileName = "dotnet.exe",
+                Arguments = $"restore {Instance.GetWorkspaceDir()}",
+                UseShellExecute = false,
+                CreateNoWindow = true
+            };
+
+            process.Start();
+            process.WaitForExit();
+        }
+
+        var projectCollection = new ProjectCollection();
+        var buildParams = new BuildParameters(projectCollection)
+        {
+            Loggers = new List<Microsoft.Build.Framework.ILogger> { logger }
+        };
+
+        var globalProperty = new Dictionary<string, string>
+        {
+            { "Configuration", "Debug" },
+            { "Platform", "x64" }
+        };
+
+        BuildManager.DefaultBuildManager.ResetCaches();
+        var path = Instance.GetCsprojPath();
+        var buildRequest = new BuildRequestData(path, globalProperty, null, new[] { "Build" }, null);
+        var buildResult = BuildManager.DefaultBuildManager.Build(buildParams, buildRequest);
+        if (buildResult.OverallResult == BuildResultCode.Failure)
+        {
+            Log.Error("Failed compiling scripts!");
+        }
+            
+        Instance._isBuilding = false;
+    }
+
+    private static void LoadAssembly()
+    {
+        Instance._isLoading = true;
+
+        var path = Path.Combine(Instance.GetWorkspaceDir(), "Library", "x64", "Debug", "ScriptLibrary.dll");
+        if (!File.Exists(path))
+        {
+            Log.Error("Assembly not found, please compile first and check if any errors!");
+            return;
+        }
+
+        Log.Information($"Loading {path}...");
+        var context = new ScriptLoadContext(path);
+        var asm = context.LoadFromAssemblyPath(path);
+
+        var scripts = CreateScripts(asm).ToList();
+        var updatables = CreateUpdatables(asm).ToList();
+        var renderables = CreateRenderables(asm).ToList();
+        
+        ScriptingCore.Instance.Scripts = scripts;
+        ScriptingCore.Instance.Updatables = updatables;
+        ScriptingCore.Instance.Renderables = renderables;
+        
+        Log.Information($"{scripts.Count} scripts loaded.");
+
+        Instance._isLoading = false;
+    }
+
+    private static IEnumerable<IScript> CreateScripts(Assembly asm)
+    {
+        var availableTypes = string.Join(",", asm.GetTypes().Select(t => t.FullName));
+        Log.Information($"Available types: {availableTypes}");
+
+        foreach (var type in asm.GetTypes())
+        {
+            if (typeof(IScript).IsAssignableFrom(type))
+            {
+                if (Activator.CreateInstance(type) is IScript script)
+                {
+                    yield return script;
+                }
+            }
+        }
+    }
+    
+    private static IEnumerable<IUpdatable> CreateUpdatables(Assembly asm)
+    {
+        foreach (var type in asm.GetTypes())
+        {
+            if (typeof(IUpdatable).IsAssignableFrom(type))
+            {
+                if (Activator.CreateInstance(type) is IUpdatable script)
+                {
+                    yield return script;
+                }
+            }
+        }
+    }
+    
+    private static IEnumerable<IRenderable> CreateRenderables(Assembly asm)
+    {
+        foreach (var type in asm.GetTypes())
+        {
+            if (typeof(IRenderable).IsAssignableFrom(type))
+            {
+                if (Activator.CreateInstance(type) is IRenderable script)
+                {
+                    yield return script;
+                }
+            }
+        }
     }
 
     private void GenerateCsproj()
     {
         var appPath = GetAppPath();
-        var scriptingEngineDllPath = Path.Combine(Path.GetDirectoryName(appPath) ?? string.Empty, "net6.0", "ScriptingCore.dll");
+        var scriptingInterfaceDllPath = Path.Combine(Path.GetDirectoryName(appPath) ?? string.Empty, "net6.0", "ScriptingInterface.dll");
         
         var root = ProjectRootElement.Create();
         root.Sdk = "Microsoft.NET.Sdk";
@@ -150,7 +234,7 @@ internal unsafe class Workspace
 
         var itemGroup = root.AddItemGroup();
         var refItem = itemGroup.AddItem("Reference", "ScriptingCore");
-        refItem.AddMetadata("HintPath", scriptingEngineDllPath);
+        refItem.AddMetadata("HintPath", scriptingInterfaceDllPath);
         
         root.Save(Path.Combine(GetWorkspaceDir(), "ScriptLibrary.csproj"));
     }
