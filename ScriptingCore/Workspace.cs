@@ -128,8 +128,7 @@ internal unsafe class Workspace
 
         var globalProperty = new Dictionary<string, string>
         {
-            { "Configuration", "Debug" },
-            { "Platform", "x64" }
+            { "Configuration", "Debug" }
         };
 
         BuildManager.DefaultBuildManager.ResetCaches();
@@ -148,10 +147,11 @@ internal unsafe class Workspace
     {
         Instance._isLoading = true;
 
-        var path = Path.Combine(Instance.GetWorkspaceDir(), "Library", "x64", "Debug", "ScriptLibrary.dll");
+        var path = Path.Combine(Instance.GetWorkspaceDir(), "Library", "Debug", "ScriptLibrary.dll");
         if (!File.Exists(path))
         {
             Log.Error("Assembly not found, please compile first and check if any errors!");
+            Instance._isLoading = false;
             return;
         }
 
@@ -222,7 +222,7 @@ internal unsafe class Workspace
     private void GenerateCsproj()
     {
         var appPath = GetAppPath();
-        var scriptingInterfaceDllPath = Path.Combine(Path.GetDirectoryName(appPath) ?? string.Empty, "net6.0", "ScriptingInterface.dll");
+        var scriptingInterfaceDllPath = Path.Combine(Path.GetDirectoryName(appPath) ?? string.Empty, "ScriptingInterface.dll");
         
         var root = ProjectRootElement.Create();
         root.Sdk = "Microsoft.NET.Sdk";
@@ -230,7 +230,6 @@ internal unsafe class Workspace
         var propertyGroup = root.AddPropertyGroup();
         propertyGroup.AddProperty("TargetFramework", "net6.0");
         propertyGroup.AddProperty("BaseOutputPath", @"Library\");
-        propertyGroup.AddProperty("Platforms", "x64");
         propertyGroup.AddProperty("EnableDynamicLoading", "true");
         propertyGroup.AddProperty("AppendTargetFrameworkToOutputPath", "false");
 

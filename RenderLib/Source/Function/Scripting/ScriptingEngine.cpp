@@ -55,7 +55,7 @@ namespace RL
         std::filesystem::path rootPath {Workspace::Get().GetApplicationPath()};
         std::filesystem::path rootDir = rootPath.parent_path();
 
-        const string_t config_path = rootDir / "net6.0" / "ScriptingCore.runtimeconfig.json";
+        const string_t config_path = rootDir / "ScriptingCore.runtimeconfig.json";
 
         // Load .NET Core
         void *loadAssemblyAndGetFunctionPointerVoid = nullptr;
@@ -82,7 +82,7 @@ namespace RL
         
         RL_ASSERT(loadAssemblyAndGetFunctionPointer != nullptr, "Failure: get_dotnet_load_assembly()")
 
-        const string_t dotnetLibPath = rootDir / "net6.0" / "ScriptingCore.dll";
+        const string_t dotnetLibPath = rootDir / "ScriptingCore.dll";
         const char_t *dotnet_type = L"ScriptingCore.Entry, ScriptingCore";
         typedef ManagedFunctionPayload (CORECLR_DELEGATE_CALLTYPE *custom_entry_point_fn)(UnmanagedFunctionPayload args);
         custom_entry_point_fn init = nullptr;
