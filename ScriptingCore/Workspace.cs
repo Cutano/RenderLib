@@ -172,20 +172,22 @@ internal unsafe class Workspace
         Instance._isLoading = false;
     }
 
-    private static IEnumerable<IScript> CreateScripts(Assembly asm)
+    private static IEnumerable<ScriptBase> CreateScripts(Assembly asm)
     {
         var availableTypes = string.Join(",", asm.GetTypes().Select(t => t.FullName));
         Log.Information($"Available types: {availableTypes}");
 
         foreach (var type in asm.GetTypes())
         {
-            if (typeof(IScript).IsAssignableFrom(type))
+            if (typeof(ScriptBase).IsAssignableFrom(type))
             {
-                if (Activator.CreateInstance(type) is IScript script)
+                if (Activator.CreateInstance(type) is ScriptBase script)
                 {
                     yield return script;
                 }
             }
+
+            var t = Activator.CreateInstance(type);
         }
     }
     

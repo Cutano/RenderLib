@@ -13,7 +13,7 @@ namespace ScriptingCore
 
         internal List<IUpdatable> Updatables { get; set; } = new ();
         internal List<IRenderable> Renderables { get; set; } = new ();
-        internal List<IScript> Scripts
+        internal List<ScriptBase> Scripts
         {
             get => _scripts;
             set
@@ -26,7 +26,7 @@ namespace ScriptingCore
             }
         }
 
-        private List<IScript> _scripts = new ();
+        private List<ScriptBase> _scripts = new ();
 
         static ScriptingCore()
         {
