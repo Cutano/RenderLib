@@ -162,14 +162,21 @@ internal unsafe class Workspace
         var scripts = CreateScripts(asm).ToList();
         var updatables = CreateUpdatables(asm).ToList();
         var renderables = CreateRenderables(asm).ToList();
+        var dummies = CreateDummies(asm).ToList();
         
         ScriptingCore.Instance.Scripts = scripts;
         ScriptingCore.Instance.Updatables = updatables;
         ScriptingCore.Instance.Renderables = renderables;
+        ScriptingCore.Instance.Dummies = dummies;
         
         Log.Information($"{scripts.Count} scripts loaded.");
 
         Instance._isLoading = false;
+    }
+
+    private static void UnloadAssembly()
+    {
+        
     }
 
     private static IEnumerable<ScriptBase> CreateScripts(Assembly asm)
@@ -188,6 +195,8 @@ internal unsafe class Workspace
             }
 
             var t = Activator.CreateInstance(type);
+            var initMethod = type.GetMethod("Init");
+            initMethod?.Invoke(t, null);
         }
     }
     
@@ -212,6 +221,20 @@ internal unsafe class Workspace
             if (typeof(IRenderable).IsAssignableFrom(type))
             {
                 if (Activator.CreateInstance(type) is IRenderable script)
+                {
+                    yield return script;
+                }
+            }
+        }
+    }
+    
+    private static IEnumerable<IDummy> CreateDummies(Assembly asm)
+    {
+        foreach (var type in asm.GetTypes())
+        {
+            if (typeof(IDummy).IsAssignableFrom(type))
+            {
+                if (Activator.CreateInstance(type) is IDummy script)
                 {
                     yield return script;
                 }

@@ -13,6 +13,7 @@ namespace ScriptingCore
 
         internal List<IUpdatable> Updatables { get; set; } = new ();
         internal List<IRenderable> Renderables { get; set; } = new ();
+        internal List<IDummy> Dummies { get; set; } = new ();
         internal List<ScriptBase> Scripts
         {
             get => _scripts;
@@ -44,7 +45,7 @@ namespace ScriptingCore
 
         internal void Update(double dt)
         {
-            foreach (var script in Scripts)
+            foreach (var script in Updatables)
             {
                 script.Update(dt);
             }
@@ -52,7 +53,7 @@ namespace ScriptingCore
 
         internal void Render(RenderContext context)
         {
-            foreach (var script in Scripts)
+            foreach (var script in Renderables)
             {
                 script.Render(context);
             }
