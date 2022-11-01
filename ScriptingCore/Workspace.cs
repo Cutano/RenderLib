@@ -1,5 +1,6 @@
 ﻿using System.Diagnostics;
 using System.Reflection;
+using System.Runtime.CompilerServices;
 using System.Runtime.InteropServices;
 using Microsoft.Build.Construction;
 using Microsoft.Build.Evaluation;
@@ -19,6 +20,8 @@ internal unsafe class Workspace
 
     private bool _isBuilding;
     private bool _isLoading;
+
+    private ScriptLoadContext? _scriptLoadContext = null;
 
     internal enum FileAction
     {
@@ -101,13 +104,15 @@ internal unsafe class Workspace
 
     private static void BuildAssembly()
     {
-        Instance._isBuilding = true;
         Log.Information("Building..");
-            
+        Instance._isBuilding = true;
+        UnloadAssembly();
+
         var logger = new MSBuildSerilog();
 
-        using (var process = new Process())
+        if (!File.Exists(Path.Combine(Instance.GetWorkspaceDir(), "obj", "project.assets.json")))
         {
+            using var process = new Process();
             process.StartInfo = new ProcessStartInfo
             {
                 FileName = "dotnet.exe",
@@ -143,9 +148,11 @@ internal unsafe class Workspace
         Instance._isBuilding = false;
     }
 
+    [MethodImpl(MethodImplOptions.NoInlining)]
     private static void LoadAssembly()
     {
         Instance._isLoading = true;
+        UnloadAssembly();
 
         var path = Path.Combine(Instance.GetWorkspaceDir(), "Library", "Debug", "ScriptLibrary.dll");
         if (!File.Exists(path))
@@ -156,11 +163,11 @@ internal unsafe class Workspace
         }
 
         Log.Information($"Loading {path}...");
-        var context = new ScriptLoadContext(path);
+        Instance._scriptLoadContext = new ScriptLoadContext(path);
 
         try
         {
-            var asm = context.LoadFromAssemblyName(AssemblyName.GetAssemblyName(path));
+            var asm = Instance._scriptLoadContext.LoadFromAssemblyName(AssemblyName.GetAssemblyName(path));
             
             var availableTypes = string.Join(",", asm.GetTypes().Select(t => t.FullName));
             Log.Information($"Available types: {availableTypes}");
@@ -186,11 +193,25 @@ internal unsafe class Workspace
         }
     }
 
+    [MethodImpl(MethodImplOptions.NoInlining)]
     private static void UnloadAssembly()
     {
+        ScriptingCore.Instance.Scripts = new List<ScriptBase>();
+        ScriptingCore.Instance.Updatables = new List<IUpdatable>();
+        ScriptingCore.Instance.Renderables = new List<IRenderable>();
+
+        var alcWeakRef = new WeakReference(Instance._scriptLoadContext, trackResurrection: true);
         
+        Instance._scriptLoadContext?.Unload();
+        Instance._scriptLoadContext = null;
+        
+        for (var i = 0; alcWeakRef.IsAlive && i < 10; i++)
+        {
+            GC.Collect();
+            GC.WaitForPendingFinalizers();
+        }
     }
-    
+
     private static IEnumerable<T> CreateScripts<T>(Assembly asm)
     {
         foreach (var type in asm.GetTypes())

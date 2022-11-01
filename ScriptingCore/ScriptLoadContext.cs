@@ -8,7 +8,7 @@ public class ScriptLoadContext : AssemblyLoadContext
 {
     private readonly AssemblyDependencyResolver _resolver;
 
-    public ScriptLoadContext(string path)
+    public ScriptLoadContext(string path) : base(isCollectible: true)
     {
         _resolver = new AssemblyDependencyResolver(path);
     }
