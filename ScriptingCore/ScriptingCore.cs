@@ -13,7 +13,6 @@ namespace ScriptingCore
 
         internal List<IUpdatable> Updatables { get; set; } = new ();
         internal List<IRenderable> Renderables { get; set; } = new ();
-        internal List<IDummy> Dummies { get; set; } = new ();
         internal List<ScriptBase> Scripts
         {
             get => _scripts;

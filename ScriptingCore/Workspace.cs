@@ -157,84 +157,47 @@ internal unsafe class Workspace
 
         Log.Information($"Loading {path}...");
         var context = new ScriptLoadContext(path);
-        var asm = context.LoadFromAssemblyPath(path);
 
-        var scripts = CreateScripts(asm).ToList();
-        var updatables = CreateUpdatables(asm).ToList();
-        var renderables = CreateRenderables(asm).ToList();
-        var dummies = CreateDummies(asm).ToList();
-        
-        ScriptingCore.Instance.Scripts = scripts;
-        ScriptingCore.Instance.Updatables = updatables;
-        ScriptingCore.Instance.Renderables = renderables;
-        ScriptingCore.Instance.Dummies = dummies;
-        
-        Log.Information($"{scripts.Count} scripts loaded.");
+        try
+        {
+            var asm = context.LoadFromAssemblyName(AssemblyName.GetAssemblyName(path));
+            
+            var availableTypes = string.Join(",", asm.GetTypes().Select(t => t.FullName));
+            Log.Information($"Available types: {availableTypes}");
 
-        Instance._isLoading = false;
+            var scripts = CreateScripts<ScriptBase>(asm).ToList();
+            var updatables = CreateScripts<IUpdatable>(asm).ToList();
+            var renderables = CreateScripts<IRenderable>(asm).ToList();
+
+            ScriptingCore.Instance.Scripts = scripts;
+            ScriptingCore.Instance.Updatables = updatables;
+            ScriptingCore.Instance.Renderables = renderables;
+
+            Log.Information($"{scripts.Count} scripts loaded.");
+        }
+        catch (Exception e)
+        {
+            Log.Error(e.Message);
+            throw;
+        }
+        finally
+        {
+            Instance._isLoading = false;
+        }
     }
 
     private static void UnloadAssembly()
     {
         
     }
-
-    private static IEnumerable<ScriptBase> CreateScripts(Assembly asm)
-    {
-        var availableTypes = string.Join(",", asm.GetTypes().Select(t => t.FullName));
-        Log.Information($"Available types: {availableTypes}");
-
-        foreach (var type in asm.GetTypes())
-        {
-            if (typeof(ScriptBase).IsAssignableFrom(type))
-            {
-                if (Activator.CreateInstance(type) is ScriptBase script)
-                {
-                    yield return script;
-                }
-            }
-
-            var t = Activator.CreateInstance(type);
-            var initMethod = type.GetMethod("Init");
-            initMethod?.Invoke(t, null);
-        }
-    }
     
-    private static IEnumerable<IUpdatable> CreateUpdatables(Assembly asm)
+    private static IEnumerable<T> CreateScripts<T>(Assembly asm)
     {
         foreach (var type in asm.GetTypes())
         {
-            if (typeof(IUpdatable).IsAssignableFrom(type))
+            if (typeof(T).IsAssignableFrom(type))
             {
-                if (Activator.CreateInstance(type) is IUpdatable script)
-                {
-                    yield return script;
-                }
-            }
-        }
-    }
-    
-    private static IEnumerable<IRenderable> CreateRenderables(Assembly asm)
-    {
-        foreach (var type in asm.GetTypes())
-        {
-            if (typeof(IRenderable).IsAssignableFrom(type))
-            {
-                if (Activator.CreateInstance(type) is IRenderable script)
-                {
-                    yield return script;
-                }
-            }
-        }
-    }
-    
-    private static IEnumerable<IDummy> CreateDummies(Assembly asm)
-    {
-        foreach (var type in asm.GetTypes())
-        {
-            if (typeof(IDummy).IsAssignableFrom(type))
-            {
-                if (Activator.CreateInstance(type) is IDummy script)
+                if (Activator.CreateInstance(type) is T script)
                 {
                     yield return script;
                 }
@@ -259,6 +222,8 @@ internal unsafe class Workspace
         var itemGroup = root.AddItemGroup();
         var refItem = itemGroup.AddItem("Reference", "ScriptingCore");
         refItem.AddMetadata("HintPath", scriptingInterfaceDllPath);
+        refItem.AddMetadata("Private", "false");
+        refItem.AddMetadata("ExcludeAssets", "runtime");
         
         root.Save(Path.Combine(GetWorkspaceDir(), "ScriptLibrary.csproj"));
     }
