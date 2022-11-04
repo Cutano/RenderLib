@@ -17,7 +17,7 @@ public partial struct DeviceObjectAttribs
     
     internal unsafe void __MarshalFrom(ref __Native @ref)
     {
-        Name = System.Runtime.InteropServices.Marshal.PtrToStringAnsi(@ref.Name);
+        Name = System.Runtime.InteropServices.Marshal.PtrToStringAnsi(@ref.Name) ?? string.Empty;
     }
     
     internal unsafe void __MarshalTo(ref __Native @ref)
@@ -75,7 +75,7 @@ public partial struct ShaderCreateInfo
     
     internal unsafe void __MarshalFrom(ref __Native @ref)
     {
-        FilePath = System.Runtime.InteropServices.Marshal.PtrToStringAnsi(@ref.FilePath);
+        FilePath = System.Runtime.InteropServices.Marshal.PtrToStringAnsi(@ref.FilePath) ?? string.Empty;
         ShaderSourceStreamFactory = @ref.ShaderSourceStreamFactory != System.IntPtr.Zero
             ? new RenderCore.Interop.IShaderSourceInputStreamFactory(@ref.ShaderSourceStreamFactory)
             : null;

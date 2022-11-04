@@ -163,7 +163,6 @@ namespace RL::Interop
 		void Shutdown();
 
 	private:
-		static void Exception(const char* Message);
 		static void Log(LogLevel Level, const char* Message);
 		
 		void* HostfxrLibrary {nullptr};
@@ -177,34 +176,9 @@ namespace RL::Interop
 
 		// Instantiable
 
-		static void* BottomLevelASFunctions[storageSize];
-		static void* BufferFunctions[storageSize];
-		static void* BufferViewFunctions[storageSize];
-		static void* CommandQueueFunctions[storageSize];
-		static void* DeviceContextFunctions[storageSize];
-		static void* DeviceMemoryFunctions[storageSize];
-		static void* DeviceObjectFunctions[storageSize];
-		static void* FenceFunctions[storageSize];
-		static void* PipelineResourceSignatureFunctions[storageSize];
-		static void* PipelineStateFunctions[storageSize];
-		static void* PipelineStateCacheFunctions[storageSize];
-		static void* QueryFunctions[storageSize];
-		static void* RenderDeviceFunctions[storageSize];
-		static void* ResourceMappingFunctions[storageSize];
-		static void* SamplerFunctions[storageSize];
-		static void* ShaderSourceInputStreamFactoryFunctions[storageSize];
-		static void* ShaderFunctions[storageSize];
-		static void* ShaderBindingTableFunctions[storageSize];
-		static void* ShaderResourceBindingFunctions[storageSize];
-		static void* ShaderResourceVariableFunctions[storageSize];
-		static void* SwapChainFunctions[storageSize];
-		static void* TextureFunctions[storageSize];
-		static void* TextureViewFunctions[storageSize];
-		static void* TopLevelASFunctions[storageSize];
-
 		// Runtime
 		
-		static void* RuntimeFunctions[2];
+		static void* RuntimeFunctions[1];
 		static void* Events[storageSize];
 		static void* Functions[storageSize];
 	}

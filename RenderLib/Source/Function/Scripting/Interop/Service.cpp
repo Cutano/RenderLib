@@ -114,16 +114,6 @@ namespace RL::Interop
 
             {
                 int32_t head = 0;
-                Shared::Functions[position++] = Shared::BottomLevelASFunctions;
-
-                Shared::BottomLevelASFunctions[head++] = (void*)&Binding::BottomLevelAS::GetDesc;
-                Shared::BottomLevelASFunctions[head++] = (void*)&Binding::BottomLevelAS::GetGeometryDescIndex;
-                Shared::BottomLevelASFunctions[head++] = (void*)&Binding::BottomLevelAS::GetGeometryIndex;
-                Shared::BottomLevelASFunctions[head++] = (void*)&Binding::BottomLevelAS::GetActualGeometryCount;
-                Shared::BottomLevelASFunctions[head++] = (void*)&Binding::BottomLevelAS::GetScratchBufferSizes;
-                Shared::BottomLevelASFunctions[head++] = (void*)&Binding::BottomLevelAS::GetNativeHandle;
-                Shared::BottomLevelASFunctions[head++] = (void*)&Binding::BottomLevelAS::SetState;
-                Shared::BottomLevelASFunctions[head++] = (void*)&Binding::BottomLevelAS::GetState;
 
                 checksum += head;
             }
@@ -131,9 +121,8 @@ namespace RL::Interop
             checksum += position;
 
             // Runtime
-
-            Shared::RuntimeFunctions[0] = (void*)&Exception;
-            Shared::RuntimeFunctions[1] = (void*)&Log;
+            
+            Shared::RuntimeFunctions[0] = (void*)&Log;
 
             constexpr void* functions[3] = {
                 Shared::RuntimeFunctions,
@@ -161,6 +150,25 @@ namespace RL::Interop
     void InteropService::Shutdown()
     {
         
+    }
+
+    void InteropService::Log(LogLevel Level, const char* Message)
+    {
+        switch (Level)
+        {
+        case LogLevel::Info:
+            Log::Logger()->info(Message);
+            break;
+        case LogLevel::Warning:
+            Log::Logger()->warn(Message);
+            break;
+        case LogLevel::Error:
+            Log::Logger()->error(Message);
+            break;
+        case LogLevel::Fatal:
+            Log::Logger()->critical(Message);
+            break;
+        }
     }
 
     size_t Utility::Strcpy(char* Destination, const char* Source, size_t Length) {
