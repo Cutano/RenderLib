@@ -1,4 +1,5 @@
-<Project Sdk="SharpGenTools.Sdk/2.0.0-beta.10">
+<Project Sdk="Microsoft.NET.Sdk">
+  <Sdk Name="SharpGenTools.Sdk" Version="2.0.0-beta.11" />
 
   <PropertyGroup>
     <TargetFramework>net6.0</TargetFramework>
@@ -18,10 +19,6 @@
 
   <ItemGroup>
     <SharpGenMapping Include="Interop\Mapping.xml" />
-  </ItemGroup>
-
-  <ItemGroup>
-    <PackageReference Include="SharpGen.Runtime" Version="2.0.0-beta.11" />
   </ItemGroup>
 
 </Project>
