@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Runtime.CompilerServices;
 using System.Runtime.InteropServices;
 using System.Text;
 using System.Threading.Tasks;
@@ -9,6 +10,20 @@ using Serilog;
 
 namespace ScriptingCore
 {
+    internal sealed class AssembliesContextManager {
+        internal ScriptLoadContext? ScriptLoadContext;
+
+        [MethodImpl(MethodImplOptions.NoInlining)]
+        internal WeakReference CreateAssembliesContext(string path) {
+            ScriptLoadContext = new ScriptLoadContext(path);
+
+            return new WeakReference(ScriptLoadContext, trackResurrection: true);
+        }
+
+        [MethodImpl(MethodImplOptions.NoInlining)]
+        internal void UnloadAssembliesContext() => ScriptLoadContext?.Unload();
+    }
+    
     internal static partial class Entry
     {
         [UnmanagedCallersOnly]
@@ -19,8 +34,6 @@ namespace ScriptingCore
                 .MinimumLevel.Information()
                 .WriteTo.Console()
                 .CreateLogger();
-            
-            Console.WriteLine("Init C# Scripting Core...");
 
             MSBuildLocator.RegisterDefaults();
             
