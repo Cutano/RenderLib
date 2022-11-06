@@ -6,7 +6,6 @@ using System.Runtime.InteropServices;
 using System.Text;
 using System.Threading.Tasks;
 using Microsoft.Build.Locator;
-using Serilog;
 
 namespace ScriptingCore;
 
@@ -16,16 +15,12 @@ internal static partial class Entry
     // ReSharper disable once UnusedMember.Global
     internal static unsafe ManagedFunctionPayload Init(UnmanagedFunctionPayload unmanagedPayload)
     {
-        Log.Logger = new LoggerConfiguration()
-            .MinimumLevel.Information()
-            .WriteTo.Console()
-            .CreateLogger();
-
         MSBuildLocator.RegisterDefaults();
 
         Workspace.WorkspaceGetAppPath = unmanagedPayload.WorkspaceGetAppPath;
         Workspace.WorkspaceGetWorkspaceDir = unmanagedPayload.WorkspaceGetWorkspaceDir;
-            
+        Log.LogUnmanaged = unmanagedPayload.Log;
+        
         Workspace.Instance.Init();
         ScriptingCore.Instance.Init();
 

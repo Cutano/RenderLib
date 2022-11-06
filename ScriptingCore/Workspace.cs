@@ -113,7 +113,7 @@ internal unsafe class Workspace
     [MethodImpl(MethodImplOptions.NoInlining)]
     private static void BuildAssembly()
     {
-        Log.Information("Building..");
+        Log.Info("Building..");
         Instance._isBuilding = true;
         UnloadAssembly();
 
@@ -171,7 +171,7 @@ internal unsafe class Workspace
             return;
         }
 
-        Log.Information($"Loading {path}...");
+        Log.Info($"Loading {path}...");
         Instance._scriptLoadContext = new ScriptLoadContext(path);
 
         try
@@ -179,7 +179,7 @@ internal unsafe class Workspace
             var asm = Instance._scriptLoadContext.LoadFromAssemblyName(AssemblyName.GetAssemblyName(path));
             
             var availableTypes = string.Join(",", asm.GetTypes().Select(t => t.FullName));
-            Log.Information($"Available types: {availableTypes}");
+            Log.Info($"Available types: {availableTypes}");
 
             var scripts = CreateScripts<ScriptBase>(asm).ToList();
             var updatables = CreateScripts<IUpdatable>(asm).ToList();
@@ -189,7 +189,7 @@ internal unsafe class Workspace
             ScriptingCore.Instance.Updatables = updatables;
             ScriptingCore.Instance.Renderables = renderables;
 
-            Log.Information($"{scripts.Count} scripts loaded.");
+            Log.Info($"{scripts.Count} scripts loaded.");
         }
         catch (Exception e)
         {
@@ -269,12 +269,12 @@ internal unsafe class Workspace
         {
             eventSource.BuildStarted += (sender, args) =>
             {
-                Log.Information(args.Message);
+                Log.Info(args.Message);
             };
             
             eventSource.BuildFinished += (sender, args) =>
             {
-                Log.Information(args.Message);
+                Log.Info(args.Message);
             };
 
             eventSource.ErrorRaised += (sender, args) =>

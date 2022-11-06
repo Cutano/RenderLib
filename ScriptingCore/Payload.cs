@@ -21,5 +21,7 @@ partial class Entry
     {
         internal delegate* unmanaged<IntPtr> WorkspaceGetAppPath;
         internal delegate* unmanaged<IntPtr> WorkspaceGetWorkspaceDir;
+        internal delegate* unmanaged<int, IntPtr, void> Log;
+        internal delegate* unmanaged<IntPtr, void> Exception;
     }
 }

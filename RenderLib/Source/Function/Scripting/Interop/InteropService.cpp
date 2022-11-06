@@ -33,6 +33,8 @@ namespace RL::Interop
     {
         void* WorkspaceGetAppPath;
         void* WorkspaceGetWorkspaceDir;
+        void* Log;
+        void* Exception;
     } unmanagedFunctionPayload;
 
     void* GetExport(void* h, const char* name)
@@ -124,6 +126,8 @@ namespace RL::Interop
         {
             unmanagedFunctionPayload.WorkspaceGetAppPath = (void*)&Binding::Workspace::GetAppPath;
             unmanagedFunctionPayload.WorkspaceGetWorkspaceDir = (void*)&Binding::Workspace::GetWorkspaceDir;
+            unmanagedFunctionPayload.Log = (void*)&Log;
+            unmanagedFunctionPayload.Exception = (void*)&Exception;
             managedPayload = init(unmanagedFunctionPayload);
             
             Log::Logger()->info("Host loaded successfully!");
@@ -214,6 +218,8 @@ namespace RL::Interop
             Log::Logger()->critical(Message);
             break;
         }
+
+        
     }
 
     void InteropService::Exception(const char* Message)
