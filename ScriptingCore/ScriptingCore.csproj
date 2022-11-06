@@ -22,6 +22,7 @@
   </ItemGroup>
 
   <ItemGroup>
+    <ProjectReference Include="..\RenderCore\RenderCore.csproj" />
     <ProjectReference Include="..\ScriptingInterface\ScriptingInterface.csproj" />
   </ItemGroup>
 

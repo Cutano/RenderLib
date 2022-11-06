@@ -240,6 +240,7 @@ internal unsafe class Workspace
         var appPath = GetAppPath();
         var scriptingInterfaceDllPath = Path.Combine(Path.GetDirectoryName(appPath) ?? string.Empty, "ScriptingInterface.dll");
         var renderCoreDllPath = Path.Combine(Path.GetDirectoryName(appPath) ?? string.Empty, "RenderCore.dll");
+        var sharpGenRuntimeDllPath = Path.Combine(Path.GetDirectoryName(appPath) ?? string.Empty, "SharpGen.Runtime.dll");
         
         var root = ProjectRootElement.Create();
         root.Sdk = "Microsoft.NET.Sdk";
@@ -249,6 +250,7 @@ internal unsafe class Workspace
         propertyGroup.AddProperty("BaseOutputPath", @"Library\");
         propertyGroup.AddProperty("EnableDynamicLoading", "true");
         propertyGroup.AddProperty("AppendTargetFrameworkToOutputPath", "false");
+        propertyGroup.AddProperty("Nullable", "enable");
 
         var itemGroup = root.AddItemGroup();
         
@@ -259,6 +261,13 @@ internal unsafe class Workspace
         
         var renderCore = itemGroup.AddItem("Reference", "RenderCore");
         renderCore.AddMetadata("HintPath", renderCoreDllPath);
+        renderCore.AddMetadata("Private", "false");
+        renderCore.AddMetadata("ExcludeAssets", "runtime");
+        
+        var sharpGenRuntime = itemGroup.AddItem("Reference", "SharpGen.Runtime");
+        sharpGenRuntime.AddMetadata("HintPath", sharpGenRuntimeDllPath);
+        sharpGenRuntime.AddMetadata("Private", "false");
+        sharpGenRuntime.AddMetadata("ExcludeAssets", "runtime");
 
         root.Save(Path.Combine(GetWorkspaceDir(), "ScriptLibrary.csproj"));
     }

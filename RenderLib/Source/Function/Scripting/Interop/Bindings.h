@@ -1,7 +1,4 @@
 #pragma once
-#include "BottomLevelAS.h"
-
-using namespace Diligent;
 
 namespace RL::Interop::Binding
 {
@@ -9,10 +6,14 @@ namespace RL::Interop::Binding
     
     namespace Workspace
     {
-        typedef void (*SourceFileChangedDelegate)(int action, const char* path);
-        
         char* GetAppPath();
         char* GetWorkspaceDir();
+    }
+
+    namespace Device
+    {
+        void* GetDevice();
+        void* GetContext();
     }
 
     // Instantiable

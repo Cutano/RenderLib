@@ -33,6 +33,8 @@ namespace RL::Interop
     {
         void* WorkspaceGetAppPath;
         void* WorkspaceGetWorkspaceDir;
+        void* DeviceGet;
+        void* DeviceGetContext;
         void* Log;
         void* Exception;
     } unmanagedFunctionPayload;
@@ -126,6 +128,8 @@ namespace RL::Interop
         {
             unmanagedFunctionPayload.WorkspaceGetAppPath = (void*)&Binding::Workspace::GetAppPath;
             unmanagedFunctionPayload.WorkspaceGetWorkspaceDir = (void*)&Binding::Workspace::GetWorkspaceDir;
+            unmanagedFunctionPayload.DeviceGet = (void*)&Binding::Device::GetDevice;
+            unmanagedFunctionPayload.DeviceGetContext = (void*)&Binding::Device::GetContext;
             unmanagedFunctionPayload.Log = (void*)&Log;
             unmanagedFunctionPayload.Exception = (void*)&Exception;
             managedPayload = init(unmanagedFunctionPayload);
@@ -218,8 +222,6 @@ namespace RL::Interop
             Log::Logger()->critical(Message);
             break;
         }
-
-        
     }
 
     void InteropService::Exception(const char* Message)

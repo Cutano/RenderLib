@@ -1,10 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Runtime.CompilerServices;
-using System.Runtime.InteropServices;
-using System.Text;
-using System.Threading.Tasks;
+﻿using System.Runtime.InteropServices;
 using Microsoft.Build.Locator;
 
 namespace ScriptingCore;
@@ -19,6 +13,8 @@ internal static partial class Entry
 
         Workspace.WorkspaceGetAppPath = unmanagedPayload.WorkspaceGetAppPath;
         Workspace.WorkspaceGetWorkspaceDir = unmanagedPayload.WorkspaceGetWorkspaceDir;
+        RenderCore.Device.GetDeviceUnmanaged = unmanagedPayload.DeviceGet;
+        RenderCore.Device.GetDeviceContextUnmanaged = unmanagedPayload.DeviceGetContext;
         Log.LogUnmanaged = unmanagedPayload.Log;
         
         Workspace.Instance.Init();

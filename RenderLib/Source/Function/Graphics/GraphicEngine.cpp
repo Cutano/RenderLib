@@ -170,4 +170,9 @@ namespace RL
     {
         return m_DeviceContext;
     }
+
+    Diligent::IRenderDevice* GraphicEngine::GetDevice() const
+    {
+        return m_RenderDevice;
+    }
 }

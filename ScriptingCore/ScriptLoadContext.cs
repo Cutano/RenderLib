@@ -1,6 +1,8 @@
 using System.Reflection;
 using System.Runtime.Loader;
+using RenderCore.Interop;
 using ScriptingInterface;
+using SharpGen.Runtime;
 
 namespace ScriptingCore;
 
@@ -19,6 +21,20 @@ public class ScriptLoadContext : AssemblyLoadContext
         // This prevents the script assembly from reloading interface DLL into it's own ALC,
         // ensures the interface DLL has only one instance.
         if (assemblyName.FullName == typeof(IScript).Assembly.FullName)
+        {
+            var loadedAssemblies = AppDomain.CurrentDomain.GetAssemblies();
+            var interfaceAsm = loadedAssemblies.First(assembly => assembly.FullName == assemblyName.FullName);
+            return interfaceAsm;
+        }
+        
+        if (assemblyName.FullName == typeof(IDeviceContext).Assembly.FullName)
+        {
+            var loadedAssemblies = AppDomain.CurrentDomain.GetAssemblies();
+            var interfaceAsm = loadedAssemblies.First(assembly => assembly.FullName == assemblyName.FullName);
+            return interfaceAsm;
+        }
+        
+        if (assemblyName.FullName == typeof(CppObject).Assembly.FullName)
         {
             var loadedAssemblies = AppDomain.CurrentDomain.GetAssemblies();
             var interfaceAsm = loadedAssemblies.First(assembly => assembly.FullName == assemblyName.FullName);
