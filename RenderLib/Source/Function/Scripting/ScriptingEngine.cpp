@@ -2,10 +2,7 @@
 #include "ScriptingEngine.h"
 #include "Platform/Workspace/Workspace.h"
 #include "Interop/InteropService.h"
-
-#include <nethost.h>
-#include <hostfxr.h>
-#include <coreclr_delegates.h>
+#include "Utility/Timer/Timer.h"
 
 #include <filesystem>
 
@@ -25,7 +22,7 @@ namespace RL
 
     void ScriptingEngine::Update()
     {
-        m_InteropService->Update(0);
+        m_InteropService->Update(Timer::Get().GetDeltaTime());
     }
 
     void ScriptingEngine::Render()

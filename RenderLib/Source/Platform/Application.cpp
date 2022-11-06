@@ -8,6 +8,7 @@
 #include "Utility/Event/Events.h"
 #include "Utility/Event/EventBus.h"
 #include "Utility/Event/EventListener.h"
+#include "Utility/Timer/Timer.h"
 #include "Function/Graphics/ImGui/GuiSystem.h"
 
 #include <filesystem>
@@ -38,6 +39,7 @@ namespace RL
             }
         }
 
+        InitTimer();
         InitEventBus();
         SetupWorkspace();
         InitScriptingEngine();
@@ -57,6 +59,7 @@ namespace RL
     {
         while (!m_ShouldExit)
         {
+            Timer::Get().Update();
             WindowManager::Get().Update();
             EventBus::Get().Update();
             ScriptingEngine::Get().Update();
@@ -74,6 +77,11 @@ namespace RL
     void Application::OnAppWindowClose()
     {
         m_ShouldExit = true;
+    }
+
+    void Application::InitTimer()
+    {
+        Timer::Get().Init();
     }
 
     void Application::InitEventBus()

@@ -116,6 +116,7 @@
     <ClCompile Include="Source\Utility\Event\Events.cpp" />
     <ClCompile Include="Source\Utility\Log.cpp" />
     <ClCompile Include="Source\main.cpp" />
+    <ClCompile Include="Source\Utility\Timer\Timer.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\ScriptingCore\ScriptingCore.csproj">
@@ -166,6 +167,7 @@
     <ClInclude Include="Source\Utility\KeyCodes.h" />
     <ClInclude Include="Source\Utility\Log.h" />
     <ClInclude Include="Source\Base.h" />
+    <ClInclude Include="Source\Utility\Timer\Timer.h" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="Resource\**">

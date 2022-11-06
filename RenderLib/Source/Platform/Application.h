@@ -41,6 +41,7 @@ namespace RL
         void OnAppWindowClose();
 
     private:
+        void InitTimer();
         void InitEventBus();
         void SetupWorkspace();
         void InitScriptingEngine();
