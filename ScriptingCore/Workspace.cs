@@ -15,8 +15,8 @@ internal unsafe class Workspace
 {
     internal static Workspace Instance { get; } = new();
     
-    private delegate* unmanaged<IntPtr> _workspaceGetAppPath;
-    private delegate* unmanaged<IntPtr> _workspaceGetWorkspaceDir;
+    internal static delegate* unmanaged<IntPtr> WorkspaceGetAppPath;
+    internal static delegate* unmanaged<IntPtr> WorkspaceGetWorkspaceDir;
 
     private bool _isBuilding;
     private bool _isLoading;
@@ -44,11 +44,8 @@ internal unsafe class Workspace
             
     }
 
-    internal void Init(Entry.UnmanagedFunctionPayload payload)
+    internal void Init()
     {
-        _workspaceGetAppPath = payload.WorkspaceGetAppPath;
-        _workspaceGetWorkspaceDir = payload.WorkspaceGetWorkspaceDir;
-
         if (!File.Exists(Path.Combine(GetWorkspaceDir(), "ScriptLibrary.csproj")))
         {
             GenerateCsproj();
@@ -57,12 +54,12 @@ internal unsafe class Workspace
 
     internal string GetAppPath()
     {
-        return Marshal.PtrToStringAnsi(_workspaceGetAppPath()) ?? string.Empty;
+        return Marshal.PtrToStringAnsi(WorkspaceGetAppPath()) ?? string.Empty;
     }
 
     internal string GetWorkspaceDir()
     {
-        return Marshal.PtrToStringAnsi(_workspaceGetWorkspaceDir()) ?? string.Empty;
+        return Marshal.PtrToStringAnsi(WorkspaceGetWorkspaceDir()) ?? string.Empty;
     }
 
     internal string GetCsprojPath()
@@ -71,15 +68,14 @@ internal unsafe class Workspace
     }
 
     [UnmanagedCallersOnly]
-    internal static void OnCsharpFileChanged(FileAction action, IntPtr path)
+    internal static void OnSourceFileChanged(FileAction action, IntPtr path)
     {
         var pathStr = Marshal.PtrToStringUni(path) ?? string.Empty;
-        Marshal.FreeBSTR(path);
         Console.WriteLine(pathStr);
     }
 
     [UnmanagedCallersOnly]
-    internal static void RecompileAssembly()
+    internal static void BuildAssemblies()
     {
         if (Instance._isBuilding)
         {
@@ -89,9 +85,9 @@ internal unsafe class Workspace
         
         Task.Run(BuildAssembly);
     }
-
+    
     [UnmanagedCallersOnly]
-    internal static void ReloadAssembly()
+    internal static void LoadAssemblies()
     {
         if (Instance._isLoading)
         {
@@ -101,7 +97,20 @@ internal unsafe class Workspace
         
         Task.Run(LoadAssembly);
     }
+    
+    [UnmanagedCallersOnly]
+    internal static void UnloadAssemblies()
+    {
+        UnloadAssembly();
+    }
+    
+    [UnmanagedCallersOnly]
+    internal static void BuildAndLoadAssemblies()
+    {
+        
+    }
 
+    [MethodImpl(MethodImplOptions.NoInlining)]
     private static void BuildAssembly()
     {
         Log.Information("Building..");
@@ -230,6 +239,7 @@ internal unsafe class Workspace
     {
         var appPath = GetAppPath();
         var scriptingInterfaceDllPath = Path.Combine(Path.GetDirectoryName(appPath) ?? string.Empty, "ScriptingInterface.dll");
+        var renderCoreDllPath = Path.Combine(Path.GetDirectoryName(appPath) ?? string.Empty, "RenderCore.dll");
         
         var root = ProjectRootElement.Create();
         root.Sdk = "Microsoft.NET.Sdk";
@@ -241,11 +251,15 @@ internal unsafe class Workspace
         propertyGroup.AddProperty("AppendTargetFrameworkToOutputPath", "false");
 
         var itemGroup = root.AddItemGroup();
-        var refItem = itemGroup.AddItem("Reference", "ScriptingCore");
-        refItem.AddMetadata("HintPath", scriptingInterfaceDllPath);
-        refItem.AddMetadata("Private", "false");
-        refItem.AddMetadata("ExcludeAssets", "runtime");
         
+        var scriptingInterface = itemGroup.AddItem("Reference", "ScriptingInterface");
+        scriptingInterface.AddMetadata("HintPath", scriptingInterfaceDllPath);
+        scriptingInterface.AddMetadata("Private", "false");
+        scriptingInterface.AddMetadata("ExcludeAssets", "runtime");
+        
+        var renderCore = itemGroup.AddItem("Reference", "RenderCore");
+        renderCore.AddMetadata("HintPath", renderCoreDllPath);
+
         root.Save(Path.Combine(GetWorkspaceDir(), "ScriptLibrary.csproj"));
     }
     

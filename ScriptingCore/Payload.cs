@@ -8,9 +8,12 @@ partial class Entry
     internal unsafe struct ManagedFunctionPayload
     {
         internal delegate* unmanaged<double, void> UpdateManaged;
-        internal delegate* unmanaged<Workspace.FileAction, IntPtr, void> OnCsharpFileChangedManaged;
-        internal delegate* unmanaged<void> RecompileAssemblyManaged;
-        internal delegate* unmanaged<void> ReloadAssemblyManaged;
+        internal delegate* unmanaged<void> RenderManaged;
+        internal delegate* unmanaged<Workspace.FileAction, IntPtr, void> OnSourceFileChangedManaged;
+        internal delegate* unmanaged<void> BuildAssembliesManaged;
+        internal delegate* unmanaged<void> LoadAssembliesManaged;
+        internal delegate* unmanaged<void> UnloadAssembliesManaged;
+        internal delegate* unmanaged<void> BuildAndLoadAssembliesManaged;
     }
 
     [StructLayout(LayoutKind.Sequential)]

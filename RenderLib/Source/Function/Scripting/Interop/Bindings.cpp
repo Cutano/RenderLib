@@ -16,10 +16,5 @@ namespace RL::Interop::Binding
         {
             return RL::Workspace::Get().GetWorkspaceDir().data();
         }
-
-        void SetOnSourceFileChangedCallback(SourceFileChangedDelegate sourceFileChangedDelegate)
-        {
-            Shared::Events[OnSourceFileChanged] = (void*)sourceFileChangedDelegate;
-        }
     }
 }

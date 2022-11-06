@@ -13,7 +13,6 @@ namespace RL::Interop::Binding
         
         char* GetAppPath();
         char* GetWorkspaceDir();
-        void  SetOnSourceFileChangedCallback(SourceFileChangedDelegate sourceFileChangedDelegate);
     }
 
     // Instantiable

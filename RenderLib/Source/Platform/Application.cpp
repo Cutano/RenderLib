@@ -63,6 +63,7 @@ namespace RL
             GraphicEngine::Get().Update();
             GuiSystem::Get().Update();
 
+            ScriptingEngine::Get().Render();
             GraphicEngine::Get().Render();
             WindowManager::Get().Present();
         }

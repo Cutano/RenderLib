@@ -24,18 +24,22 @@ namespace RL
             {
                 if (ImGui::MenuItem("Compile Script"))
                 {
-                    ScriptingEngine::Get().RecompileAssembly();
+                    ScriptingEngine::Get().BuildAssemblies();
                 }
 
                 if (ImGui::MenuItem("Reload Assembly"))
                 {
-                    ScriptingEngine::Get().ReloadAssembly();
+                    ScriptingEngine::Get().LoadAssemblies();
                 }
 
                 if (ImGui::MenuItem("Compile & Reload"))
                 {
-                    ScriptingEngine::Get().RecompileAssembly();
-                    ScriptingEngine::Get().ReloadAssembly();
+                    ScriptingEngine::Get().BuildAndLoadAssemblies();
+                }
+
+                if (ImGui::MenuItem("Unload Assembly"))
+                {
+                    ScriptingEngine::Get().UnloadAssemblies();
                 }
 
                 if (ImGui::MenuItem("Auto Recompile", nullptr, m_AutoRecompile, true))

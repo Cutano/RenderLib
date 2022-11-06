@@ -8,50 +8,47 @@ using System.Threading.Tasks;
 using Microsoft.Build.Locator;
 using Serilog;
 
-namespace ScriptingCore
+namespace ScriptingCore;
+
+internal static partial class Entry
 {
-    internal sealed class AssembliesContextManager {
-        internal ScriptLoadContext? ScriptLoadContext;
+    [UnmanagedCallersOnly]
+    // ReSharper disable once UnusedMember.Global
+    internal static unsafe ManagedFunctionPayload Init(UnmanagedFunctionPayload unmanagedPayload)
+    {
+        Log.Logger = new LoggerConfiguration()
+            .MinimumLevel.Information()
+            .WriteTo.Console()
+            .CreateLogger();
 
-        [MethodImpl(MethodImplOptions.NoInlining)]
-        internal WeakReference CreateAssembliesContext(string path) {
-            ScriptLoadContext = new ScriptLoadContext(path);
+        MSBuildLocator.RegisterDefaults();
 
-            return new WeakReference(ScriptLoadContext, trackResurrection: true);
-        }
+        Workspace.WorkspaceGetAppPath = unmanagedPayload.WorkspaceGetAppPath;
+        Workspace.WorkspaceGetWorkspaceDir = unmanagedPayload.WorkspaceGetWorkspaceDir;
+            
+        Workspace.Instance.Init();
+        ScriptingCore.Instance.Init();
 
-        [MethodImpl(MethodImplOptions.NoInlining)]
-        internal void UnloadAssembliesContext() => ScriptLoadContext?.Unload();
+        ManagedFunctionPayload managedPayload;
+        managedPayload.UpdateManaged = &Update;
+        managedPayload.RenderManaged = &Render;
+        managedPayload.OnSourceFileChangedManaged = &Workspace.OnSourceFileChanged;
+        managedPayload.BuildAssembliesManaged = &Workspace.BuildAssemblies;
+        managedPayload.LoadAssembliesManaged = &Workspace.LoadAssemblies;
+        managedPayload.UnloadAssembliesManaged = &Workspace.UnloadAssemblies;
+        managedPayload.BuildAndLoadAssembliesManaged = &Workspace.BuildAndLoadAssemblies;
+        return managedPayload;
+    }
+
+    [UnmanagedCallersOnly]
+    internal static void Update(double dt)
+    {
+        ScriptingCore.Instance.Update(dt);
     }
     
-    internal static partial class Entry
+    [UnmanagedCallersOnly]
+    internal static void Render()
     {
-        [UnmanagedCallersOnly]
-        // ReSharper disable once UnusedMember.Global
-        internal static unsafe ManagedFunctionPayload Init(UnmanagedFunctionPayload unmanagedPayload)
-        {
-            Log.Logger = new LoggerConfiguration()
-                .MinimumLevel.Information()
-                .WriteTo.Console()
-                .CreateLogger();
-
-            MSBuildLocator.RegisterDefaults();
-            
-            Workspace.Instance.Init(unmanagedPayload);
-            ScriptingCore.Instance.Init();
-
-            ManagedFunctionPayload managedPayload;
-            managedPayload.UpdateManaged = &Update;
-            managedPayload.OnCsharpFileChangedManaged = &Workspace.OnCsharpFileChanged;
-            managedPayload.RecompileAssemblyManaged = &Workspace.RecompileAssembly;
-            managedPayload.ReloadAssemblyManaged = &Workspace.ReloadAssembly;
-            return managedPayload;
-        }
-
-        [UnmanagedCallersOnly]
-        internal static void Update(double dt)
-        {
-            ScriptingCore.Instance.Update(dt);
-        }
+        // ScriptingCore.Instance.Render();
     }
 }

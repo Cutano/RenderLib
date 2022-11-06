@@ -2,10 +2,10 @@
 
 namespace RL
 {
-    struct DirParam
+    namespace Interop
     {
-        
-    };
+        class InteropService;
+    }
     
     class ScriptingEngine
     {
@@ -19,6 +19,7 @@ namespace RL
         void Init();
         void Shutdown();
         void Update();
+        void Render();
 
         ~ScriptingEngine() = default;
         ScriptingEngine(const ScriptingEngine& other) = delete;
@@ -26,13 +27,14 @@ namespace RL
         ScriptingEngine& operator=(const ScriptingEngine& other) = delete;
         ScriptingEngine& operator=(ScriptingEngine&& other) noexcept = delete;
 
-        void SourceFileChanged(int action, const std::wstring& path);
-        void RecompileAssembly();
-        void ReloadAssembly();
+        void BuildAssemblies();
+        void LoadAssemblies();
+        void UnloadAssemblies();
+        void BuildAndLoadAssemblies();
 
     private:
         ScriptingEngine() = default;
 
-        bool LoadHostFxr();
+        Interop::InteropService* m_InteropService {nullptr};
     };
 }

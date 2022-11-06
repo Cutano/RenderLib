@@ -18,6 +18,23 @@ namespace RL::Interop
     hostfxr_set_error_writer_fn SetErrorWriterDelegate;
     hostfxr_close_fn CloseFxrDelegate;
 
+    struct ManagedFunctionPayload
+    {
+        void(*Update)(double);
+        void(*Render)();
+        void(*OnSourceFileChanged)(int, const wchar_t*);
+        void(*BuildAssemblies)();
+        void(*LoadAssemblies)();
+        void(*UnloadAssemblies)();
+        void(*BuildAndLoadAssemblies)();
+    } managedPayload;
+
+    struct UnmanagedFunctionPayload
+    {
+        void* WorkspaceGetAppPath;
+        void* WorkspaceGetWorkspaceDir;
+    } unmanagedFunctionPayload;
+
     void* GetExport(void* h, const char* name)
     {
         void* f = GetProcAddress(static_cast<HMODULE>(h), name);
@@ -91,63 +108,23 @@ namespace RL::Interop
         const std::wstring dotnetLibPath = rootDir / "ScriptingCore.dll";
         const char_t *dotnet_type = L"ScriptingCore.Entry, ScriptingCore";
 
+        typedef ManagedFunctionPayload (CORECLR_DELEGATE_CALLTYPE *custom_entry_point_fn)(UnmanagedFunctionPayload args);
+        custom_entry_point_fn init = nullptr;
         rc = loadAssemblyAndGetFunctionPointer(
             dotnetLibPath.c_str(),
             dotnet_type,
-            L"ManagedCommand" /*method_name*/,
+            L"Init" /*method_name*/,
             UNMANAGEDCALLERSONLY_METHOD,
             nullptr,
-            reinterpret_cast<void**>(&ManagedCommand));
+            reinterpret_cast<void**>(&init));
 
-        RL_ASSERT(rc == 0 && ManagedCommand != nullptr, "Failure: load_assembly_and_get_function_pointer()")
+        RL_ASSERT(rc == 0 && init != nullptr, "Failure: load_assembly_and_get_function_pointer()")
 
-        if (ManagedCommand)
+        if (init)
         {
-            int32_t position = 0;
-            int32_t checksum = 0;
-
-            // Non-instantiable
-
-            {
-                int32_t head = 0;
-                Shared::Functions[position++] = Shared::WorkspaceFunctions;
-
-                Shared::WorkspaceFunctions[head++] = (void*)&Binding::Workspace::GetAppPath;
-                Shared::WorkspaceFunctions[head++] = (void*)&Binding::Workspace::GetWorkspaceDir;
-                Shared::WorkspaceFunctions[head++] = (void*)&Binding::Workspace::SetOnSourceFileChangedCallback;
-
-                checksum += head;
-            }
-
-            // Instantiable
-
-            {
-                int32_t head = 0;
-
-                checksum += head;
-            }
-
-            checksum += position;
-
-            // Runtime
-            
-            Shared::RuntimeFunctions[0] = (void*)&Log;
-            Shared::RuntimeFunctions[1] = (void*)&Exception;
-
-            constexpr void* functions[3] = {
-                Shared::RuntimeFunctions,
-                Shared::Events,
-                Shared::Functions
-            };
-
-            if (reinterpret_cast<intptr_t>(ManagedCommand(Command(functions, checksum))) == 0xF) {
-                Log::Logger()->info("Host runtime assembly initialized successfully!");
-            } else {
-                Log::Logger()->error("Host runtime assembly initialized failed!");
-                return;
-            }
-
-            Status = StatusType::Idle;
+            unmanagedFunctionPayload.WorkspaceGetAppPath = (void*)&Binding::Workspace::GetAppPath;
+            unmanagedFunctionPayload.WorkspaceGetWorkspaceDir = (void*)&Binding::Workspace::GetWorkspaceDir;
+            managedPayload = init(unmanagedFunctionPayload);
             
             Log::Logger()->info("Host loaded successfully!");
         }
@@ -156,16 +133,13 @@ namespace RL::Interop
             Log::Logger()->error("Host runtime assembly unable to load the initialization function!");
         }
 
+        m_Listener = new EventListener();
+
         m_Listener->SubscribeEvent<SourceFileChangedEvent>([](const SourceFileChangedEvent& e)
         {
-            if (Shared::Events[OnSourceFileChanged])
+            if (managedPayload.OnSourceFileChanged)
             {
-                void* parameters[2] = {
-                    reinterpret_cast<void*>(const_cast<FileEvent::EventType*>(&e.Type)),
-                    reinterpret_cast<void*>(const_cast<wchar_t*>(e.Path.data()))
-                };
-                
-                ManagedCommand(Command(Shared::Events[OnSourceFileChanged], {{parameters, CallbackType::SourceFileChangedDelegate}}));
+                managedPayload.OnSourceFileChanged(e.Type, e.Path.data());
             }
         });
     }
@@ -177,38 +151,50 @@ namespace RL::Interop
 
     void InteropService::Update(double dt)
     {
-        if (Shared::Events[OnUpdate])
+        if (managedPayload.Update)
         {
-            ManagedCommand(Command(Shared::Events[OnUpdate], dt));
+            managedPayload.Update(dt);
         }
     }
 
     void InteropService::Render()
     {
-        if (Shared::Events[OnRender])
+        if (managedPayload.Render)
         {
-            ManagedCommand(Command(Shared::Events[OnRender]));
+            managedPayload.Render();
         }
     }
 
     void InteropService::BuildAssemblies()
     {
-        ManagedCommand(Command(CommandType::BuildAssemblies));
+        if (managedPayload.BuildAssemblies)
+        {
+            managedPayload.BuildAssemblies();
+        }
     }
 
     void InteropService::LoadAssemblies()
     {
-        ManagedCommand(Command(CommandType::LoadAssemblies));
+        if (managedPayload.LoadAssemblies)
+        {
+            managedPayload.LoadAssemblies();
+        }
     }
 
     void InteropService::UnloadAssemblies()
     {
-        ManagedCommand(Command(CommandType::UnloadAssemblies));
+        if (managedPayload.UnloadAssemblies)
+        {
+            managedPayload.UnloadAssemblies();
+        }
     }
 
     void InteropService::BuildAndLoadAssemblies()
     {
-        ManagedCommand(Command(CommandType::BuildAndLoadAssemblies));
+        if (managedPayload.BuildAndLoadAssemblies)
+        {
+            managedPayload.BuildAndLoadAssemblies();
+        }
     }
 
     void InteropService::Log(LogLevel Level, const char* Message)
@@ -233,34 +219,6 @@ namespace RL::Interop
     void InteropService::Exception(const char* Message)
     {
         Log::Logger()->error(Message);
-    }
-
-    size_t Utility::Strcpy(char* Destination, const char* Source, size_t Length) {
-        char* destination = Destination;
-        const char* source = Source;
-        size_t length = Length;
-
-        if (length != 0 && --length != 0) {
-            do {
-                if ((*destination++ = *source++) == 0)
-                    break;
-            }
-
-            while (--length != 0);
-        }
-
-        if (length == 0) {
-            if (Length != 0)
-                *destination = '\0';
-
-            while (*source++);
-        }
-
-        return (source - Source - 1);
-    }
-
-    size_t Utility::Strlen(const char* Source) {
-        return strlen(Source) + 1;
     }
 
 }
