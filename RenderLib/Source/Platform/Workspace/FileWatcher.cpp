@@ -1,5 +1,7 @@
 #include "Base.h"
 #include "FileWatcher.h"
+#include "Utility/Event/EventBus.h"
+#include "Utility/Event/Events.h"
 #include "Function/Scripting/ScriptingEngine.h"
 
 #include <filesystem>
@@ -35,36 +37,28 @@ namespace RL
         const auto wDir = std::filesystem::path{ConvertString(dir)};
 
         const std::filesystem::path path {wDir / wFilename};
+
+        if (wFilename.has_extension() && wFilename.extension() == L".cs")
+        {
+            SourceFileChangedEvent e;
+            e.Path = path;
+            e.Type = static_cast<FileEvent::EventType>(action);
+            EventBus::Get().SpreadEvent(e);
+        }
         
         switch (action)
         {
         case efsw::Actions::Add:
             Log::Logger()->trace("File {} added in {}.", ConvertString(wFilename), ConvertString(wDir));
-            if (wFilename.has_extension() && wFilename.extension() == L".cs")
-            {
-                ScriptingEngine::Get().CsharpFileChanged(action, path);
-            }
             break;
         case efsw::Actions::Delete:
             Log::Logger()->trace("File {} deleted in {}.", ConvertString(wFilename), ConvertString(wDir));
-            if (wFilename.has_extension() && wFilename.extension() == L".cs")
-            {
-                ScriptingEngine::Get().CsharpFileChanged(action, path);
-            }
             break;
         case efsw::Actions::Modified:
             Log::Logger()->trace("File {} modified in {}.", ConvertString(wFilename), ConvertString(wDir));
-            if (wFilename.has_extension() && wFilename.extension() == L".cs")
-            {
-                ScriptingEngine::Get().CsharpFileChanged(action, path);
-            }
             break;
         case efsw::Actions::Moved:
             Log::Logger()->trace("File {} moved in {}.", ConvertString(wFilename), ConvertString(wDir));
-            if (wFilename.has_extension() && wFilename.extension() == L".cs")
-            {
-                ScriptingEngine::Get().CsharpFileChanged(action, path);
-            }
             break;
         }
     }

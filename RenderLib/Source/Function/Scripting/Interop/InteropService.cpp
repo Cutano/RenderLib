@@ -1,7 +1,9 @@
 #include "Base.h"
-#include "Service.h"
+#include "InteropService.h"
 #include "Bindings.h"
 #include "Platform/Workspace/Workspace.h"
+#include "Utility/Event/Events.h"
+#include "Utility/Event/EventListener.h"
 
 #include <nethost.h>
 #include <hostfxr.h>
@@ -107,7 +109,14 @@ namespace RL::Interop
             // Non-instantiable
 
             {
-                
+                int32_t head = 0;
+                Shared::Functions[position++] = Shared::WorkspaceFunctions;
+
+                Shared::WorkspaceFunctions[head++] = (void*)&Binding::Workspace::GetAppPath;
+                Shared::WorkspaceFunctions[head++] = (void*)&Binding::Workspace::GetWorkspaceDir;
+                Shared::WorkspaceFunctions[head++] = (void*)&Binding::Workspace::SetOnSourceFileChangedCallback;
+
+                checksum += head;
             }
 
             // Instantiable
@@ -123,6 +132,7 @@ namespace RL::Interop
             // Runtime
             
             Shared::RuntimeFunctions[0] = (void*)&Log;
+            Shared::RuntimeFunctions[1] = (void*)&Exception;
 
             constexpr void* functions[3] = {
                 Shared::RuntimeFunctions,
@@ -145,11 +155,60 @@ namespace RL::Interop
         {
             Log::Logger()->error("Host runtime assembly unable to load the initialization function!");
         }
+
+        m_Listener->SubscribeEvent<SourceFileChangedEvent>([](const SourceFileChangedEvent& e)
+        {
+            if (Shared::Events[OnSourceFileChanged])
+            {
+                void* parameters[2] = {
+                    reinterpret_cast<void*>(const_cast<FileEvent::EventType*>(&e.Type)),
+                    reinterpret_cast<void*>(const_cast<wchar_t*>(e.Path.data()))
+                };
+                
+                ManagedCommand(Command(Shared::Events[OnSourceFileChanged], {{parameters, CallbackType::SourceFileChangedDelegate}}));
+            }
+        });
     }
 
     void InteropService::Shutdown()
     {
-        
+        delete m_Listener;
+    }
+
+    void InteropService::Update(double dt)
+    {
+        if (Shared::Events[OnUpdate])
+        {
+            ManagedCommand(Command(Shared::Events[OnUpdate], dt));
+        }
+    }
+
+    void InteropService::Render()
+    {
+        if (Shared::Events[OnRender])
+        {
+            ManagedCommand(Command(Shared::Events[OnRender]));
+        }
+    }
+
+    void InteropService::BuildAssemblies()
+    {
+        ManagedCommand(Command(CommandType::BuildAssemblies));
+    }
+
+    void InteropService::LoadAssemblies()
+    {
+        ManagedCommand(Command(CommandType::LoadAssemblies));
+    }
+
+    void InteropService::UnloadAssemblies()
+    {
+        ManagedCommand(Command(CommandType::UnloadAssemblies));
+    }
+
+    void InteropService::BuildAndLoadAssemblies()
+    {
+        ManagedCommand(Command(CommandType::BuildAndLoadAssemblies));
     }
 
     void InteropService::Log(LogLevel Level, const char* Message)
@@ -169,6 +228,11 @@ namespace RL::Interop
             Log::Logger()->critical(Message);
             break;
         }
+    }
+
+    void InteropService::Exception(const char* Message)
+    {
+        Log::Logger()->error(Message);
     }
 
     size_t Utility::Strcpy(char* Destination, const char* Source, size_t Length) {

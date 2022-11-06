@@ -1,8 +1,25 @@
+#include "Base.h"
 #include "Bindings.h"
+#include "InteropService.h"
+#include "Platform/Workspace/Workspace.h"
 
 namespace RL::Interop::Binding
 {
-    namespace BottomLevelAS
+    namespace Workspace
     {
+        char* GetAppPath()
+        {
+            return RL::Workspace::Get().GetApplicationPath().data();
+        }
+
+        char* GetWorkspaceDir()
+        {
+            return RL::Workspace::Get().GetWorkspaceDir().data();
+        }
+
+        void SetOnSourceFileChangedCallback(SourceFileChangedDelegate sourceFileChangedDelegate)
+        {
+            Shared::Events[OnSourceFileChanged] = (void*)sourceFileChangedDelegate;
+        }
     }
 }

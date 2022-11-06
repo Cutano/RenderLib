@@ -3,6 +3,11 @@
 #include <cstdint>
 #include <string>
 
+namespace RL
+{
+	class EventListener;
+}
+
 namespace RL::Interop
 {
     enum struct StatusType : int32_t {
@@ -25,15 +30,7 @@ namespace RL::Interop
 	};
 
 	enum struct CallbackType : int32_t {
-		ActorOverlapDelegate,
-		ActorHitDelegate,
-		ActorCursorDelegate,
-		ActorKeyDelegate,
-		ComponentOverlapDelegate,
-		ComponentHitDelegate,
-		ComponentCursorDelegate,
-		ComponentKeyDelegate,
-		CharacterLandedDelegate
+		SourceFileChangedDelegate
 	};
 
 	enum struct ArgumentType : int32_t {
@@ -46,16 +43,19 @@ namespace RL::Interop
 
 	enum struct CommandType : int32_t {
 		Initialize = 1,
-		LoadAssemblies = 2,
-		UnloadAssemblies = 3,
-		Find = 4,
-		Execute = 5
+		BuildAssemblies = 2,
+		LoadAssemblies = 3,
+		UnloadAssemblies = 4,
+		BuildAndLoadAssemblies = 5,
+		Find = 6,
+		Execute = 7
 	};
 
 	enum {
 		OnInit,
 		OnUpdate,
-		OnRender
+		OnRender,
+		OnSourceFileChanged
 	};
 
 	struct Callback {
@@ -70,14 +70,14 @@ namespace RL::Interop
 
 	struct Argument {
 		union {
-			float Single;
+			double Single;
 			uint32_t Integer;
 			void* Pointer;
 			Callback Callback;
 		};
 		ArgumentType Type;
 
-		FORCEINLINE Argument(float Value) {
+		FORCEINLINE Argument(double Value) {
 			this->Single = Value;
 			this->Type = ArgumentType::Single;
 		}
@@ -162,10 +162,20 @@ namespace RL::Interop
 		void Init();
 		void Shutdown();
 
+		void Update(double dt);
+		void Render();
+
+		void BuildAssemblies();
+		void LoadAssemblies();
+		void UnloadAssemblies();
+		void BuildAndLoadAssemblies();
+
 	private:
 		static void Log(LogLevel Level, const char* Message);
+		static void Exception(const char* Message);
 		
 		void* HostfxrLibrary {nullptr};
+		EventListener* m_Listener {nullptr};
 	};
 
 	namespace Shared
@@ -174,11 +184,13 @@ namespace RL::Interop
 
 		// Non-instantiable
 
+		static void* WorkspaceFunctions[storageSize];
+
 		// Instantiable
 
 		// Runtime
 		
-		static void* RuntimeFunctions[1];
+		static void* RuntimeFunctions[2];
 		static void* Events[storageSize];
 		static void* Functions[storageSize];
 	}

@@ -105,7 +105,7 @@
     <ClCompile Include="Source\Function\Graphics\ImGui\ImGuiImplRenderLib.cpp" />
     <ClCompile Include="Source\Function\Scripting\Bindings.cpp" />
     <ClCompile Include="Source\Function\Scripting\Interop\Bindings.cpp" />
-    <ClCompile Include="Source\Function\Scripting\Interop\Service.cpp" />
+    <ClCompile Include="Source\Function\Scripting\Interop\InteropService.cpp" />
     <ClCompile Include="Source\Function\Scripting\ScriptingEngine.cpp" />
     <ClCompile Include="Source\Platform\Application.cpp" />
     <ClCompile Include="Source\Platform\Window\Window.cpp" />
@@ -154,7 +154,7 @@
     <ClInclude Include="Source\Function\Graphics\ImGui\ImGuiImplRenderLib.h" />
     <ClInclude Include="Source\Function\Scripting\Bindings.h" />
     <ClInclude Include="Source\Function\Scripting\Interop\Bindings.h" />
-    <ClInclude Include="Source\Function\Scripting\Interop\Service.h" />
+    <ClInclude Include="Source\Function\Scripting\Interop\InteropService.h" />
     <ClInclude Include="Source\Function\Scripting\ScriptingEngine.h" />
     <ClInclude Include="Source\Platform\Application.h" />
     <ClInclude Include="Source\Platform\Window\Window.h" />

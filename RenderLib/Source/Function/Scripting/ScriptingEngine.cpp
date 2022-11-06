@@ -111,7 +111,7 @@ namespace RL
         managedPayload.Update(0);
     }
 
-    void ScriptingEngine::CsharpFileChanged(int action, const std::wstring& path)
+    void ScriptingEngine::SourceFileChanged(int action, const std::wstring& path)
     {
         managedPayload.OnCsharpFileChanged(action, SysAllocString(path.c_str()));
     }
