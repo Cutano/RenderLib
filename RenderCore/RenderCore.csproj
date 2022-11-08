@@ -1,0 +1,24 @@
+<Project Sdk="Microsoft.NET.Sdk">
+  <Sdk Name="SharpGenTools.Sdk" Version="2.0.0-beta.11" />
+
+  <PropertyGroup>
+    <TargetFramework>net6.0</TargetFramework>
+    <ImplicitUsings>enable</ImplicitUsings>
+    <Nullable>enable</Nullable>
+    <BaseIntermediateOutputPath>obj\</BaseIntermediateOutputPath>
+    <BaseOutputPath>$(SolutionDir)Build\Bin\</BaseOutputPath>
+    <AllowUnsafeBlocks>True</AllowUnsafeBlocks>
+    <EnableDynamicLoading>true</EnableDynamicLoading>
+    <AppendTargetFrameworkToOutputPath>false</AppendTargetFrameworkToOutputPath>
+    <Authors>Cutano</Authors>
+  </PropertyGroup>
+
+  <PropertyGroup>
+    <CastXmlPath>C:\Users\cutanojiang\Downloads\castxml-windows\castxml\bin\castxml.exe</CastXmlPath>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <SharpGenMapping Include="Interop\Mapping.xml" />
+  </ItemGroup>
+
+</Project>

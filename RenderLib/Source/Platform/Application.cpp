@@ -2,11 +2,13 @@
 #include "Application.h"
 #include "Workspace/Workspace.h"
 #include "Function/Graphics/GraphicEngine.h"
+#include "Function/Scripting/ScriptingEngine.h"
 #include "Platform/Window/Window.h"
 #include "Platform/Window/WindowManager.h"
 #include "Utility/Event/Events.h"
 #include "Utility/Event/EventBus.h"
 #include "Utility/Event/EventListener.h"
+#include "Utility/Timer/Timer.h"
 #include "Function/Graphics/ImGui/GuiSystem.h"
 
 #include <filesystem>
@@ -37,8 +39,10 @@ namespace RL
             }
         }
 
+        InitTimer();
         InitEventBus();
         SetupWorkspace();
+        InitScriptingEngine();
         InitGraphicsEngine();
         LoadAsset();
         Preprocess();
@@ -55,11 +59,14 @@ namespace RL
     {
         while (!m_ShouldExit)
         {
+            Timer::Get().Update();
             WindowManager::Get().Update();
             EventBus::Get().Update();
+            ScriptingEngine::Get().Update();
             GraphicEngine::Get().Update();
             GuiSystem::Get().Update();
 
+            ScriptingEngine::Get().Render();
             GraphicEngine::Get().Render();
             WindowManager::Get().Present();
         }
@@ -70,6 +77,11 @@ namespace RL
     void Application::OnAppWindowClose()
     {
         m_ShouldExit = true;
+    }
+
+    void Application::InitTimer()
+    {
+        Timer::Get().Init();
     }
 
     void Application::InitEventBus()
@@ -90,7 +102,13 @@ namespace RL
     void Application::SetupWorkspace()
     {
         Log::Logger()->info("Initiating workspace...");
-        Workspace::Get().Init(m_StartupParam.WorkspaceDir);
+        Workspace::Get().Init(m_StartupParam.ExePath, m_StartupParam.WorkspaceDir);
+    }
+
+    void Application::InitScriptingEngine()
+    {
+        Log::Logger()->info("Initiating scripting engine...");
+        ScriptingEngine::Get().Init();
     }
 
     void Application::InitGraphicsEngine()
@@ -129,6 +147,7 @@ namespace RL
         delete m_Listener;
         
         WindowManager::Get().Shutdown();
+        ScriptingEngine::Get().Shutdown();
         GraphicEngine::Get().Shutdown();
         EventBus::Get().Shutdown();
     }

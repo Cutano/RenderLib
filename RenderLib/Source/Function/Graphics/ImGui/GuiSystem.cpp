@@ -1,5 +1,6 @@
 #include "GuiSystem.h"
 #include "GuiComponent/Window/DemoWindow.h"
+#include "GuiComponent/MenuBar/MainMenuBar.h"
 
 #include <imgui.h>
 
@@ -22,6 +23,7 @@ namespace RL
         ImGui::StyleColorsDark();
 
         m_GuiRegistry.emplace_back(std::make_shared<DemoWindow>());
+        m_GuiRegistry.emplace_back(std::make_shared<MainMenuBar>());
     }
 
     void GuiSystem::Update()

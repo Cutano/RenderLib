@@ -22,6 +22,9 @@
     <ClCompile Include="Source\Function\Graphics\ImGui\GuiComponent\Window\imgui_demo.cpp" />
     <ClCompile Include="Source\Function\Graphics\ImGui\GuiSystem.cpp" />
     <ClCompile Include="Source\Function\Graphics\ImGui\GuiWindowBase.cpp" />
+    <ClCompile Include="Source\Function\Scripting\ScriptingEngine.cpp" />
+    <ClCompile Include="Source\Function\Graphics\ImGui\GuiComponent\MenuBar\MainMenuBar.cpp" />
+    <ClCompile Include="Source\Function\Scripting\Bindings.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Source\Base.h" />
@@ -41,5 +44,9 @@
     <ClInclude Include="Source\Function\Graphics\ImGui\GuiComponent\Window\DemoWindow.h" />
     <ClInclude Include="Source\Function\Graphics\ImGui\GuiSystem.h" />
     <ClInclude Include="Source\Function\Graphics\ImGui\GuiWindowBase.h" />
+    <ClInclude Include="Source\Function\Scripting\ScriptingEngine.h" />
+    <ClInclude Include="Source\Utility\Functions.h" />
+    <ClInclude Include="Source\Function\Graphics\ImGui\GuiComponent\MenuBar\MainMenuBar.h" />
+    <ClInclude Include="Source\Function\Scripting\Bindings.h" />
   </ItemGroup>
 </Project>

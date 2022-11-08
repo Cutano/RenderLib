@@ -42,6 +42,7 @@ namespace RL
         void AttachRawWindow(HWND hwnd);
 
         Diligent::IDeviceContext* GetDeviceContext() const;
+        Diligent::IRenderDevice*  GetDevice() const;
         
     private:
         GraphicEngine() = default;

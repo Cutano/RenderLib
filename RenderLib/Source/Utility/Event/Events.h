@@ -2,12 +2,32 @@
 
 #include "Utility/KeyCodes.h"
 
+#include <string>
+
 typedef struct HWND__ *HWND;
 typedef struct GLFWmonitor GLFWmonitor;
 typedef struct GLFWwindow GLFWwindow;
 
 namespace RL
 {
+    struct FileEvent
+    {
+        enum EventType
+        {
+            /// Sent when a file is created or renamed
+            Add = 1,
+            /// Sent when a file is deleted or renamed
+            Delete = 2,
+            /// Sent when a file is modified
+            Modified = 3,
+            /// Sent when a file is moved
+            Moved = 4
+        };
+        
+        std::wstring Path;
+        EventType Type;
+    };
+    
     struct ResizeEvent
     {
         float Width {0};
@@ -127,5 +147,10 @@ namespace RL
     {
         GLFWmonitor* Monitor {nullptr};
         int Event {0};
+    };
+
+    struct SourceFileChangedEvent : FileEvent
+    {
+        
     };
 }

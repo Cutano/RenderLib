@@ -16,3 +16,10 @@ CMake required, or you can use Visual Studio 2022 Developer PowerShell which has
 .\GenerateDepsProj.bat
 ```
 **Do this before opening the solution**.
+
+## Scripting Engine Reference
+https://learn.microsoft.com/en-us/dotnet/core/tutorials/netcore-hosting \
+https://learn.microsoft.com/en-us/dotnet/core/tutorials/creating-app-with-plugin-support \
+https://github.com/dotnet/samples/tree/main/core/hosting \
+https://github.com/dotnet/runtime/blob/main/docs/design/features/native-hosting.md
+
