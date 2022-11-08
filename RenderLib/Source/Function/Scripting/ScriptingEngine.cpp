@@ -6,6 +6,8 @@
 
 #include <filesystem>
 
+#include "Platform/Input/InputManager.h"
+
 namespace RL
 {
     void ScriptingEngine::Init()
@@ -22,6 +24,12 @@ namespace RL
 
     void ScriptingEngine::Update()
     {
+        if (InputManager::Get().IsHotKeyTriggered({KeyCode::LeftControl, KeyCode::R}) ||
+            InputManager::Get().IsHotKeyTriggered({KeyCode::RightControl, KeyCode::R}))
+        {
+            BuildAndLoadAssemblies();
+        }
+        
         m_InteropService->Update(Timer::Get().GetDeltaTime());
     }
 

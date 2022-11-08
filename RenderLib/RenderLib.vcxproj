@@ -107,6 +107,7 @@
     <ClCompile Include="Source\Function\Scripting\Interop\InteropService.cpp" />
     <ClCompile Include="Source\Function\Scripting\ScriptingEngine.cpp" />
     <ClCompile Include="Source\Platform\Application.cpp" />
+    <ClCompile Include="Source\Platform\Input\InputManager.cpp" />
     <ClCompile Include="Source\Platform\Window\Window.cpp" />
     <ClCompile Include="Source\Platform\Window\WindowManager.cpp" />
     <ClCompile Include="Source\Platform\Workspace\FileWatcher.cpp" />
@@ -156,6 +157,7 @@
     <ClInclude Include="Source\Function\Scripting\Interop\InteropService.h" />
     <ClInclude Include="Source\Function\Scripting\ScriptingEngine.h" />
     <ClInclude Include="Source\Platform\Application.h" />
+    <ClInclude Include="Source\Platform\Input\InputManager.h" />
     <ClInclude Include="Source\Platform\Window\Window.h" />
     <ClInclude Include="Source\Platform\Window\WindowManager.h" />
     <ClInclude Include="Source\Platform\Workspace\FileWatcher.h" />

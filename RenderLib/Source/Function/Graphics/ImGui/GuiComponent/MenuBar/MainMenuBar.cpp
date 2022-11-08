@@ -40,7 +40,7 @@ namespace RL
                     ScriptingEngine::Get().LoadAssemblies();
                 }
 
-                if (ImGui::MenuItem("Compile & Reload"))
+                if (ImGui::MenuItem("Compile & Reload", "Ctrl+R"))
                 {
                     ScriptingEngine::Get().BuildAndLoadAssemblies();
                 }

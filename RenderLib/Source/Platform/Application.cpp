@@ -5,6 +5,7 @@
 #include "Function/Scripting/ScriptingEngine.h"
 #include "Platform/Window/Window.h"
 #include "Platform/Window/WindowManager.h"
+#include "Platform/Input/InputManager.h"
 #include "Utility/Event/Events.h"
 #include "Utility/Event/EventBus.h"
 #include "Utility/Event/EventListener.h"
@@ -48,6 +49,7 @@ namespace RL
         Preprocess();
         InitMainWindow();
         InitGuiSystem();
+        InitInputManager();
     }
 
     Application::~Application()
@@ -65,6 +67,7 @@ namespace RL
             ScriptingEngine::Get().Update();
             GraphicEngine::Get().Update();
             GuiSystem::Get().Update();
+            InputManager::Get().Update();
 
             ScriptingEngine::Get().Render();
             GraphicEngine::Get().Render();
@@ -140,6 +143,11 @@ namespace RL
     {
         GuiSystem::Get().Init();
         GraphicEngine::Get().AttachGuiBackend();
+    }
+
+    void Application::InitInputManager()
+    {
+        InputManager::Get().Init();
     }
 
     void Application::BeforeClose()

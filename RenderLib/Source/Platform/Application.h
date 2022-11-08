@@ -50,6 +50,7 @@ namespace RL
         void Preprocess();
         void InitMainWindow();
         void InitGuiSystem();
+        void InitInputManager();
 
         void BeforeClose();
         
