@@ -1,5 +1,7 @@
 #include "MainMenuBar.h"
 #include "Function/Scripting/ScriptingEngine.h"
+#include "Utility/Event/EventListener.h"
+#include "Utility/Event/Events.h"
 
 #include <imgui.h>
 
@@ -7,7 +9,13 @@ namespace RL
 {
     MainMenuBar::MainMenuBar() : GuiBase(L"MainMenuBar")
     {
-        
+        m_Listener->SubscribeEvent<SourceFileChangedEvent>([this](const SourceFileChangedEvent&)
+        {
+            if (IsAutoRecompile())
+            {
+                ScriptingEngine::Get().BuildAndLoadAssemblies();
+            }
+        });
     }
 
     void MainMenuBar::Draw()

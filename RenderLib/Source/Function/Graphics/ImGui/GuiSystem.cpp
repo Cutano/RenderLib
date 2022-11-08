@@ -1,4 +1,5 @@
 #include "GuiSystem.h"
+#include "GuiBase.h"
 #include "GuiComponent/Window/DemoWindow.h"
 #include "GuiComponent/MenuBar/MainMenuBar.h"
 
@@ -52,5 +53,18 @@ namespace RL
         }
 
         ImGui::End();
+    }
+
+    std::shared_ptr<GuiBase> GuiSystem::GetUIComponentByName(const std::wstring& name) const
+    {
+        for (const auto& ui : m_GuiRegistry)
+        {
+            if (ui->GetName() == name)
+            {
+                return ui;
+            }
+        }
+
+        return nullptr;
     }
 }
