@@ -62,12 +62,12 @@ namespace RL
         while (!m_ShouldExit)
         {
             Timer::Get().Update();
+            InputManager::Get().Update();
             WindowManager::Get().Update();
             EventBus::Get().Update();
             ScriptingEngine::Get().Update();
             GraphicEngine::Get().Update();
             GuiSystem::Get().Update();
-            InputManager::Get().Update();
 
             ScriptingEngine::Get().Render();
             GraphicEngine::Get().Render();
@@ -153,7 +153,8 @@ namespace RL
     void Application::BeforeClose()
     {
         delete m_Listener;
-        
+
+        InputManager::Get().Shutdown();
         WindowManager::Get().Shutdown();
         ScriptingEngine::Get().Shutdown();
         GraphicEngine::Get().Shutdown();

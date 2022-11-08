@@ -24,8 +24,8 @@ namespace RL
 
     void ScriptingEngine::Update()
     {
-        if (InputManager::Get().IsHotKeyTriggered({KeyCode::LeftControl, KeyCode::R}) ||
-            InputManager::Get().IsHotKeyTriggered({KeyCode::RightControl, KeyCode::R}))
+        if (InputManager::Get().HasHotKeyTriggered(KeyCode::R, {KeyCode::LeftControl}) ||
+            InputManager::Get().HasHotKeyTriggered(KeyCode::R, {KeyCode::RightControl}))
         {
             BuildAndLoadAssemblies();
         }

@@ -1,8 +1,9 @@
 #include "InputManager.h"
 #include "Platform/Window/Window.h"
 #include "Platform/Window/WindowManager.h"
-#include "Utility/Event/EventBus.h"
 #include "Utility/Event/Events.h"
+#include "Utility/Event/EventBus.h"
+#include "Utility/Event/EventListener.h"
 
 #include <GLFW/glfw3.h>
 #include <imgui.h>
@@ -14,6 +15,17 @@ namespace RL
 {
     void InputManager::Init()
     {
+        m_Listener = new EventListener();
+
+        m_Listener->SubscribeEvent<KeyPressedEvent>([this](const KeyPressedEvent& e)
+        {
+            m_PressedKeys.insert(e.Key);
+        });
+
+        m_Listener->SubscribeEvent<MouseButtonPressedEvent>([this](const MouseButtonPressedEvent& e)
+        {
+            m_PressedButtons.insert(e.Button);
+        });
     }
 
     void InputManager::Update()
@@ -53,9 +65,20 @@ namespace RL
                     controller.HatStates[i] = hats[i];
             }
         }
+
+        // Finish recording keys
+        m_PrevPressedKeys = m_PressedKeys;
+        m_PrevPressedButtons = m_PressedButtons;
+        m_PressedKeys.clear();
+        m_PressedButtons.clear();
     }
 
-    bool InputManager::IsKeyPressed(KeyCode keycode)
+    void InputManager::Shutdown()
+    {
+        delete m_Listener;
+    }
+
+    bool InputManager::IsKeyDown(KeyCode keycode)
     {
         ImGuiContext* context = ImGui::GetCurrentContext();
         
@@ -74,7 +97,7 @@ namespace RL
         return false;
     }
 
-    bool InputManager::IsMouseButtonPressed(MouseButton button)
+    bool InputManager::IsMouseButtonDown(MouseButton button)
     {
         ImGuiContext* context = ImGui::GetCurrentContext();
         
@@ -93,36 +116,32 @@ namespace RL
         return false;
     }
 
-    bool InputManager::IsHotKeyTriggered(const std::set<KeyCode>& keycodes)
+    bool InputManager::HasKeyPressed(const KeyCode keycode)
     {
-        bool res = true;
-        
-        for (const auto& keycode : keycodes)
-        {
-            res &= IsKeyPressed(keycode);
-            if (!res)
-            {
-                return false;
-            }
-        }
-
-        return res;
+        return m_PrevPressedKeys.contains(keycode);
     }
 
-    bool InputManager::IsHotKeyTriggered(const std::initializer_list<KeyCode> keycodes)
+    bool InputManager::HasMouseButtonPressed(const MouseButton button)
     {
-        bool res = true;
-        
-        for (const auto& keycode : keycodes)
+        return m_PrevPressedButtons.contains(button);
+    }
+
+    bool InputManager::HasHotKeyTriggered(const KeyCode triggerKey, const std::initializer_list<KeyCode> holdKeys)
+    {
+        if (holdKeys.size() < 1 || !HasKeyPressed(triggerKey))
         {
-            res &= IsKeyPressed(keycode);
-            if (!res)
+            return false;
+        }
+        
+        for (const auto& keycode : holdKeys)
+        {
+            if (!IsKeyDown(keycode))
             {
                 return false;
             }
         }
 
-        return res;
+        return true;
     }
 
     float InputManager::GetMouseX()

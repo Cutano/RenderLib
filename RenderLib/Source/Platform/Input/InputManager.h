@@ -10,6 +10,8 @@
 
 namespace RL
 {
+    class EventListener;
+    
     struct Controller
     {
         int ID;
@@ -36,12 +38,13 @@ namespace RL
 
         void Init();
         void Update();
+        void Shutdown();
     
-        bool IsKeyPressed(KeyCode keycode);
+        bool IsKeyDown(KeyCode keycode);
+        bool IsMouseButtonDown(MouseButton button);
         bool HasKeyPressed(KeyCode keycode);
-        bool IsMouseButtonPressed(MouseButton button);
-        bool IsHotKeyTriggered(const std::set<KeyCode>& keycodes);
-        bool IsHotKeyTriggered(std::initializer_list<KeyCode> keycodes);
+        bool HasMouseButtonPressed(MouseButton button);
+        bool HasHotKeyTriggered(KeyCode triggerKey, std::initializer_list<KeyCode> holdKeys);
         float GetMouseX();
         float GetMouseY();
         std::pair<float, float> GetMousePosition();
@@ -64,6 +67,12 @@ namespace RL
         InputManager() = default;
 
         std::map<int, Controller> m_Controllers;
+        std::set<KeyCode> m_PressedKeys;
+        std::set<KeyCode> m_PrevPressedKeys;
+        std::set<MouseButton> m_PressedButtons;
+        std::set<MouseButton> m_PrevPressedButtons;
         float m_PreX = 0, m_PreY = 0;
+
+        EventListener* m_Listener {nullptr};
     };
 }
