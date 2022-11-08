@@ -35,7 +35,8 @@ namespace RL::Interop
         void* WorkspaceGetWorkspaceDir;
         void* DeviceGet;
         void* DeviceGetContext;
-        void* Log;
+        void* ScriptCoreLog;
+        void* GraphicsLog;
         void* Exception;
     } unmanagedFunctionPayload;
 
@@ -130,7 +131,8 @@ namespace RL::Interop
             unmanagedFunctionPayload.WorkspaceGetWorkspaceDir = (void*)&Binding::Workspace::GetWorkspaceDir;
             unmanagedFunctionPayload.DeviceGet = (void*)&Binding::Device::GetDevice;
             unmanagedFunctionPayload.DeviceGetContext = (void*)&Binding::Device::GetContext;
-            unmanagedFunctionPayload.Log = (void*)&Log;
+            unmanagedFunctionPayload.ScriptCoreLog = (void*)&ScriptCoreLog;
+            unmanagedFunctionPayload.GraphicsLog = (void*)&GraphicsLog;
             unmanagedFunctionPayload.Exception = (void*)&Exception;
             managedPayload = init(unmanagedFunctionPayload);
             
@@ -205,21 +207,40 @@ namespace RL::Interop
         }
     }
 
-    void InteropService::Log(LogLevel Level, const char* Message)
+    void InteropService::ScriptCoreLog(LogLevel Level, const char* Message)
     {
         switch (Level)
         {
         case LogLevel::Info:
-            Log::Logger()->info(Message);
+            Log::ScriptCoreLogger()->info(Message);
             break;
         case LogLevel::Warning:
-            Log::Logger()->warn(Message);
+            Log::ScriptCoreLogger()->warn(Message);
             break;
         case LogLevel::Error:
-            Log::Logger()->error(Message);
+            Log::ScriptCoreLogger()->error(Message);
             break;
         case LogLevel::Fatal:
-            Log::Logger()->critical(Message);
+            Log::ScriptCoreLogger()->critical(Message);
+            break;
+        }
+    }
+
+    void InteropService::GraphicsLog(LogLevel Level, const char* Message)
+    {
+        switch (Level)
+        {
+        case LogLevel::Info:
+            Log::GraphicsLogger()->info(Message);
+            break;
+        case LogLevel::Warning:
+            Log::GraphicsLogger()->warn(Message);
+            break;
+        case LogLevel::Error:
+            Log::GraphicsLogger()->error(Message);
+            break;
+        case LogLevel::Fatal:
+            Log::GraphicsLogger()->critical(Message);
             break;
         }
     }

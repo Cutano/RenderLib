@@ -20,16 +20,16 @@ namespace RL
                 switch (severity)
                 {
                 case Diligent::DEBUG_MESSAGE_SEVERITY_INFO:
-                    Log::GraphicsLogger()->info("Engine: {}", msg);
+                    Log::GraphicsEngineLogger()->info("{}", msg);
                     break;
                 case Diligent::DEBUG_MESSAGE_SEVERITY_WARNING:
-                    Log::GraphicsLogger()->warn("Engine: {}", msg);
+                    Log::GraphicsEngineLogger()->warn("{}", msg);
                     break;
                 case Diligent::DEBUG_MESSAGE_SEVERITY_ERROR:
-                    Log::GraphicsLogger()->error("Engine: {}", msg);
+                    Log::GraphicsEngineLogger()->error("{}", msg);
                     break;
                 case Diligent::DEBUG_MESSAGE_SEVERITY_FATAL_ERROR:
-                    Log::GraphicsLogger()->critical("Engine: {}", msg);
+                    Log::GraphicsEngineLogger()->critical("{}", msg);
                     break;
                 }
             }
@@ -38,19 +38,19 @@ namespace RL
                 switch (severity)
                 {
                 case Diligent::DEBUG_MESSAGE_SEVERITY_INFO:
-                    Log::GraphicsLogger()->info("Engine: {}, in function {}, file {}, line {}", msg, function, file,
+                    Log::GraphicsEngineLogger()->info("{}, in function {}, file {}, line {}", msg, function, file,
                                                 std::to_string(line).c_str());
                     break;
                 case Diligent::DEBUG_MESSAGE_SEVERITY_WARNING:
-                    Log::GraphicsLogger()->warn("Engine: {}, in function {}, file {}, line {}", msg, function, file,
+                    Log::GraphicsEngineLogger()->warn("{}, in function {}, file {}, line {}", msg, function, file,
                                                 std::to_string(line).c_str());
                     break;
                 case Diligent::DEBUG_MESSAGE_SEVERITY_ERROR:
-                    Log::GraphicsLogger()->error("Engine: {}, in function {}, file {}, line {}", msg, function, file,
+                    Log::GraphicsEngineLogger()->error("{}, in function {}, file {}, line {}", msg, function, file,
                                                  std::to_string(line).c_str());
                     break;
                 case Diligent::DEBUG_MESSAGE_SEVERITY_FATAL_ERROR:
-                    Log::GraphicsLogger()->critical("Engine: {}, in function {}, file {}, line {}", msg, function, file,
+                    Log::GraphicsEngineLogger()->critical("{}, in function {}, file {}, line {}", msg, function, file,
                                                     std::to_string(line).c_str());
                     break;
                 }

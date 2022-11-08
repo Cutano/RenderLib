@@ -23,7 +23,8 @@ partial class Entry
         internal delegate* unmanaged<IntPtr> WorkspaceGetWorkspaceDir;
         internal delegate* unmanaged<IntPtr> DeviceGet;
         internal delegate* unmanaged<IntPtr> DeviceGetContext;
-        internal delegate* unmanaged<int, IntPtr, void> Log;
+        internal delegate* unmanaged<int, IntPtr, void> ScriptCoreLog;
+        internal delegate* unmanaged<int, IntPtr, void> GraphicsLog;
         internal delegate* unmanaged<IntPtr, void> Exception;
     }
 }

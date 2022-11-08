@@ -32,7 +32,8 @@ namespace RL::Interop
 		void BuildAndLoadAssemblies();
 
 	private:
-		static void Log(LogLevel Level, const char* Message);
+		static void ScriptCoreLog(LogLevel Level, const char* Message);
+		static void GraphicsLog(LogLevel Level, const char* Message);
 		static void Exception(const char* Message);
 		
 		void* HostfxrLibrary {nullptr};
