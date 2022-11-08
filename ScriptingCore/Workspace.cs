@@ -7,7 +7,6 @@ using Microsoft.Build.Evaluation;
 using Microsoft.Build.Execution;
 using Microsoft.Build.Framework;
 using ScriptingInterface;
-using Serilog;
 
 namespace ScriptingCore;
 
@@ -79,7 +78,7 @@ internal unsafe class Workspace
     {
         if (Instance._isBuilding)
         {
-            Log.Warning("Still building, wait until done.");
+            Log.Warning("Still building.");
             return;
         }
         
@@ -91,7 +90,7 @@ internal unsafe class Workspace
     {
         if (Instance._isLoading)
         {
-            Log.Warning("Still loading, wait until done.");
+            Log.Warning("Still loading.");
             return;
         }
         
@@ -107,7 +106,23 @@ internal unsafe class Workspace
     [UnmanagedCallersOnly]
     internal static void BuildAndLoadAssemblies()
     {
+        if (Instance._isBuilding)
+        {
+            Log.Warning("Still building.");
+            return;
+        }
         
+        if (Instance._isLoading)
+        {
+            Log.Warning("Still loading.");
+            return;
+        }
+
+        Task.Run(() =>
+        {
+            BuildAssembly();
+            LoadAssembly();
+        });
     }
 
     [MethodImpl(MethodImplOptions.NoInlining)]
@@ -137,7 +152,7 @@ internal unsafe class Workspace
         var projectCollection = new ProjectCollection();
         var buildParams = new BuildParameters(projectCollection)
         {
-            Loggers = new List<Microsoft.Build.Framework.ILogger> { logger }
+            Loggers = new List<ILogger> { logger }
         };
 
         var globalProperty = new Dictionary<string, string>
@@ -272,7 +287,7 @@ internal unsafe class Workspace
         root.Save(Path.Combine(GetWorkspaceDir(), "ScriptLibrary.csproj"));
     }
     
-    private sealed class MSBuildSerilog : Microsoft.Build.Framework.ILogger
+    private sealed class MSBuildSerilog : ILogger
     {
         public void Initialize(IEventSource eventSource)
         {
