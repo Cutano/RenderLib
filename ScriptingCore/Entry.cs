@@ -13,8 +13,8 @@ internal static partial class Entry
 
         Workspace.WorkspaceGetAppPath = unmanagedPayload.WorkspaceGetAppPath;
         Workspace.WorkspaceGetWorkspaceDir = unmanagedPayload.WorkspaceGetWorkspaceDir;
-        RenderCore.Device.GetDeviceUnmanaged = unmanagedPayload.DeviceGet;
-        RenderCore.Device.GetDeviceContextUnmanaged = unmanagedPayload.DeviceGetContext;
+        RenderCore.RenderDevice.GetDeviceUnmanaged = unmanagedPayload.DeviceGet;
+        RenderCore.DeviceContext.GetDeviceContextUnmanaged = unmanagedPayload.DeviceGetContext;
         Log.LogUnmanaged = unmanagedPayload.Log;
         
         Workspace.Instance.Init();

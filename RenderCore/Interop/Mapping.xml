@@ -20,6 +20,7 @@
 		#define PLATFORM_WIN32 1
 		#define D3D12_SUPPORTED 1
 		#define DILIGENT_CPP_INTERFACE 1
+		#define DILIGENT_C_INTERFACE 0
 	</include-prolog>
 	<include file="PlatformDefinitions.h" />
 	
@@ -133,5 +134,82 @@
 			<remove field="ShaderCreateInfo::ByteCodeSize" />
 			<map struct="ShaderCreateInfo" marshal="true" />
 		<context-clear />
+		
+<!--		<map param="IBuffer::CreateView::ViewDesc" type="void" />-->
+		
+		<map method="IDeviceContext::GetDesc" type="void" />
+<!--		<map param="IDeviceContext::SetRenderTargetsExt::Attribs" type="void" />-->
+<!--		<map param="IDeviceContext::BeginRenderPass::Attribs" type="void" />-->
+<!--		<map param="IDeviceContext::Draw::Attribs" type="void" />-->
+<!--		<map param="IDeviceContext::DrawIndexed::Attribs" type="void" />-->
+<!--		<map param="IDeviceContext::DrawIndirect::Attribs" type="void" />-->
+<!--		<map param="IDeviceContext::DrawIndexedIndirect::Attribs" type="void" />-->
+<!--		<map param="IDeviceContext::DrawMesh::Attribs" type="void" />-->
+<!--		<map param="IDeviceContext::DrawMeshIndirect::Attribs" type="void" />-->
+<!--		<map param="IDeviceContext::DispatchCompute::Attribs" type="void" />-->
+<!--		<map param="IDeviceContext::DispatchComputeIndirect::Attribs" type="void" />-->
+<!--		<map param="IDeviceContext::DispatchTile::Attribs" type="void" />-->
+<!--		<map param="IDeviceContext::GetTileSize::TileSizeX" type="void" />-->
+<!--		<map param="IDeviceContext::GetTileSize::TileSizeY" type="void" />-->
+<!--		<map param="IDeviceContext::MapBuffer::pMappedData" type="void" />-->
+<!--		<map param="IDeviceContext::UpdateTexture::DstBox" type="void" />-->
+<!--		<map param="IDeviceContext::UpdateTexture::SubresData" type="void" />-->
+<!--		<map param="IDeviceContext::CopyTexture::CopyAttribs" type="void" />-->
+<!--		<map param="IDeviceContext::MapTextureSubresource::MappedData" type="void" />-->
+<!--		<map param="IDeviceContext::ResolveTextureSubresource::ResolveAttribs" type="void" />-->
+<!--		<map param="IDeviceContext::BuildBLAS::Attribs" type="void" />-->
+<!--		<map param="IDeviceContext::BuildTLAS::Attribs" type="void" />-->
+<!--		<map param="IDeviceContext::CopyBLAS::Attribs" type="void" />-->
+<!--		<map param="IDeviceContext::CopyTLAS::Attribs" type="void" />-->
+<!--		<map param="IDeviceContext::WriteBLASCompactedSize::Attribs" type="void" />-->
+<!--		<map param="IDeviceContext::WriteTLASCompactedSize::Attribs" type="void" />-->
+<!--		<map param="IDeviceContext::TraceRays::Attribs" type="void" />-->
+<!--		<map param="IDeviceContext::TraceRaysIndirect::Attribs" type="void" />-->
+<!--		<map param="IDeviceContext::BindSparseResourceMemory::Attribs" type="void" />-->
+
+		<map method="IDeviceObject::GetDesc" type="void" />
+
+		<map method="IEngineFactory::GetAPIInfo" type="void" />
+<!--		<map param="IEngineFactory::EnumerateAdapters::NumAdapters" type="void" />-->
+<!--		<map param="IEngineFactory::CreateDearchiver::CreateInfo" type="void" />-->
+
+		<map method="IPipelineState::GetGraphicsPipelineDesc" type="void" />
+		<map method="IPipelineState::GetRayTracingPipelineDesc" type="void" />
+		<map method="IPipelineState::GetTilePipelineDesc" type="void" />
+
+<!--		<map param="IRenderDevice::CreateBuffer::BuffDesc" type="void" />-->
+<!--		<map param="IRenderDevice::CreateShader::ShaderCI" type="void" />-->
+<!--		<map param="IRenderDevice::CreateTexture::TexDesc" type="void" />-->
+<!--		<map param="IRenderDevice::CreateSampler::SamDesc" type="void" />-->
+<!--		<map param="IRenderDevice::CreateResourceMapping::MappingDesc" type="void" />-->
+<!--		<map param="IRenderDevice::CreateGraphicsPipelineState::PSOCreateInfo" type="void" />-->
+<!--		<map param="IRenderDevice::CreateComputePipelineState::PSOCreateInfo" type="void" />-->
+<!--		<map param="IRenderDevice::CreateRayTracingPipelineState::PSOCreateInfo" type="void" />-->
+<!--		<map param="IRenderDevice::CreateTilePipelineState::PSOCreateInfo" type="void" />-->
+<!--		<map param="IRenderDevice::CreateFence::Desc" type="void" />-->
+<!--		<map param="IRenderDevice::CreateQuery::Desc" type="void" />-->
+<!--		<map param="IRenderDevice::CreateRenderPass::Desc" type="void" />-->
+<!--		<map param="IRenderDevice::CreateFramebuffer::Desc" type="void" />-->
+<!--		<map param="IRenderDevice::CreateBLAS::Desc" type="void" />-->
+<!--		<map param="IRenderDevice::CreateTLAS::Desc" type="void" />-->
+<!--		<map param="IRenderDevice::CreateSBT::Desc" type="void" />-->
+<!--		<map param="IRenderDevice::CreatePipelineResourceSignature::Desc" type="void" />-->
+<!--		<map param="IRenderDevice::CreateDeviceMemory::CreateInfo" type="void" />-->
+<!--		<map param="IRenderDevice::CreatePipelineStateCache::CreateInfo" type="void" />-->
+		<map method="IRenderDevice::GetDeviceInfo" type="void" />
+		<map method="IRenderDevice::GetAdapterInfo" type="void" />
+		<map method="IRenderDevice::GetTextureFormatInfo" type="void" />
+		<map method="IRenderDevice::GetTextureFormatInfoExt" type="void" />
+
+<!--		<map param="IShader::GetResourceDesc::ResourceDesc" type="void" />-->
+<!--		<map param="IShader::GetBytecode::Size" type="void" />-->
+
+<!--		<map param="IShaderResourceVariable::GetResourceDesc::ResourceDesc" type="void" />-->
+
+		<map method="ISwapChain::GetDesc" type="void" />
+<!--		<map param="ISwapChain::SetFullscreenMode::DisplayMode" type="void" />-->
+
+<!--		<map param="ITexture::CreateView::ViewDesc" type="void" />-->
+		<map method="ITexture::GetSparseProperties" type="void" />
 	</mapping>
 </config>

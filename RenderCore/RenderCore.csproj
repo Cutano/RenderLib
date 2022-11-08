@@ -13,6 +13,10 @@
     <Authors>Cutano</Authors>
   </PropertyGroup>
 
+  <PropertyGroup>
+    <CastXmlPath>C:\Users\cutanojiang\Downloads\castxml-windows\castxml\bin\castxml.exe</CastXmlPath>
+  </PropertyGroup>
+
   <ItemGroup>
     <SharpGenMapping Include="Interop\Mapping.xml" />
   </ItemGroup>
