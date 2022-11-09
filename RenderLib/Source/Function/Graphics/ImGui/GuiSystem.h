@@ -1,8 +1,11 @@
 #pragma once
 
+#define MAX_SCENE_WINDOW_COUNT 16
+
 #include <vector>
 #include <memory>
 #include <string>
+#include <array>
 
 namespace RL
 {
@@ -26,15 +29,21 @@ namespace RL
         void Init();
         void Update();
 
-        void AddSceneWindow(const std::wstring& name);
+        void AddSceneWindowNextFrame();
+        void RemoveSceneWindowNextFrame(uint16_t number);
 
         [[nodiscard]] std::shared_ptr<GuiBase> GetUIComponentByName(const std::wstring& name) const;
 
     private:
         GuiSystem() = default;
 
+        bool NewSceneWindow();
+        void RemoveSceneWindow(uint16_t number);
+
         void* m_ImGuiCtx {nullptr};
 
         std::vector<std::shared_ptr<GuiBase>> m_GuiRegistry;
+
+        std::array<bool, MAX_SCENE_WINDOW_COUNT> m_AvailableSceneWindow {false};
     };
 }

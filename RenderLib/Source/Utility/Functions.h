@@ -1,5 +1,15 @@
 #pragma once
+#include <random>
 #include <string>
+
+static std::random_device s_RandomDevice;
+static std::mt19937_64 eng(s_RandomDevice());
+static std::uniform_int_distribution<uint64_t> s_UniformDistribution;
+
+inline uint64_t GenerateUUID()
+{
+    return s_UniformDistribution(eng);
+}
 
 // Convert a multi-byte character string (UTF-8) to a wide (UTF-16) encoded string.
 inline std::wstring ConvertString( const std::string& string )

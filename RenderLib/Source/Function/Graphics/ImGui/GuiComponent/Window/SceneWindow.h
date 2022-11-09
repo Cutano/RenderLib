@@ -3,11 +3,10 @@
 
 namespace RL
 {
-    class SceneWindow final : GuiWindowBase
+    class SceneWindow final : public GuiWindowBase
     {
     public:
-        explicit SceneWindow();
-        explicit SceneWindow(const std::wstring& name);
+        explicit SceneWindow(uint16_t number);
 
         ~SceneWindow() override = default;
         SceneWindow(const SceneWindow& other) = delete;
@@ -17,7 +16,11 @@ namespace RL
 
         void Draw() override;
 
+        uint16_t GetID();
+
     private:
+        uint16_t m_ID {0};
+        
         bool m_IsSceneWindowHovered {false};
 
         float m_SceneWindowWidth {1920.0f};

@@ -66,27 +66,10 @@ namespace RL
             {
                 if (ImGui::MenuItem("Add Scene Window"))
                 {
-                    ImGui::OpenPopup("SceneWindowNamePopup");
+                    GuiSystem::Get().AddSceneWindowNextFrame();
                 }
                 
                 ImGui::EndMenu();
-            }
-
-            static bool s_ShowAddSceneWindowPopup {true};
-            if (ImGui::BeginPopupModal("SceneWindowNamePopup", &s_ShowAddSceneWindowPopup))
-            {
-                constexpr int bufferSize = 64;
-                char buffer[bufferSize];
-                ImGui::Text("Please name the new window.");
-                ImGui::InputText("Name", buffer, bufferSize);
-                        
-                if (ImGui::Button("Cancel")) ImGui::CloseCurrentPopup();
-                if (ImGui::Button("OK"))
-                {
-                    GuiSystem::Get().AddSceneWindow(ConvertString(buffer));
-                }
-
-                ImGui::EndPopup();
             }
             
             ImGui::EndMenuBar();
