@@ -43,14 +43,15 @@ namespace RL
     private:
         void InitTimer();
         void InitEventBus();
+        void InitInputManager();
         void SetupWorkspace();
+        void InitPreferenceManager();
         void InitScriptingEngine();
         void InitGraphicsEngine();
         void LoadAsset();
         void Preprocess();
         void InitMainWindow();
         void InitGuiSystem();
-        void InitInputManager();
 
         void BeforeClose();
         

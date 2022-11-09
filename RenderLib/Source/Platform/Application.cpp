@@ -10,6 +10,7 @@
 #include "Utility/Event/EventBus.h"
 #include "Utility/Event/EventListener.h"
 #include "Utility/Timer/Timer.h"
+#include "Utility/Preference/PreferenceManager.h"
 #include "Function/Graphics/ImGui/GuiSystem.h"
 
 #include <filesystem>
@@ -44,6 +45,7 @@ namespace RL
         InitEventBus();
         InitInputManager();
         SetupWorkspace();
+        InitPreferenceManager();
         InitScriptingEngine();
         InitGraphicsEngine();
         LoadAsset();
@@ -108,6 +110,12 @@ namespace RL
         Workspace::Get().Init(m_StartupParam.ExePath, m_StartupParam.WorkspaceDir);
     }
 
+    void Application::InitPreferenceManager()
+    {
+        Log::Logger()->info("Initiating preference manager...");
+        PreferenceManager::Get().Init();
+    }
+
     void Application::InitScriptingEngine()
     {
         Log::Logger()->info("Initiating scripting engine...");
@@ -147,6 +155,7 @@ namespace RL
 
     void Application::InitInputManager()
     {
+        Log::Logger()->info("Initiating input manager...");
         InputManager::Get().Init();
     }
 
@@ -158,6 +167,7 @@ namespace RL
         WindowManager::Get().Shutdown();
         ScriptingEngine::Get().Shutdown();
         GraphicEngine::Get().Shutdown();
+        PreferenceManager::Get().Shutdown();
         EventBus::Get().Shutdown();
     }
 }

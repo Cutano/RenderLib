@@ -2,6 +2,7 @@
 #include "Function/Scripting/ScriptingEngine.h"
 #include "Utility/Event/EventListener.h"
 #include "Utility/Event/Events.h"
+#include "Utility/Preference/PreferenceManager.h"
 
 #include <imgui.h>
 
@@ -16,6 +17,8 @@ namespace RL
                 ScriptingEngine::Get().BuildAndLoadAssemblies();
             }
         });
+
+        m_AutoRecompile = PreferenceManager::Get().GetSpecificPreference<bool>(L"/scriptingPreference/autoCompile");
     }
 
     void MainMenuBar::Draw()
@@ -65,6 +68,7 @@ namespace RL
     void MainMenuBar::SetAutoRecompile(const bool autoRecompile)
     {
         m_AutoRecompile = autoRecompile;
+        PreferenceManager::Get().SetSpecificPreference<bool>(L"/scriptingPreference/autoCompile", autoRecompile, false);
     }
 
     bool& MainMenuBar::IsAutoRecompile()
