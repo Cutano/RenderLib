@@ -11,13 +11,13 @@ namespace RL
     public:
         explicit GuiBase(std::wstring name);
         
-        virtual ~GuiBase() = default;
+        virtual ~GuiBase();
         GuiBase(const GuiBase& other) = delete;
         GuiBase(GuiBase&& other) noexcept = delete;
         GuiBase& operator=(const GuiBase& other) = delete;
         GuiBase& operator=(GuiBase&& other) noexcept = delete;
 
-        virtual void Draw();
+        virtual void Draw() = 0;
         
         [[nodiscard]] virtual const std::wstring& GetName() const;
         virtual void SetName(const std::wstring& name);

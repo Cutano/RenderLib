@@ -10,7 +10,7 @@ namespace RL
         m_Listener = new EventListener();
     }
 
-    void GuiBase::Draw()
+    GuiBase::~GuiBase()
     {
         delete m_Listener;
     }
