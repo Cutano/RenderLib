@@ -1,35 +1,49 @@
 ﻿#include "Base.h"
 #include "ScriptingEngine.h"
 #include "Platform/Workspace/Workspace.h"
+#include "Platform/Input/InputManager.h"
 #include "Interop/InteropService.h"
+#include "Utility/Event/Events.h"
+#include "Utility/Event/EventListener.h"
 #include "Utility/Timer/Timer.h"
 
 #include <filesystem>
 
-#include "Platform/Input/InputManager.h"
-
 namespace RL
 {
+    const std::wstring g_HotKeyBuildAndLoad {L"BuildAndLoadAssemblies"};
+    
     void ScriptingEngine::Init()
     {
+        m_Listener = new EventListener();
         m_InteropService = new Interop::InteropService();
         m_InteropService->Init();
+
+        InputManager::Get().RegisterHotKey({
+            g_HotKeyBuildAndLoad,
+            "Ctrl+R",
+            KeyCode::R,
+            {KeyCode::LeftControl}
+        });
+
+        m_Listener->SubscribeEvent<HotkeyEvent>([this](const HotkeyEvent& e)
+        {
+            if (e.Name == g_HotKeyBuildAndLoad)
+            {
+                BuildAndLoadAssemblies();
+            }
+        });
     }
 
     void ScriptingEngine::Shutdown()
     {
         m_InteropService->Shutdown();
         delete m_InteropService;
+        delete m_Listener;
     }
 
     void ScriptingEngine::Update()
     {
-        if (InputManager::Get().HasHotKeyTriggered(KeyCode::R, {KeyCode::LeftControl}) ||
-            InputManager::Get().HasHotKeyTriggered(KeyCode::R, {KeyCode::RightControl}))
-        {
-            BuildAndLoadAssemblies();
-        }
-        
         m_InteropService->Update(Timer::Get().GetDeltaTime());
     }
 

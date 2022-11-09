@@ -6,6 +6,8 @@ namespace RL
     {
         class InteropService;
     }
+
+    class EventListener;
     
     class ScriptingEngine
     {
@@ -36,5 +38,6 @@ namespace RL
         ScriptingEngine() = default;
 
         Interop::InteropService* m_InteropService {nullptr};
+        EventListener* m_Listener {nullptr};
     };
 }

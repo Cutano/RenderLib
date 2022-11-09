@@ -20,6 +20,14 @@ namespace RL
         m_Listener->SubscribeEvent<KeyPressedEvent>([this](const KeyPressedEvent& e)
         {
             m_PressedKeys.insert(e.Key);
+
+            for (const auto& [name, hotkey] : m_HotKeyRegistry)
+            {
+                if (hotkey.TriggerKey == e.Key && IsKeyAllDown(hotkey.HoldKeys))
+                {
+                    EventBus::Get().SpreadEvent<HotkeyEvent>({name});
+                }
+            }
         });
 
         m_Listener->SubscribeEvent<MouseButtonPressedEvent>([this](const MouseButtonPressedEvent& e)
@@ -97,6 +105,32 @@ namespace RL
         return false;
     }
 
+    bool InputManager::IsKeyAllDown(const std::set<KeyCode>& keyCodes)
+    {
+        for (const auto& keyCode : keyCodes)
+        {
+            if (!IsKeyDown(keyCode))
+            {
+                return false;
+            }
+        }
+
+        return true;
+    }
+
+    bool InputManager::IsKeyAllDown(const std::initializer_list<KeyCode> keyCodes)
+    {
+        for (const auto& keyCode : keyCodes)
+        {
+            if (!IsKeyDown(keyCode))
+            {
+                return false;
+            }
+        }
+
+        return true;
+    }
+
     bool InputManager::IsMouseButtonDown(MouseButton button)
     {
         ImGuiContext* context = ImGui::GetCurrentContext();
@@ -116,29 +150,26 @@ namespace RL
         return false;
     }
 
-    bool InputManager::HasKeyPressed(const KeyCode keycode)
+    bool InputManager::HasKeyPressed(const KeyCode keycode) const
     {
         return m_PrevPressedKeys.contains(keycode);
     }
 
-    bool InputManager::HasMouseButtonPressed(const MouseButton button)
+    bool InputManager::HasMouseButtonPressed(const MouseButton button) const
     {
         return m_PrevPressedButtons.contains(button);
     }
 
-    bool InputManager::HasHotKeyTriggered(const KeyCode triggerKey, const std::initializer_list<KeyCode> holdKeys)
+    bool InputManager::HasHotKeyTriggered(const HotKey& hotKey)
     {
-        if (holdKeys.size() < 1 || !HasKeyPressed(triggerKey))
+        if (hotKey.HoldKeys.empty() || !HasKeyPressed(hotKey.TriggerKey))
         {
             return false;
         }
-        
-        for (const auto& keycode : holdKeys)
+
+        if (!IsKeyAllDown(hotKey.HoldKeys))
         {
-            if (!IsKeyDown(keycode))
-            {
-                return false;
-            }
+            return false;
         }
 
         return true;
@@ -172,6 +203,31 @@ namespace RL
     {
         return static_cast<CursorMode>(
             glfwGetInputMode(WindowManager::Get().GetMainWindow()->GetGlfWWindow(), GLFW_CURSOR) - GLFW_CURSOR_NORMAL);
+    }
+
+    HotKey& InputManager::GetHotKey(const std::wstring& name)
+    {
+        return m_HotKeyRegistry[name];
+    }
+
+    bool InputManager::IsHotKeyRegistered(const HotKey& hotKey) const
+    {
+        return m_HotKeyRegistry.contains(hotKey.Name);
+    }
+
+    void InputManager::RegisterHotKey(const HotKey& hotKey)
+    {
+        m_HotKeyRegistry[hotKey.Name] = hotKey;
+    }
+
+    void InputManager::UnregisterHotKey(const HotKey& hotKey)
+    {
+        m_HotKeyRegistry.erase(hotKey.Name);
+    }
+
+    void InputManager::UnregisterAllHotKey()
+    {
+        m_HotKeyRegistry.clear();
     }
 
     bool InputManager::IsControllerPresent(const int id)

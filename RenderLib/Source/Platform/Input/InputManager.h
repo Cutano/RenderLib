@@ -5,6 +5,7 @@
 #include <utility>
 #include <vector>
 #include <string>
+#include <unordered_map>
 #include <map>
 #include <set>
 
@@ -19,6 +20,14 @@ namespace RL
         std::map<int, bool> ButtonStates;
         std::map<int, float> AxisStates;
         std::map<int, uint8_t> HatStates;
+    };
+
+    struct HotKey
+    {
+        std::wstring Name;
+        std::string KeyHint;
+        KeyCode TriggerKey = static_cast<KeyCode>(0);
+        std::set<KeyCode> HoldKeys;
     };
     
     class InputManager
@@ -41,16 +50,24 @@ namespace RL
         void Shutdown();
     
         bool IsKeyDown(KeyCode keycode);
+        bool IsKeyAllDown(const std::set<KeyCode>& keyCodes);
+        bool IsKeyAllDown(std::initializer_list<KeyCode> keyCodes);
         bool IsMouseButtonDown(MouseButton button);
-        bool HasKeyPressed(KeyCode keycode);
-        bool HasMouseButtonPressed(MouseButton button);
-        bool HasHotKeyTriggered(KeyCode triggerKey, std::initializer_list<KeyCode> holdKeys);
+        bool HasKeyPressed(KeyCode keycode) const;
+        bool HasMouseButtonPressed(MouseButton button) const;
+        bool HasHotKeyTriggered(const HotKey& hotKey);
         float GetMouseX();
         float GetMouseY();
         std::pair<float, float> GetMousePosition();
 
         void SetCursorMode(CursorMode mode);
         CursorMode GetCursorMode();
+
+        [[nodiscard]] HotKey& GetHotKey(const std::wstring& name);
+        [[nodiscard]] bool IsHotKeyRegistered(const HotKey& hotKey) const;
+        void RegisterHotKey(const HotKey& hotKey);
+        void UnregisterHotKey(const HotKey& hotKey);
+        void UnregisterAllHotKey();
 
         // Controllers
         bool IsControllerPresent(int id);
@@ -71,6 +88,7 @@ namespace RL
         std::set<KeyCode> m_PrevPressedKeys;
         std::set<MouseButton> m_PressedButtons;
         std::set<MouseButton> m_PrevPressedButtons;
+        std::unordered_map<std::wstring, HotKey> m_HotKeyRegistry;
         float m_PreX = 0, m_PreY = 0;
 
         EventListener* m_Listener {nullptr};

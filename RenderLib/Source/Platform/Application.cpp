@@ -42,6 +42,7 @@ namespace RL
 
         InitTimer();
         InitEventBus();
+        InitInputManager();
         SetupWorkspace();
         InitScriptingEngine();
         InitGraphicsEngine();
@@ -49,7 +50,6 @@ namespace RL
         Preprocess();
         InitMainWindow();
         InitGuiSystem();
-        InitInputManager();
     }
 
     Application::~Application()

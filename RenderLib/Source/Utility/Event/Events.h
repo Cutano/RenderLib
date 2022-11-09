@@ -153,4 +153,9 @@ namespace RL
     {
         
     };
+
+    struct HotkeyEvent
+    {
+        std::wstring Name;
+    };
 }
