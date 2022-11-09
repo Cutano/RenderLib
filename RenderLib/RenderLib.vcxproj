@@ -100,6 +100,7 @@
     <ClCompile Include="Source\Function\Graphics\ImGui\GuiComponent\MenuBar\MainMenuBar.cpp" />
     <ClCompile Include="Source\Function\Graphics\ImGui\GuiComponent\Window\DemoWindow.cpp" />
     <ClCompile Include="Source\Function\Graphics\ImGui\GuiComponent\Window\imgui_demo.cpp" />
+    <ClCompile Include="Source\Function\Graphics\ImGui\GuiComponent\Window\SceneWindow.cpp" />
     <ClCompile Include="Source\Function\Graphics\ImGui\GuiSystem.cpp" />
     <ClCompile Include="Source\Function\Graphics\ImGui\GuiWindowBase.cpp" />
     <ClCompile Include="Source\Function\Graphics\ImGui\ImGuiImplRenderLib.cpp" />
@@ -151,6 +152,7 @@
     <ClInclude Include="Source\Function\Graphics\ImGui\GuiBase.h" />
     <ClInclude Include="Source\Function\Graphics\ImGui\GuiComponent\MenuBar\MainMenuBar.h" />
     <ClInclude Include="Source\Function\Graphics\ImGui\GuiComponent\Window\DemoWindow.h" />
+    <ClInclude Include="Source\Function\Graphics\ImGui\GuiComponent\Window\SceneWindow.h" />
     <ClInclude Include="Source\Function\Graphics\ImGui\GuiSystem.h" />
     <ClInclude Include="Source\Function\Graphics\ImGui\GuiWindowBase.h" />
     <ClInclude Include="Source\Function\Graphics\ImGui\ImGuiImplRenderLib.h" />

@@ -55,6 +55,11 @@ namespace RL
         ImGui::End();
     }
 
+    void GuiSystem::AddSceneWindow(const std::wstring& name)
+    {
+        
+    }
+
     std::shared_ptr<GuiBase> GuiSystem::GetUIComponentByName(const std::wstring& name) const
     {
         for (const auto& ui : m_GuiRegistry)

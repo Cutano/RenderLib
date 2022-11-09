@@ -73,7 +73,12 @@ namespace RL
         double Z {0};
     };
 
-    struct SceneViewportResizeEvent : ResizeEvent
+    struct SceneWindowEvent
+    {
+        std::wstring SceneWindowName;
+    };
+
+    struct SceneViewportResizeEvent : SceneWindowEvent, ResizeEvent
     {
         
     };

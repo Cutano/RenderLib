@@ -9,6 +9,7 @@ namespace Diligent
     struct IEngineFactoryD3D12;
     struct IRenderDevice;
     struct IDeviceContext;
+    struct ITextureView;
 }
 
 namespace RL
