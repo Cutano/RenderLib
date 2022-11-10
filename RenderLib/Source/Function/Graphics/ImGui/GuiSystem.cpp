@@ -1,14 +1,19 @@
 #include "GuiSystem.h"
+
 #include "GuiBase.h"
 #include "GuiComponent/Window/DemoWindow.h"
 #include "GuiComponent/Window/SceneWindow.h"
 #include "GuiComponent/MenuBar/MainMenuBar.h"
+#include "Platform/Workspace/Workspace.h"
 #include "Utility/Log.h"
 
 #include <imgui.h>
+#include <filesystem>
 
 namespace RL
 {
+    static std::string s_ImGuiSettingPath;
+    
     void GuiSystem::Init()
     {
         // Setup Dear ImGui context
@@ -21,8 +26,10 @@ namespace RL
         io.ConfigFlags |= ImGuiConfigFlags_NavEnableGamepad;      // Enable Gamepad Controls
         io.ConfigFlags |= ImGuiConfigFlags_DockingEnable; // Enable Docking
         io.ConfigFlags |= ImGuiConfigFlags_ViewportsEnable; // Enable Multi-Viewport / Platform Windows
-        
-        io.IniFilename = "ImGui.ini";
+
+        const std::filesystem::path workDir = Workspace::Get().GetWorkspaceDir();
+        s_ImGuiSettingPath = (workDir / "ImGui.ini").string();
+        io.IniFilename = s_ImGuiSettingPath.c_str();
 
         // Setup Dear ImGui style
         ImGui::StyleColorsDark();
