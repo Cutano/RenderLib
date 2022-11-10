@@ -1,9 +1,9 @@
 #pragma once
-#include "Function/Graphics/ImGui/GuiWindowBase.h"
+#include "Function/Graphics/ImGui/GuiToolWindowBase.h"
 
 namespace RL
 {
-    class DemoWindow final : public GuiWindowBase
+    class DemoWindow final : public GuiToolWindowBase
     {
     public:
         explicit DemoWindow();
