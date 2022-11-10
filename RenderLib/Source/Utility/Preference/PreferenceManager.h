@@ -26,12 +26,12 @@ namespace RL
         void Init();
         void Shutdown();
 
-        void Save();
-        void Load();
+        void Save(bool async = true);
+        void Load(bool async = true);
         [[nodiscard]] bool HasPreference(const std::wstring& name) const;
         [[nodiscard]] std::wstring GetSimplePreference(const std::wstring& name);
-        void SetSimplePreference(const std::wstring& name, const std::wstring& preference, bool isGlobal = false);
-        void SetPreference(const std::wstring& name, const IPreference& preference, bool isGlobal = false);
+        void SetSimplePreference(const std::wstring& name, const std::wstring& preference, bool isGlobal = false, bool async = true);
+        void SetPreference(const std::wstring& name, const IPreference& preference, bool isGlobal = false, bool async = true);
 
         template <typename T> T GetSpecificPreference(const std::wstring& path)
         {
@@ -47,7 +47,7 @@ namespace RL
             }
         }
         
-        template <typename T> void SetSpecificPreference(const std::wstring& path, T preference, bool isGlobal = false)
+        template <typename T> void SetSpecificPreference(const std::wstring& path, T preference, bool isGlobal = false, bool async = true)
         {
             const nlohmann::json::json_pointer pointer {ConvertString(path)};
 
@@ -60,7 +60,7 @@ namespace RL
                 m_ProjectPreference[pointer] = preference;
             }
 
-            Save();
+            Save(async);
         }
         
         template <typename T> T GetPreference(const std::wstring& name)
@@ -84,9 +84,6 @@ namespace RL
 
         nlohmann::json m_GlobalPreference;
         nlohmann::json m_ProjectPreference;
-
-        std::mutex m_SaveMutex;
-        std::mutex m_LoadMutex;
 
         std::string m_GlobalPreferencePath;
         std::string m_ProjectPreferencePath;

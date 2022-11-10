@@ -23,7 +23,7 @@ namespace RL
         m_GlobalPreferencePath = (globalDir / "Preferences" / "Preference.json").string();
         m_ProjectPreferencePath = (projDir / "Preference.json").string();
 
-        Load();
+        Load(false);
         InitPreferences();
     }
 
@@ -32,11 +32,10 @@ namespace RL
 
     }
 
-    void PreferenceManager::Save()
+    void PreferenceManager::Save(bool async)
     {
-        std::thread{[this]{
-            std::scoped_lock lk{m_SaveMutex, m_LoadMutex};
-
+        const auto save = [this]
+        {
             const auto global = m_GlobalPreference.dump(4);
             const auto project = m_ProjectPreference.dump(4);
 
@@ -51,14 +50,21 @@ namespace RL
             projectFile.close();
 
             Log::Logger()->info("Preferences saved.");
-        }}.detach();
+        };
+        
+        if (async)
+        {
+            std::thread{save}.detach();
+        }
+        else
+        {
+            save();
+        }
     }
 
-    void PreferenceManager::Load()
+    void PreferenceManager::Load(bool async)
     {
-        std::thread{[this]{
-            std::scoped_lock lk {m_SaveMutex, m_LoadMutex};
-
+        const auto load = [this]{
             if (std::filesystem::exists(m_GlobalPreferencePath))
             {
                 std::ifstream globalFile(m_GlobalPreferencePath);
@@ -76,7 +82,16 @@ namespace RL
 
                 Log::Logger()->info("Project preference loaded, path: {}", m_ProjectPreferencePath);
             }
-        }}.detach();
+        };
+
+        if (async)
+        {
+            std::thread{load}.detach();
+        }
+        else
+        {
+            load();
+        }
     }
 
     bool PreferenceManager::HasPreference(const std::wstring& name) const
@@ -85,7 +100,7 @@ namespace RL
         return m_ProjectPreference.contains(key) || m_GlobalPreference.contains(key);
     }
 
-    void PreferenceManager::SetPreference(const std::wstring& name, const IPreference& preference, const bool isGlobal)
+    void PreferenceManager::SetPreference(const std::wstring& name, const IPreference& preference, const bool isGlobal, bool async)
     {
         if (isGlobal)
         {
@@ -96,10 +111,10 @@ namespace RL
             m_ProjectPreference[ConvertString(name)] = preference;
         }
 
-        Save();
+        Save(async);
     }
 
-    void PreferenceManager::SetSimplePreference(const std::wstring& name, const std::wstring& preference, bool isGlobal)
+    void PreferenceManager::SetSimplePreference(const std::wstring& name, const std::wstring& preference, bool isGlobal, bool async)
     {
         if (isGlobal)
         {
@@ -110,7 +125,7 @@ namespace RL
             m_ProjectPreference[ConvertString(name)] = preference;
         }
 
-        Save();
+        Save(async);
     }
 
     std::wstring PreferenceManager::GetSimplePreference(const std::wstring& name)
@@ -132,13 +147,13 @@ namespace RL
         const ScriptingPreference scriptingPreference {};
         if (const auto scriptingPreferenceName = L"scriptingPreference"; !HasPreference(scriptingPreferenceName))
         {
-            SetPreference(scriptingPreferenceName, scriptingPreference);
+            SetPreference(scriptingPreferenceName, scriptingPreference, false, false);
         }
 
         const WindowPreference windowPreference {};
         if (const auto windowPreferenceName = L"windowPreference"; !HasPreference(windowPreferenceName))
         {
-            SetPreference(windowPreferenceName, windowPreference);
+            SetPreference(windowPreferenceName, windowPreference, false, false);
         }
     }
 
