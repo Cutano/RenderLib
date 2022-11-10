@@ -60,7 +60,7 @@ namespace RL
                 m_SceneWindowWidth = view.x;
                 m_SceneWindowHeight = view.y;
             
-                EventBus::Get().SpreadEvent<SceneViewportResizeEvent>({{m_Index}, {view.x, view.y}});
+                EventBus::Get().SpreadEvent<SceneViewportResizeEvent>({{{this}, m_Index}, {view.x, view.y}});
             }
 
             ImDrawList* drawList = ImGui::GetWindowDrawList();
@@ -80,7 +80,7 @@ namespace RL
         
         if (m_Show != m_CachedShow)
         {
-            EventBus::Get().SpreadEvent<ToggleSceneWindowEvent>({{m_Index}, m_Show, this});
+            EventBus::Get().SpreadEvent<ToggleSceneWindowEvent>({{{this}, m_Index}, m_Show});
             
             if (m_Show == true)
             {

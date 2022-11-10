@@ -125,7 +125,7 @@ namespace RL
 
         if (spread)
         {
-            EventBus::Get().SpreadEvent<ToggleSceneWindowEvent>({{index}, show, this});
+            EventBus::Get().SpreadEvent<ToggleSceneWindowEvent>({{{this}, index}, show});
         }
     }
 

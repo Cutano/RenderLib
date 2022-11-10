@@ -73,15 +73,29 @@ namespace RL
         double Z {0};
     };
 
-    struct SceneWindowEvent
+    struct GuiWindowEvent
+    {
+        void* Sender {nullptr};
+    };
+
+    struct SceneWindowEvent : GuiWindowEvent
     {
         int Index {-1};
+    };
+
+    struct ToolWindowEvent : GuiWindowEvent
+    {
+        std::wstring Name;
     };
 
     struct ToggleSceneWindowEvent : SceneWindowEvent
     {
         bool Show {false};
-        void* Sender {nullptr};
+    };
+
+    struct ToggleToolWindowEvent : ToolWindowEvent
+    {
+        
     };
 
     struct SceneViewportResizeEvent : SceneWindowEvent, ResizeEvent
