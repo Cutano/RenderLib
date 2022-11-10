@@ -24,18 +24,7 @@ namespace RL
         m_ProjectPreferencePath = (projDir / "Preference.json").string();
 
         Load();
-
-        const ScriptingPreference scriptingPreference {};
-        if (const auto scriptingPreferenceName = L"scriptingPreference"; !HasPreference(scriptingPreferenceName))
-        {
-            SetPreference(scriptingPreferenceName, scriptingPreference);
-        }
-
-        const WindowPreference windowPreference {};
-        if (const auto windowPreferenceName = L"windowPreference"; !HasPreference(windowPreferenceName))
-        {
-            SetPreference(windowPreferenceName, windowPreference);
-        }
+        InitPreferences();
     }
 
     void PreferenceManager::Shutdown()
@@ -137,4 +126,20 @@ namespace RL
             return j.get<std::wstring>();
         }
     }
+
+    void PreferenceManager::InitPreferences()
+    {
+        const ScriptingPreference scriptingPreference {};
+        if (const auto scriptingPreferenceName = L"scriptingPreference"; !HasPreference(scriptingPreferenceName))
+        {
+            SetPreference(scriptingPreferenceName, scriptingPreference);
+        }
+
+        const WindowPreference windowPreference {};
+        if (const auto windowPreferenceName = L"windowPreference"; !HasPreference(windowPreferenceName))
+        {
+            SetPreference(windowPreferenceName, windowPreference);
+        }
+    }
+
 }

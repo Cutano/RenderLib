@@ -80,6 +80,7 @@ namespace RL
 
     private:
         PreferenceManager() = default;
+        void InitPreferences();
 
         nlohmann::json m_GlobalPreference;
         nlohmann::json m_ProjectPreference;
