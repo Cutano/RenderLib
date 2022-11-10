@@ -52,6 +52,8 @@ namespace RL
         Diligent::IRenderDevice* m_RenderDevice {nullptr};
         Diligent::IDeviceContext* m_DeviceContext {nullptr};
 
+        // Hold SceneWindow RenderTargets
+
         ImGuiImplRenderLib* m_ImGuiImpl {nullptr};
     };
 }

@@ -6,7 +6,7 @@ namespace RL
     class SceneWindow final : public GuiWindowBase
     {
     public:
-        explicit SceneWindow(uint16_t number);
+        explicit SceneWindow(uint16_t index);
 
         ~SceneWindow() override = default;
         SceneWindow(const SceneWindow& other) = delete;
@@ -16,11 +16,15 @@ namespace RL
 
         void Draw() override;
 
-        uint16_t GetID();
+        uint16_t GetIndex();
 
     private:
-        uint16_t m_ID {0};
+        void OnClosed();
+        void OnShow();
         
+        uint16_t m_Index {0};
+
+        bool m_CachedShow {false};
         bool m_IsSceneWindowHovered {false};
 
         float m_SceneWindowWidth {1920.0f};

@@ -3,16 +3,37 @@
 #include "Function/Graphics/ImGui/GuiSystem.h"
 #include "Utility/Event/Events.h"
 #include "Utility/Event/EventBus.h"
+#include "Utility/Event/EventListener.h"
+#include "Utility/Preference/PreferenceManager.h"
 
 #include <imgui.h>
 
 namespace RL
 {
-    SceneWindow::SceneWindow(uint16_t number)
-    : GuiWindowBase(std::wstring(L"SceneWindow").append(std::to_wstring(number)))
+    SceneWindow::SceneWindow(uint16_t index)
+    : GuiWindowBase(std::wstring(L"Scene").append(std::to_wstring(index + 1)))
     {
-        m_Show = true;
-        m_ID = number;
+        std::wstring sceneWindowPrefPath = L"/windowPreference/sceneWindow/showSceneWindow";
+        m_Show = PreferenceManager::Get().GetSpecificPreference<bool>(sceneWindowPrefPath.append(std::to_wstring(index + 1)));
+        m_CachedShow = m_Show;
+        m_Index = index;
+
+        m_Listener->SubscribeEvent<ToggleSceneWindowEvent>([this](const ToggleSceneWindowEvent& e)
+        {
+            if (e.Sender != this && e.Index == m_Index && e.Show != m_Show)
+            {
+                m_Show = e.Show;
+            }
+
+            if (m_Show == true)
+            {
+                OnShow();
+            }
+            else
+            {
+                OnClosed();
+            }
+        });
     }
 
     void SceneWindow::Draw()
@@ -39,7 +60,7 @@ namespace RL
                 m_SceneWindowWidth = view.x;
                 m_SceneWindowHeight = view.y;
             
-                EventBus::Get().SpreadEvent<SceneViewportResizeEvent>({{m_Name}, {view.x, view.y}});
+                EventBus::Get().SpreadEvent<SceneViewportResizeEvent>({{m_Index}, {view.x, view.y}});
             }
 
             ImDrawList* drawList = ImGui::GetWindowDrawList();
@@ -56,14 +77,34 @@ namespace RL
 
             ImGui::End();
         }
-        else
+        
+        if (m_Show != m_CachedShow)
         {
-            GuiSystem::Get().RemoveSceneWindowNextFrame(m_ID);
+            EventBus::Get().SpreadEvent<ToggleSceneWindowEvent>({{m_Index}, m_Show, this});
+            
+            if (m_Show == true)
+            {
+                OnShow();
+            }
+            else
+            {
+                OnClosed();
+            }
+            
+            m_CachedShow = m_Show;
         }
     }
 
-    uint16_t SceneWindow::GetID()
+    uint16_t SceneWindow::GetIndex()
     {
-        return m_ID;
+        return m_Index;
+    }
+
+    void SceneWindow::OnClosed()
+    {
+    }
+
+    void SceneWindow::OnShow()
+    {
     }
 }

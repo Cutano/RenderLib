@@ -1,9 +1,11 @@
 #include "PreferenceManager.h"
 #include "ScriptingPreference.h"
+#include "WindowPreference.h"
 #include "Platform/Workspace/Workspace.h"
 
 #include <nlohmann/json.hpp>
 #include <fstream>
+#include <thread>
 
 namespace RL
 {
@@ -28,54 +30,64 @@ namespace RL
         {
             SetPreference(scriptingPreferenceName, scriptingPreference);
         }
+
+        const WindowPreference windowPreference {};
+        if (const auto windowPreferenceName = L"windowPreference"; !HasPreference(windowPreferenceName))
+        {
+            SetPreference(windowPreferenceName, windowPreference);
+        }
     }
 
     void PreferenceManager::Shutdown()
     {
-        Save();
+
     }
 
     void PreferenceManager::Save()
     {
-        std::scoped_lock lk {m_SaveMutex, m_LoadMutex};
-            
-        const auto global =  m_GlobalPreference.dump(4);
-        const auto project =  m_ProjectPreference.dump(4);
+        std::thread{[this]{
+            std::scoped_lock lk{m_SaveMutex, m_LoadMutex};
 
-        std::ofstream globalFile;
-        globalFile.open(m_GlobalPreferencePath, std::ios::out | std::ios::trunc);
-        globalFile << global << std::endl;
-        globalFile.close();
+            const auto global = m_GlobalPreference.dump(4);
+            const auto project = m_ProjectPreference.dump(4);
 
-        std::ofstream projectFile;
-        projectFile.open(m_ProjectPreferencePath, std::ios::out | std::ios::trunc);
-        projectFile << project << std::endl;
-        projectFile.close();
+            std::ofstream globalFile;
+            globalFile.open(m_GlobalPreferencePath, std::ios::out | std::ios::trunc);
+            globalFile << global << std::endl;
+            globalFile.close();
 
-        Log::Logger()->info("Preferences saved.");
+            std::ofstream projectFile;
+            projectFile.open(m_ProjectPreferencePath, std::ios::out | std::ios::trunc);
+            projectFile << project << std::endl;
+            projectFile.close();
+
+            Log::Logger()->info("Preferences saved.");
+        }}.detach();
     }
 
     void PreferenceManager::Load()
     {
-        std::scoped_lock lk {m_SaveMutex, m_LoadMutex};
+        std::thread{[this]{
+            std::scoped_lock lk {m_SaveMutex, m_LoadMutex};
 
-        if (std::filesystem::exists(m_GlobalPreferencePath))
-        {
-            std::ifstream globalFile(m_GlobalPreferencePath);
-            globalFile >> m_GlobalPreference;
-            globalFile.close();
+            if (std::filesystem::exists(m_GlobalPreferencePath))
+            {
+                std::ifstream globalFile(m_GlobalPreferencePath);
+                globalFile >> m_GlobalPreference;
+                globalFile.close();
 
-            Log::Logger()->info("Global preference loaded, path: {}", m_GlobalPreferencePath);
-        }
+                Log::Logger()->info("Global preference loaded, path: {}", m_GlobalPreferencePath);
+            }
 
-        if (std::filesystem::exists(m_ProjectPreferencePath))
-        {
-            std::ifstream projectFile(m_ProjectPreferencePath);
-            projectFile >> m_ProjectPreference;
-            projectFile.close();
+            if (std::filesystem::exists(m_ProjectPreferencePath))
+            {
+                std::ifstream projectFile(m_ProjectPreferencePath);
+                projectFile >> m_ProjectPreference;
+                projectFile.close();
 
-            Log::Logger()->info("Project preference loaded, path: {}", m_ProjectPreferencePath);
-        }
+                Log::Logger()->info("Project preference loaded, path: {}", m_ProjectPreferencePath);
+            }
+        }}.detach();
     }
 
     bool PreferenceManager::HasPreference(const std::wstring& name) const

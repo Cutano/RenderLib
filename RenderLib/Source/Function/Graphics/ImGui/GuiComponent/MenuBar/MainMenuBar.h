@@ -16,10 +16,15 @@ namespace RL
 
         void Draw() override;
 
-        void SetAutoRecompile(bool autoRecompile);
         [[nodiscard]] bool& IsAutoRecompile();
+        void SetAutoRecompile(bool autoRecompile);
+        void ToggleSceneWindow(int index, bool show, bool spread);
 
     private:
+        void LoadPreferences();
+        
         bool m_AutoRecompile {false};
+        
+        bool m_ShowSceneWindow[4] {true, false, false, false};
     };
 }

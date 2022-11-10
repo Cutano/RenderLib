@@ -9,9 +9,6 @@
 
 namespace RL
 {
-    static bool g_NewSceneWindowNextFrame {false};
-    static int32_t g_CloseSceneWindowNextFrame {-1};
-    
     void GuiSystem::Init()
     {
         // Setup Dear ImGui context
@@ -24,31 +21,22 @@ namespace RL
         io.ConfigFlags |= ImGuiConfigFlags_NavEnableGamepad;      // Enable Gamepad Controls
         io.ConfigFlags |= ImGuiConfigFlags_DockingEnable; // Enable Docking
         io.ConfigFlags |= ImGuiConfigFlags_ViewportsEnable; // Enable Multi-Viewport / Platform Windows
+        
+        io.IniFilename = "ImGui.ini";
 
         // Setup Dear ImGui style
         ImGui::StyleColorsDark();
 
         m_GuiRegistry.emplace_back(std::make_shared<DemoWindow>());
         m_GuiRegistry.emplace_back(std::make_shared<MainMenuBar>());
-        NewSceneWindow();
+        m_GuiRegistry.emplace_back(std::make_shared<SceneWindow>(0));
+        m_GuiRegistry.emplace_back(std::make_shared<SceneWindow>(1));
+        m_GuiRegistry.emplace_back(std::make_shared<SceneWindow>(2));
+        m_GuiRegistry.emplace_back(std::make_shared<SceneWindow>(3));
     }
 
     void GuiSystem::Update()
     {
-        if (g_NewSceneWindowNextFrame)
-        {
-            if (!NewSceneWindow())
-            {
-                Log::Logger()->warn("Max scene window count is {}", m_AvailableSceneWindow.size());
-            }
-        }
-
-        if (g_CloseSceneWindowNextFrame != -1)
-        {
-            RemoveSceneWindow(static_cast<uint16_t>(g_CloseSceneWindowNextFrame));
-            g_CloseSceneWindowNextFrame = -1;
-        }
-        
         ImGui::SetCurrentContext(static_cast<ImGuiContext*>(m_ImGuiCtx));
         
         ImGuiWindowFlags windowFlags = ImGuiWindowFlags_MenuBar | ImGuiWindowFlags_NoDocking;
@@ -75,16 +63,6 @@ namespace RL
         ImGui::End();
     }
 
-    void GuiSystem::AddSceneWindowNextFrame()
-    {
-        g_NewSceneWindowNextFrame = true;
-    }
-
-    void GuiSystem::RemoveSceneWindowNextFrame(uint16_t number)
-    {
-        g_CloseSceneWindowNextFrame = number;
-    }
-
     std::shared_ptr<GuiBase> GuiSystem::GetUIComponentByName(const std::wstring& name) const
     {
         for (const auto& ui : m_GuiRegistry)
@@ -96,39 +74,5 @@ namespace RL
         }
 
         return nullptr;
-    }
-
-    bool GuiSystem::NewSceneWindow()
-    {
-        g_NewSceneWindowNextFrame = false;
-        
-        for (int i = 0; i < MAX_SCENE_WINDOW_COUNT; ++i)
-        {
-            if (m_AvailableSceneWindow.at(i) == false)
-            {
-                m_GuiRegistry.emplace_back(std::make_shared<SceneWindow>(i));
-                m_AvailableSceneWindow[i] = true;
-
-                return true;
-            }
-        }
-
-        return false;
-    }
-
-    void GuiSystem::RemoveSceneWindow(uint16_t number)
-    {
-        for (auto it = m_GuiRegistry.begin(); it != m_GuiRegistry.end(); ++it)
-        {
-            if (const auto window = dynamic_cast<SceneWindow*>((*it).get()))
-            {
-                if (window->GetID() == number)
-                {
-                    m_GuiRegistry.erase(it);
-                    m_AvailableSceneWindow[number] = false;
-                    return;
-                }
-            }
-        }
     }
 }

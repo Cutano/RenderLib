@@ -75,7 +75,13 @@ namespace RL
 
     struct SceneWindowEvent
     {
-        std::wstring SceneWindowName;
+        int Index {-1};
+    };
+
+    struct ToggleSceneWindowEvent : SceneWindowEvent
+    {
+        bool Show {false};
+        void* Sender {nullptr};
     };
 
     struct SceneViewportResizeEvent : SceneWindowEvent, ResizeEvent
