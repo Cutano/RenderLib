@@ -29,6 +29,17 @@ namespace RL
             }
         });
 
+        m_Listener->SubscribeEvent<ToggleToolWindowEvent>([this](const ToggleToolWindowEvent& e)
+        {
+            if (e.Sender != this)
+            {
+                if (e.Name == L"ImGuiDemoWindow")
+                {
+                    ToggleImGuiDemoWindow(e.Show, false);
+                }
+            }
+        });
+
         LoadPreferences();
     }
 
@@ -74,7 +85,7 @@ namespace RL
 
             if (ImGui::BeginMenu("Window"))
             {
-                if (ImGui::BeginMenu("SceneWindow"))
+                if (ImGui::BeginMenu("Scene Window"))
                 {
                     if (ImGui::MenuItem("Scene Window 1", nullptr, m_ShowSceneWindow[0]))
                     {
@@ -94,6 +105,11 @@ namespace RL
                     }
                 
                     ImGui::EndMenu();
+                }
+
+                if (ImGui::MenuItem("ImGui Demo Window", nullptr, m_ShowImGuiDemoWindow))
+                {
+                    ToggleImGuiDemoWindow(!m_ShowImGuiDemoWindow, true);
                 }
                 
                 ImGui::EndMenu();
@@ -129,15 +145,31 @@ namespace RL
         }
     }
 
+    void MainMenuBar::ToggleImGuiDemoWindow(bool show, bool spread)
+    {
+        if (m_ShowImGuiDemoWindow != show)
+        {
+            m_ShowImGuiDemoWindow = show;
+            const std::wstring path = L"/windowPreference/showImGuiDemoWindow";
+            PreferenceManager::Get().SetSpecificPreference<bool>(path, show, false);
+        }
+
+        if (spread)
+        {
+            EventBus::Get().SpreadEvent<ToggleToolWindowEvent>({{{this}, L"ImGuiDemoWindow"}, show});
+        }
+    }
+
     void MainMenuBar::LoadPreferences()
     {
         m_AutoRecompile = PreferenceManager::Get().GetSpecificPreference<bool>(L"/scriptingPreference/autoCompile");
 
-        const std::wstring sceneWindowPrefPath = L"/windowPreference/sceneWindow";
-        const auto sceneWindowPref = PreferenceManager::Get().GetSpecificPreference<SceneWindowPreference>(sceneWindowPrefPath);
-        m_ShowSceneWindow[0] = sceneWindowPref.ShowSceneWindow1;
-        m_ShowSceneWindow[1] = sceneWindowPref.ShowSceneWindow2;
-        m_ShowSceneWindow[2] = sceneWindowPref.ShowSceneWindow3;
-        m_ShowSceneWindow[3] = sceneWindowPref.ShowSceneWindow4;
+        const std::wstring windowPrefPath = L"/windowPreference";
+        const auto windowPref = PreferenceManager::Get().GetSpecificPreference<WindowPreference>(windowPrefPath);
+        m_ShowSceneWindow[0]  = windowPref.SceneWindowPref.ShowSceneWindow1;
+        m_ShowSceneWindow[1]  = windowPref.SceneWindowPref.ShowSceneWindow2;
+        m_ShowSceneWindow[2]  = windowPref.SceneWindowPref.ShowSceneWindow3;
+        m_ShowSceneWindow[3]  = windowPref.SceneWindowPref.ShowSceneWindow4;
+        m_ShowImGuiDemoWindow = windowPref.ShowImGuiDemoWindow;
     }
 }

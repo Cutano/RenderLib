@@ -23,8 +23,7 @@ namespace RL
         void OnShow();
         
         uint16_t m_Index {0};
-
-        bool m_CachedShow {false};
+        
         bool m_IsSceneWindowHovered {false};
 
         float m_SceneWindowWidth {1920.0f};

@@ -18,6 +18,7 @@ namespace RL
 
     protected:
         bool m_Show {false};
+        bool m_CachedShow {false};
     };
     
 }

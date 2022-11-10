@@ -95,7 +95,7 @@ namespace RL
 
     struct ToggleToolWindowEvent : ToolWindowEvent
     {
-        
+        bool Show {false};
     };
 
     struct SceneViewportResizeEvent : SceneWindowEvent, ResizeEvent

@@ -19,6 +19,7 @@ namespace RL
         [[nodiscard]] bool& IsAutoRecompile();
         void SetAutoRecompile(bool autoRecompile);
         void ToggleSceneWindow(int index, bool show, bool spread);
+        void ToggleImGuiDemoWindow(bool show, bool spread);
 
     private:
         void LoadPreferences();
@@ -26,5 +27,6 @@ namespace RL
         bool m_AutoRecompile {false};
         
         bool m_ShowSceneWindow[4] {true, false, false, false};
+        bool m_ShowImGuiDemoWindow {true};
     };
 }

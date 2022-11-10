@@ -33,6 +33,7 @@ namespace RL
     struct WindowPreference final : IPreference
     {
         SceneWindowPreference SceneWindowPref;
+        bool ShowImGuiDemoWindow {true};
         
         void ToJson(nlohmann::json& j) const override
         {
@@ -40,13 +41,16 @@ namespace RL
             SceneWindowPref.ToJson(sceneWindowJson);
             
             j = nlohmann::json{
-                {"sceneWindow", sceneWindowJson}
+                {"sceneWindow", sceneWindowJson},
+                {"showImGuiDemoWindow", ShowImGuiDemoWindow}
             };
         }
         
         void FromJson(const nlohmann::json& j) override
         {
             SceneWindowPref.FromJson(j["sceneWindow"]);
+
+            j.at("showImGuiDemoWindow").get_to(ShowImGuiDemoWindow);
         }
     };
 }
