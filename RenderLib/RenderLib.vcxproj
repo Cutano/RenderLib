@@ -60,7 +60,7 @@
       <ConformanceMode>true</ConformanceMode>
       <LanguageStandard>stdcpp20</LanguageStandard>
       <LanguageStandard_C>stdc17</LanguageStandard_C>
-      <AdditionalIncludeDirectories>$(SolutionDir)ThirdParty\DiligentEngine\DiligentCore\Common\interface;$(SolutionDir)ThirdParty\DiligentEngine\DiligentCore\Graphics\GraphicsEngine\interface;$(SolutionDir)ThirdParty\DiligentEngine\DiligentCore\Graphics\GraphicsEngineD3D12\interface;$(SolutionDir)ThirdParty\DiligentEngine\DiligentTools\Imgui\interface;$(SolutionDir)ThirdParty\DiligentEngine\DiligentTools\ThirdParty\imgui;$(SolutionDir)ThirdParty\efsw\include;$(SolutionDir)ThirdParty\spdlog\include;$(SolutionDir)ThirdParty\eventbus\eventbus\include;$(ProjectDir)Source;$(SolutionDir)ThirdParty\DotnetAppHost\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>$(SolutionDir)ThirdParty\DiligentEngine\DiligentCore\Common\interface;$(SolutionDir)ThirdParty\DiligentEngine\DiligentCore\Graphics\GraphicsEngine\interface;$(SolutionDir)ThirdParty\DiligentEngine\DiligentCore\Graphics\GraphicsEngineD3D12\interface;$(SolutionDir)ThirdParty\DiligentEngine\DiligentTools\Imgui\interface;$(SolutionDir)ThirdParty\DiligentEngine\DiligentTools\ThirdParty\imgui;$(SolutionDir)ThirdParty\glm;$(SolutionDir)ThirdParty\efsw\include;$(SolutionDir)ThirdParty\spdlog\include;$(SolutionDir)ThirdParty\eventbus\eventbus\include;$(ProjectDir)Source;$(SolutionDir)ThirdParty\DotnetAppHost\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
     </ClCompile>
     <Link>
       <SubSystem>Console</SubSystem>
@@ -79,7 +79,7 @@
       <ConformanceMode>true</ConformanceMode>
       <LanguageStandard>stdcpp20</LanguageStandard>
       <LanguageStandard_C>stdc17</LanguageStandard_C>
-      <AdditionalIncludeDirectories>$(SolutionDir)ThirdParty\DiligentEngine\DiligentCore\Common\interface;$(SolutionDir)ThirdParty\DiligentEngine\DiligentCore\Graphics\GraphicsEngine\interface;$(SolutionDir)ThirdParty\DiligentEngine\DiligentCore\Graphics\GraphicsEngineD3D12\interface;$(SolutionDir)ThirdParty\DiligentEngine\DiligentTools\Imgui\interface;$(SolutionDir)ThirdParty\DiligentEngine\DiligentTools\ThirdParty\imgui;$(SolutionDir)ThirdParty\efsw\include;$(SolutionDir)ThirdParty\spdlog\include;$(SolutionDir)ThirdParty\eventbus\eventbus\include;$(ProjectDir)Source;$(SolutionDir)ThirdParty\DotnetAppHost\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>$(SolutionDir)ThirdParty\DiligentEngine\DiligentCore\Common\interface;$(SolutionDir)ThirdParty\DiligentEngine\DiligentCore\Graphics\GraphicsEngine\interface;$(SolutionDir)ThirdParty\DiligentEngine\DiligentCore\Graphics\GraphicsEngineD3D12\interface;$(SolutionDir)ThirdParty\DiligentEngine\DiligentTools\Imgui\interface;$(SolutionDir)ThirdParty\DiligentEngine\DiligentTools\ThirdParty\imgui;$(SolutionDir)ThirdParty\glm;$(SolutionDir)ThirdParty\efsw\include;$(SolutionDir)ThirdParty\spdlog\include;$(SolutionDir)ThirdParty\eventbus\eventbus\include;$(ProjectDir)Source;$(SolutionDir)ThirdParty\DotnetAppHost\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
     </ClCompile>
     <Link>
       <SubSystem>Console</SubSystem>
@@ -95,6 +95,10 @@
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="..\ThirdParty\DiligentEngine\DiligentTools\ThirdParty\imgui\backends\imgui_impl_glfw.cpp" />
+    <ClCompile Include="Source\Function\Graphics\Camera\Camera.cpp" />
+    <ClCompile Include="Source\Function\Graphics\Camera\CameraController.cpp" />
+    <ClCompile Include="Source\Function\Graphics\Camera\MathCamera.cpp" />
+    <ClCompile Include="Source\Function\Graphics\Camera\SceneCamera.cpp" />
     <ClCompile Include="Source\Function\Graphics\GraphicEngine.cpp" />
     <ClCompile Include="Source\Function\Graphics\ImGui\GuiBase.cpp" />
     <ClCompile Include="Source\Function\Graphics\ImGui\GuiComponent\MenuBar\MainMenuBar.cpp" />
@@ -149,6 +153,10 @@
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="Source\Function\Graphics\Camera\Camera.h" />
+    <ClInclude Include="Source\Function\Graphics\Camera\CameraController.h" />
+    <ClInclude Include="Source\Function\Graphics\Camera\MathCamera.h" />
+    <ClInclude Include="Source\Function\Graphics\Camera\SceneCamera.h" />
     <ClInclude Include="Source\Function\Graphics\GraphicEngine.h" />
     <ClInclude Include="Source\Function\Graphics\ImGui\GuiBase.h" />
     <ClInclude Include="Source\Function\Graphics\ImGui\GuiComponent\MenuBar\MainMenuBar.h" />
@@ -174,6 +182,7 @@
     <ClInclude Include="Source\Utility\KeyCodes.h" />
     <ClInclude Include="Source\Utility\Log.h" />
     <ClInclude Include="Source\Base.h" />
+    <ClInclude Include="Source\Utility\Math.h" />
     <ClInclude Include="Source\Utility\Preference\PreferenceManager.h" />
     <ClInclude Include="Source\Utility\Preference\ScriptingPreference.h" />
     <ClInclude Include="Source\Utility\Preference\WindowPreference.h" />

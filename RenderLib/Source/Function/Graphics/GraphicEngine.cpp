@@ -1,6 +1,7 @@
 ﻿#include "GraphicEngine.h"
 #include "Platform/Window/WindowManager.h"
 #include "Platform/Window/Window.h"
+#include "Camera/SceneCamera.h"
 #include "ImGui/ImGuiImplRenderLib.h"
 
 #include <EngineFactoryD3D12.h>
@@ -71,6 +72,11 @@ namespace RL
         
         m_EngineFactory = Diligent::GetEngineFactoryD3D12();
         m_EngineFactory->CreateDeviceAndContextsD3D12(createInfo, &m_RenderDevice, &m_DeviceContext);
+
+        for (uint16_t i = 0; i < static_cast<uint16_t>(m_SceneCameras.size()); ++i)
+        {
+            m_SceneCameras.at(i) = new SceneCamera(i, 1440, 900);
+        }
     }
 
     void GraphicEngine::Update()
@@ -104,6 +110,11 @@ namespace RL
         m_DeviceContext->Flush();
         m_DeviceContext->Release();
         m_DeviceContext = nullptr;
+
+        for (uint16_t i = 0; i < static_cast<uint16_t>(m_SceneCameras.size()); ++i)
+        {
+            delete m_SceneCameras.at(i);
+        }
 
         m_RenderDevice->Release();
         m_RenderDevice = nullptr;
@@ -164,6 +175,11 @@ namespace RL
         const Diligent::Win32NativeWindow window(hwnd);
 
         m_EngineFactory->CreateSwapChainD3D12(m_RenderDevice, m_DeviceContext, swapChainDesc, {}, window, &swapChain);
+    }
+
+    SceneCamera* GraphicEngine::GetSceneCamera(const uint16_t index)
+    {
+        return m_SceneCameras.at(index);
     }
 
     Diligent::IDeviceContext* GraphicEngine::GetDeviceContext() const

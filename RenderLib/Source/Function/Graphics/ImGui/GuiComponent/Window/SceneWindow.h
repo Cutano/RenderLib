@@ -3,12 +3,14 @@
 
 namespace RL
 {
+    class SceneCamera;
+    
     class SceneWindow final : public GuiWindowBase
     {
     public:
         explicit SceneWindow(uint16_t index);
 
-        ~SceneWindow() override = default;
+        ~SceneWindow() override;
         SceneWindow(const SceneWindow& other) = delete;
         SceneWindow(SceneWindow&& other) noexcept = delete;
         SceneWindow& operator=(const SceneWindow& other) = delete;
@@ -26,9 +28,11 @@ namespace RL
         
         bool m_IsSceneWindowHovered {false};
 
-        float m_SceneWindowWidth {1920.0f};
-        float m_SceneWindowHeight {1080.0f};
+        float m_SceneWindowWidth {1440.0f};
+        float m_SceneWindowHeight {900.0f};
         float m_SceneWindowPosX {0};
         float m_SceneWindowPosY {0};
+
+        SceneCamera* m_Camera {nullptr};
     };
 }

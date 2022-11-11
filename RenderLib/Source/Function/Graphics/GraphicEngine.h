@@ -1,6 +1,7 @@
 ﻿#pragma once
 
 #include <memory>
+#include <array>
 
 typedef struct HWND__ *HWND;
 
@@ -16,6 +17,8 @@ namespace RL
 {
     class Window;
     class ImGuiImplRenderLib;
+
+    class SceneCamera;
     
     class GraphicEngine
     {
@@ -42,6 +45,8 @@ namespace RL
         void AttachWindow(const std::shared_ptr<Window>& window);
         void AttachRawWindow(HWND hwnd);
 
+        SceneCamera* GetSceneCamera(uint16_t index);
+
         Diligent::IDeviceContext* GetDeviceContext() const;
         Diligent::IRenderDevice*  GetDevice() const;
         
@@ -52,7 +57,7 @@ namespace RL
         Diligent::IRenderDevice* m_RenderDevice {nullptr};
         Diligent::IDeviceContext* m_DeviceContext {nullptr};
 
-        // Hold SceneWindow RenderTargets
+        std::array<SceneCamera*, 4> m_SceneCameras;
 
         ImGuiImplRenderLib* m_ImGuiImpl {nullptr};
     };

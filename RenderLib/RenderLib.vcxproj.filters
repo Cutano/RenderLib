@@ -24,7 +24,16 @@
     <ClCompile Include="Source\Function\Graphics\ImGui\GuiWindowBase.cpp" />
     <ClCompile Include="Source\Function\Scripting\ScriptingEngine.cpp" />
     <ClCompile Include="Source\Function\Graphics\ImGui\GuiComponent\MenuBar\MainMenuBar.cpp" />
-    <ClCompile Include="Source\Function\Scripting\Bindings.cpp" />
+    <ClCompile Include="Source\Function\Graphics\Camera\Camera.cpp" />
+    <ClCompile Include="Source\Function\Graphics\Camera\MathCamera.cpp" />
+    <ClCompile Include="Source\Function\Graphics\Camera\SceneCamera.cpp" />
+    <ClCompile Include="Source\Function\Graphics\ImGui\GuiComponent\Window\SceneWindow.cpp" />
+    <ClCompile Include="Source\Function\Graphics\ImGui\GuiToolWindowBase.cpp" />
+    <ClCompile Include="Source\Function\Scripting\Interop\Bindings.cpp" />
+    <ClCompile Include="Source\Function\Scripting\Interop\InteropService.cpp" />
+    <ClCompile Include="Source\Platform\Input\InputManager.cpp" />
+    <ClCompile Include="Source\Utility\Preference\PreferenceManager.cpp" />
+    <ClCompile Include="Source\Utility\Timer\Timer.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Source\Base.h" />
@@ -47,6 +56,18 @@
     <ClInclude Include="Source\Function\Scripting\ScriptingEngine.h" />
     <ClInclude Include="Source\Utility\Functions.h" />
     <ClInclude Include="Source\Function\Graphics\ImGui\GuiComponent\MenuBar\MainMenuBar.h" />
-    <ClInclude Include="Source\Function\Scripting\Bindings.h" />
+    <ClInclude Include="Source\Function\Graphics\Camera\Camera.h" />
+    <ClInclude Include="Source\Function\Graphics\Camera\MathCamera.h" />
+    <ClInclude Include="Source\Function\Graphics\Camera\SceneCamera.h" />
+    <ClInclude Include="Source\Function\Graphics\ImGui\GuiComponent\Window\SceneWindow.h" />
+    <ClInclude Include="Source\Function\Graphics\ImGui\GuiToolWindowBase.h" />
+    <ClInclude Include="Source\Function\Scripting\Interop\Bindings.h" />
+    <ClInclude Include="Source\Function\Scripting\Interop\InteropService.h" />
+    <ClInclude Include="Source\Platform\Input\InputManager.h" />
+    <ClInclude Include="Source\Utility\Preference\PreferenceManager.h" />
+    <ClInclude Include="Source\Utility\Preference\ScriptingPreference.h" />
+    <ClInclude Include="Source\Utility\Preference\WindowPreference.h" />
+    <ClInclude Include="Source\Utility\Timer\Timer.h" />
+    <ClInclude Include="Source\Utility\Preference\IPreference.h" />
   </ItemGroup>
 </Project>

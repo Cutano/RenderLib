@@ -1,6 +1,8 @@
 #include "Base.h"
 #include "SceneWindow.h"
+#include "Function/Graphics/GraphicEngine.h"
 #include "Function/Graphics/ImGui/GuiSystem.h"
+#include "Function/Graphics/Camera/SceneCamera.h"
 #include "Utility/Event/Events.h"
 #include "Utility/Event/EventBus.h"
 #include "Utility/Event/EventListener.h"
@@ -10,7 +12,7 @@
 
 namespace RL
 {
-    SceneWindow::SceneWindow(uint16_t index)
+    SceneWindow::SceneWindow(const uint16_t index)
     : GuiWindowBase(std::wstring(L"Scene").append(std::to_wstring(index + 1)))
     {
         std::wstring sceneWindowPrefPath = L"/windowPreference/sceneWindow/showSceneWindow";
@@ -34,6 +36,12 @@ namespace RL
                 OnClosed();
             }
         });
+
+        m_Camera = GraphicEngine::Get().GetSceneCamera(index);
+    }
+
+    SceneWindow::~SceneWindow()
+    {
     }
 
     void SceneWindow::Draw()
@@ -46,6 +54,7 @@ namespace RL
             ImGui::PopStyleVar();
 
             m_IsSceneWindowHovered = ImGui::IsWindowHovered();
+            m_Camera->ActiveController(m_IsSceneWindowHovered);
 
             const ImVec2 view = ImGui::GetContentRegionAvail();
             if (view.x != m_SceneWindowWidth || view.y != m_SceneWindowHeight)
@@ -59,6 +68,10 @@ namespace RL
 
                 m_SceneWindowWidth = view.x;
                 m_SceneWindowHeight = view.y;
+
+                m_Camera->ResizeViewport(
+                    static_cast<uint32_t>(m_SceneWindowWidth),
+                    static_cast<uint32_t>(m_SceneWindowHeight));
             
                 EventBus::Get().SpreadEvent<SceneViewportResizeEvent>({{{this}, m_Index}, {view.x, view.y}});
             }
@@ -70,7 +83,7 @@ namespace RL
             vMin.y += ImGui::GetWindowPos().y;
             vMax.x += ImGui::GetWindowPos().x;
             vMax.y += ImGui::GetWindowPos().y;
-            // drawList->AddImage(textureId, vMin, vMax);
+            // drawList->AddImage(m_Camera->GetRenderTargetView(), vMin, vMax);
 
             m_SceneWindowPosX = vMin.x;
             m_SceneWindowPosY = vMin.y;
