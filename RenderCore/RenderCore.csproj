@@ -1,4 +1,4 @@
-<Project Sdk="Microsoft.NET.Sdk">
+﻿<Project Sdk="Microsoft.NET.Sdk">
   <Sdk Name="SharpGenTools.Sdk" Version="2.0.0-beta.11" />
 
   <PropertyGroup>
@@ -12,6 +12,10 @@
     <AppendTargetFrameworkToOutputPath>false</AppendTargetFrameworkToOutputPath>
     <Authors>Cutano</Authors>
   </PropertyGroup>
+
+  <ItemGroup>
+    <PackageReference Include="csdot" Version="2.0.1" />
+  </ItemGroup>
 
   <ItemGroup>
     <SharpGenMapping Include="Interop\Mapping.xml" />
