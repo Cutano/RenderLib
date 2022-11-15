@@ -24,6 +24,7 @@ public class Compiler
 
             public PassNode? FirstReferencedPass { get; internal set; }
             public PassNode? LastReferencedPass { get; internal set; }
+            public int ReferenceCount { get; internal set; }
         }
         
         public class PassInfo
@@ -339,6 +340,15 @@ public class Compiler
         {
             var info = pair.Value;
 
+            var passToRemove = 
+                info.ReaderPasses.Where(readerPass => !result.SortedPasses.Contains(readerPass)).ToList();
+            foreach (var passNode in passToRemove)
+            {
+                info.ReaderPasses.Remove(passNode);
+            }
+
+            info.ReferenceCount = info.ReaderPasses.Count;
+
             if (info.WriterPass is not null)
             {
                 info.FirstReferencedPass = info.WriterPass;
@@ -399,7 +409,19 @@ public class Compiler
             }
             else
             {
-                result.PassInfoRegistry[info.LastReferencedPass].DisposedResource.Add(resourceNode);
+                if (info.ReaderPasses.Count > 1 && info.ReaderPasses.Any(readerPass => readerPass.Async))
+                {
+                    var lastRefIndex = result.PassToOrder[info.LastReferencedPass];
+                    foreach (var passNode in result.SortedPasses.Where(
+                                 passNode => passNode.Async == false && result.PassToOrder[passNode] >= lastRefIndex))
+                    {
+                        result.PassInfoRegistry[passNode].DisposedResource.Add(resourceNode);
+                    }
+                }
+                else
+                {
+                    result.PassInfoRegistry[info.LastReferencedPass].DisposedResource.Add(resourceNode);
+                }
             }
         }
 
