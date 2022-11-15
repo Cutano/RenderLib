@@ -22,14 +22,14 @@ public class Compiler
             /// </summary>
             public List<PassNode> ReaderPasses { get; internal set; } = new();
 
-            public int FirstIndex { get; internal set; } = -1;
-            public int LastIndex { get; internal set; } = -1;
+            public PassNode? FirstReferencedPass { get; internal set; }
+            public PassNode? LastReferencedPass { get; internal set; }
         }
         
         public class PassInfo
         {
             public List<ResourceNode> ConstructedResource { get; internal set; } = new();
-            public List<ResourceNode> DeconstructedResource { get; internal set; } = new();
+            public List<ResourceNode> DisposedResource { get; internal set; } = new();
             public List<ResourceNode> MovedResource { get; internal set; } = new();
         }
         
@@ -341,73 +341,65 @@ public class Compiler
 
             if (info.WriterPass is not null)
             {
-                info.FirstIndex = result.PassToOrder[info.WriterPass];
+                info.FirstReferencedPass = info.WriterPass;
             }
             else if (info.ReaderPasses.Count != 0)
             {
-                info.FirstIndex = info.ReaderPasses.Select(readerPass => 
-                    result.PassToOrder[readerPass]).Prepend(int.MaxValue).Min();
+                info.FirstReferencedPass = result.SortedPasses[
+                    info.ReaderPasses.Select(readerPass => result.PassToOrder[readerPass]).Min()];
             }
             else if (info.CopyPass is not null)
             {
-                info.FirstIndex = result.PassToOrder[info.CopyPass];
-            }
-            else
-            {
-                info.FirstIndex = -1;
+                info.FirstReferencedPass = info.CopyPass;
             }
 
-            info.LastIndex = info.FirstIndex;
+            info.LastReferencedPass = info.FirstReferencedPass;
             if (info.CopyPass is not null)
             {
-                info.LastIndex = result.PassToOrder[info.CopyPass];
+                info.LastReferencedPass = info.CopyPass;
             }
-            else
+            else if (info.ReaderPasses.Count != 0)
             {
-                foreach (var readerPass in info.ReaderPasses)
-                {
-                    info.LastIndex = info.LastIndex == -1 ? 
-                        result.PassToOrder[readerPass] : 
-                        Math.Max(info.LastIndex, result.PassToOrder[readerPass]);
-                }
+                info.LastReferencedPass = result.SortedPasses[
+                    info.ReaderPasses.Select(readerPass => result.PassToOrder[readerPass]).Max()];
             }
         }
 
         foreach (var (resourceNode, info) in result.ResourceInfoRegistry)
         {
-            if (info.FirstIndex == -1 && result.MoveDestinationToSource.ContainsKey(resourceNode))
+            if (info.FirstReferencedPass is null && result.MoveDestinationToSource.ContainsKey(resourceNode))
             {
                 var target = result.MoveDestinationToSource[resourceNode];
-                info.FirstIndex = result.ResourceInfoRegistry[target].LastIndex;
-                if (info.LastIndex == -1)
-                {
-                    info.LastIndex = info.FirstIndex;
-                }
-                    
-                Debug.Assert(info.LastIndex >= info.FirstIndex);
+                info.FirstReferencedPass = result.ResourceInfoRegistry[target].LastReferencedPass;
+                info.LastReferencedPass ??= info.FirstReferencedPass;
+            }
+            
+            Debug.Assert(info.FirstReferencedPass is not null);
+            Debug.Assert(info.LastReferencedPass is not null);
+            
+            if (result.PassToOrder[info.LastReferencedPass] < result.PassToOrder[info.FirstReferencedPass])
+            {
+                info.LastReferencedPass = info.FirstReferencedPass;
             }
         }
 
         foreach (var (resourceNode, info) in result.ResourceInfoRegistry)
         {
-            var firstPass = info.FirstIndex != -1 ? result.SortedPasses[info.FirstIndex] : null;
-            var lastPass = info.LastIndex != -1 ? result.SortedPasses[info.LastIndex] : null;
-            
-            Debug.Assert(firstPass is not null);
-            Debug.Assert(lastPass is not null);
+            Debug.Assert(info.FirstReferencedPass is not null);
+            Debug.Assert(info.LastReferencedPass is not null);
 
             if (!result.MoveDestinationToSource.ContainsKey(resourceNode))
             {
-                result.PassInfoRegistry[firstPass].ConstructedResource.Add(resourceNode);
+                result.PassInfoRegistry[info.FirstReferencedPass].ConstructedResource.Add(resourceNode);
             }
 
             if (result.MoveSourceToDestination.ContainsKey(resourceNode))
             {
-                result.PassInfoRegistry[lastPass].MovedResource.Add(resourceNode);
+                result.PassInfoRegistry[info.LastReferencedPass].MovedResource.Add(resourceNode);
             }
             else
             {
-                result.PassInfoRegistry[lastPass].DeconstructedResource.Add(resourceNode);
+                result.PassInfoRegistry[info.LastReferencedPass].DisposedResource.Add(resourceNode);
             }
         }
 
