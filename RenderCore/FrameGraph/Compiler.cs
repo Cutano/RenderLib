@@ -1,3 +1,5 @@
+using System.Diagnostics;
+
 namespace RenderCore.FrameGraph;
 
 public class Compiler
@@ -20,13 +22,15 @@ public class Compiler
             /// </summary>
             public List<PassNode> ReaderPasses { get; internal set; } = new();
 
-            public long FirstIndex { get; internal set; }
-            public long LastIndex { get; internal set; }
+            public int FirstIndex { get; internal set; } = -1;
+            public int LastIndex { get; internal set; } = -1;
         }
         
         public class PassInfo
         {
-            
+            public List<ResourceNode> ConstructedResource { get; internal set; } = new();
+            public List<ResourceNode> DeconstructedResource { get; internal set; } = new();
+            public List<ResourceNode> MovedResource { get; internal set; } = new();
         }
         
         public class PassGraph
@@ -37,9 +41,7 @@ public class Compiler
 
             public List<PassNode>? Sort()
             {
-                var inDegMap = 
-                    AdjList.ToDictionary<KeyValuePair<PassNode, HashSet<PassNode>>, PassNode, long>(
-                        pair => pair.Key, _ => 0);
+                var inDegMap = AdjList.ToDictionary(pair => pair.Key, _ => 0);
 
                 foreach (var pass in AdjList.SelectMany(pair => pair.Value))
                 {
@@ -70,7 +72,7 @@ public class Compiler
                     }
                 }
 
-                return inDegMap.Count == 0 ? null : sortedNodes;
+                return inDegMap.Count != 0 ? null : sortedNodes;
             }
 
             public void ToGraphVis()
@@ -81,12 +83,13 @@ public class Compiler
 
         public PassGraph? CompiledGraph { get; internal set; }
         public List<PassNode>? SortedPasses { get; internal set; }
+        public Dictionary<PassNode, int> PassToOrder { get; internal set; } = new();
         public Dictionary<ResourceNode, ResourceInfo> ResourceInfoRegistry { get; internal set; } = new();
         public Dictionary<PassNode, PassInfo> PassInfoRegistry { get; internal set; } = new();
-        public Dictionary<ResourceNode, ResourceNode> MoveSourceToDestination { get; set; } = new();
-        public Dictionary<ResourceNode, ResourceNode> MoveDestinationToSource { get; set; } = new();
-        public Dictionary<ResourceNode, ResourceNode> CopySourceToDestination { get; set; } = new();
-        public Dictionary<ResourceNode, ResourceNode> CopyDestinationToSource { get; set; } = new();
+        public Dictionary<ResourceNode, ResourceNode> MoveSourceToDestination { get; internal set; } = new();
+        public Dictionary<ResourceNode, ResourceNode> MoveDestinationToSource { get; internal set; } = new();
+        public Dictionary<ResourceNode, ResourceNode> CopySourceToDestination { get; internal set; } = new();
+        public Dictionary<ResourceNode, ResourceNode> CopyDestinationToSource { get; internal set; } = new();
     }
 
     public Result Compile(FrameGraph frameGraph)
@@ -199,6 +202,12 @@ public class Compiler
                 result.MoveSourceToDestination[src] = next;
                 info = result.ResourceInfoRegistry[next];
                 moveNodesToRemove.Add(next);
+                if (!result.MoveSourceToDestination.ContainsKey(next))
+                {
+                    break;
+                }
+                
+                next = result.MoveSourceToDestination[next];
             }
         }
 
@@ -242,5 +251,166 @@ public class Compiler
                 result.CompiledGraph?.AdjList[info.Value.WriterPass].Add(info.Value.CopyPass);
             }
         }
+
+        foreach (var (src, dst) in result.MoveSourceToDestination)
+        {
+            var infoDst = result.ResourceInfoRegistry[dst];
+            var infoSrc = result.ResourceInfoRegistry[src];
+            
+            var firstAccessoriesDst = new List<PassNode>();
+            var finalAccessoriesSrc = new List<PassNode>();
+            
+            if (infoDst.WriterPass is not null)
+            {
+                firstAccessoriesDst = new List<PassNode>
+                {
+                    infoDst.WriterPass
+                };
+            }
+            else if (infoDst.ReaderPasses.Count != 0)
+            {
+                firstAccessoriesDst = infoDst.ReaderPasses;
+            }
+            else if (infoDst.CopyPass is not null)
+            {
+                firstAccessoriesDst = new List<PassNode>
+                {
+                    infoDst.CopyPass
+                };
+            }
+            
+            if (infoSrc.WriterPass is not null)
+            {
+                finalAccessoriesSrc = new List<PassNode>
+                {
+                    infoSrc.WriterPass
+                };
+            }
+            else if (infoSrc.ReaderPasses.Count != 0)
+            {
+                finalAccessoriesSrc = infoSrc.ReaderPasses;
+            }
+            else if (infoSrc.CopyPass is not null)
+            {
+                finalAccessoriesSrc = new List<PassNode>
+                {
+                    infoSrc.CopyPass
+                };
+            }
+
+            foreach (var finalAccessor in finalAccessoriesSrc)
+            {
+                foreach (var firstAccessor in firstAccessoriesDst)
+                {
+                    result.CompiledGraph?.AdjList[finalAccessor].Add(firstAccessor);
+                }
+            }
+        }
+
+        var sortedPass = result.CompiledGraph?.Sort();
+        if (sortedPass is null)
+        {
+            throw new Exception("Not a DAG");
+        }
+
+        result.SortedPasses = sortedPass;
+
+        foreach (var (src, dst) in result.MoveSourceToDestination)
+        {
+            result.MoveDestinationToSource.Add(dst, src);
+        }
+
+        foreach (var (src, dst) in result.CopySourceToDestination)
+        {
+            result.CopyDestinationToSource.Add(dst, src);
+        }
+
+        for (var i = 0; i < result.SortedPasses.Count; i++)
+        {
+            result.PassToOrder[result.SortedPasses[i]] = i;
+        }
+
+        foreach (var node in frameGraph.PassNodes)
+        {
+            result.PassInfoRegistry[node] = new Result.PassInfo();
+        }
+
+        foreach (var pair in result.ResourceInfoRegistry)
+        {
+            var info = pair.Value;
+
+            if (info.WriterPass is not null)
+            {
+                info.FirstIndex = result.PassToOrder[info.WriterPass];
+            }
+            else if (info.ReaderPasses.Count != 0)
+            {
+                info.FirstIndex = info.ReaderPasses.Select(readerPass => 
+                    result.PassToOrder[readerPass]).Prepend(int.MaxValue).Min();
+            }
+            else if (info.CopyPass is not null)
+            {
+                info.FirstIndex = result.PassToOrder[info.CopyPass];
+            }
+            else
+            {
+                info.FirstIndex = -1;
+            }
+
+            info.LastIndex = info.FirstIndex;
+            if (info.CopyPass is not null)
+            {
+                info.LastIndex = result.PassToOrder[info.CopyPass];
+            }
+            else
+            {
+                foreach (var readerPass in info.ReaderPasses)
+                {
+                    info.LastIndex = info.LastIndex == -1 ? 
+                        result.PassToOrder[readerPass] : 
+                        Math.Max(info.LastIndex, result.PassToOrder[readerPass]);
+                }
+            }
+        }
+
+        foreach (var (resourceNode, info) in result.ResourceInfoRegistry)
+        {
+            if (info.FirstIndex == -1 && result.MoveDestinationToSource.ContainsKey(resourceNode))
+            {
+                var target = result.MoveDestinationToSource[resourceNode];
+                info.FirstIndex = result.ResourceInfoRegistry[target].LastIndex;
+                if (info.LastIndex == -1)
+                {
+                    info.LastIndex = info.FirstIndex;
+                }
+                    
+                Debug.Assert(info.LastIndex >= info.FirstIndex);
+            }
+        }
+
+        foreach (var (resourceNode, info) in result.ResourceInfoRegistry)
+        {
+            var firstPass = info.FirstIndex != -1 ? result.SortedPasses[info.FirstIndex] : null;
+            var lastPass = info.LastIndex != -1 ? result.SortedPasses[info.LastIndex] : null;
+            
+            Debug.Assert(firstPass is not null);
+            Debug.Assert(lastPass is not null);
+
+            if (!result.MoveDestinationToSource.ContainsKey(resourceNode))
+            {
+                result.PassInfoRegistry[firstPass].ConstructedResource.Add(resourceNode);
+            }
+
+            if (result.MoveSourceToDestination.ContainsKey(resourceNode))
+            {
+                result.PassInfoRegistry[lastPass].MovedResource.Add(resourceNode);
+            }
+            else
+            {
+                result.PassInfoRegistry[lastPass].DeconstructedResource.Add(resourceNode);
+            }
+        }
+
+        return result;
     }
 }
