@@ -15,6 +15,8 @@ internal static partial class Entry
         Workspace.WorkspaceGetWorkspaceDir = unmanagedPayload.WorkspaceGetWorkspaceDir;
         RenderCore.RenderDevice.GetDeviceUnmanaged = unmanagedPayload.DeviceGet;
         RenderCore.DeviceContext.GetDeviceContextUnmanaged = unmanagedPayload.DeviceGetContext;
+        RenderCore.DeviceContext.GetDeviceDeferredContext = unmanagedPayload.DeviceGetDeferredContext;
+        RenderCore.DeviceContext.GetDeviceNumDeferredContext = unmanagedPayload.DeviceGetNumDeferredContext;
         RenderCore.Log.LogUnmanaged = unmanagedPayload.GraphicsLog;
         Log.LogUnmanaged = unmanagedPayload.ScriptCoreLog;
 

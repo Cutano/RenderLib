@@ -30,5 +30,15 @@ namespace RL::Interop::Binding
         {
             return GraphicEngine::Get().GetDeviceContext();
         }
+
+        void* GetDeferredContext()
+        {
+            return GraphicEngine::Get().GetDeferredContexts();
+        }
+
+        uint32_t GetNumDeferredContext()
+        {
+            return GraphicEngine::Get().GetNumDeferredContexts();
+        }
     }
 }

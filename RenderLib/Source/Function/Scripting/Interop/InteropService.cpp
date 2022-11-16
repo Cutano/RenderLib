@@ -35,6 +35,8 @@ namespace RL::Interop
         void* WorkspaceGetWorkspaceDir;
         void* DeviceGet;
         void* DeviceGetContext;
+        void* DeviceGetDeferredContext;
+        void* DeviceGetNumDeferredContext;
         void* ScriptCoreLog;
         void* GraphicsLog;
         void* Exception;
@@ -131,6 +133,8 @@ namespace RL::Interop
             unmanagedFunctionPayload.WorkspaceGetWorkspaceDir = (void*)&Binding::Workspace::GetWorkspaceDir;
             unmanagedFunctionPayload.DeviceGet = (void*)&Binding::Device::GetDevice;
             unmanagedFunctionPayload.DeviceGetContext = (void*)&Binding::Device::GetContext;
+            unmanagedFunctionPayload.DeviceGetDeferredContext = (void*)&Binding::Device::GetDeferredContext;
+            unmanagedFunctionPayload.DeviceGetNumDeferredContext = (void*)&Binding::Device::GetNumDeferredContext;
             unmanagedFunctionPayload.ScriptCoreLog = (void*)&ScriptCoreLog;
             unmanagedFunctionPayload.GraphicsLog = (void*)&GraphicsLog;
             unmanagedFunctionPayload.Exception = (void*)&Exception;

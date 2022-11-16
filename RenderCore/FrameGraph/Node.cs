@@ -14,13 +14,13 @@ public class PassNode : Node
     public List<ResourceNode> Inputs { get; init; }
     public List<ResourceNode> Outputs { get; init; }
 
-    public PassNode(string name, List<ResourceNode> inputs, List<ResourceNode> outputs, bool async = false, Type passType = Type.General)
+    public PassNode(string name, IEnumerable<ResourceNode> inputs, IEnumerable<ResourceNode> outputs, bool async = false, Type passType = Type.General)
     {
         Name = name;
         PassType = passType;
         Async = async;
-        Inputs = inputs;
-        Outputs = outputs;
+        Inputs = inputs.ToList();
+        Outputs = outputs.ToList();
     }
 
     public bool IsValid()

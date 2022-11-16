@@ -2,6 +2,7 @@
 
 #include <memory>
 #include <array>
+#include <vector>
 
 typedef struct HWND__ *HWND;
 
@@ -49,6 +50,9 @@ namespace RL
 
         Diligent::IDeviceContext* GetDeviceContext() const;
         Diligent::IRenderDevice*  GetDevice() const;
+
+        Diligent::IDeviceContext** GetDeferredContexts() const;
+        uint32_t                   GetNumDeferredContexts() const;
         
     private:
         GraphicEngine() = default;
@@ -56,6 +60,8 @@ namespace RL
         Diligent::IEngineFactoryD3D12* m_EngineFactory {nullptr};
         Diligent::IRenderDevice* m_RenderDevice {nullptr};
         Diligent::IDeviceContext* m_DeviceContext {nullptr};
+        
+        std::vector<Diligent::IDeviceContext*> m_DeferredContexts;
 
         std::array<SceneCamera*, 4> m_SceneCameras;
 

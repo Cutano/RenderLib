@@ -59,6 +59,8 @@ namespace RL
         });
         
         Diligent::EngineD3D12CreateInfo createInfo;
+        createInfo.NumDeferredContexts = std::thread::hardware_concurrency();
+        createInfo.NumImmediateContexts = 1;
         
 #ifdef _DEBUG
         createInfo.EnableValidation = true;
@@ -69,9 +71,15 @@ namespace RL
         createInfo.D3D12ValidationFlags = Diligent::D3D12_VALIDATION_FLAG_NONE;
         createInfo.SetValidationLevel(Diligent::VALIDATION_LEVEL_DISABLED);
 #endif
+
+        std::vector<Diligent::IDeviceContext*> deviceContexts;
+        deviceContexts.resize(createInfo.NumImmediateContexts + createInfo.NumDeferredContexts);
         
         m_EngineFactory = Diligent::GetEngineFactoryD3D12();
-        m_EngineFactory->CreateDeviceAndContextsD3D12(createInfo, &m_RenderDevice, &m_DeviceContext);
+        m_EngineFactory->CreateDeviceAndContextsD3D12(createInfo, &m_RenderDevice, deviceContexts.data());
+
+        m_DeviceContext = deviceContexts.at(0);
+        m_DeferredContexts = std::vector(deviceContexts.begin() + 1, deviceContexts.end());
 
         for (uint16_t i = 0; i < static_cast<uint16_t>(m_SceneCameras.size()); ++i)
         {
@@ -110,6 +118,15 @@ namespace RL
         m_DeviceContext->Flush();
         m_DeviceContext->Release();
         m_DeviceContext = nullptr;
+
+        for (auto& deferredContext : m_DeferredContexts)
+        {
+            deferredContext->Flush();
+            deferredContext->Release();
+            deferredContext = nullptr;
+        }
+
+        m_DeferredContexts.clear();
 
         for (uint16_t i = 0; i < static_cast<uint16_t>(m_SceneCameras.size()); ++i)
         {
@@ -190,5 +207,15 @@ namespace RL
     Diligent::IRenderDevice* GraphicEngine::GetDevice() const
     {
         return m_RenderDevice;
+    }
+
+    Diligent::IDeviceContext** GraphicEngine::GetDeferredContexts() const
+    {
+        return m_DeferredContexts.begin()._Ptr;
+    }
+
+    uint32_t GraphicEngine::GetNumDeferredContexts() const
+    {
+        return static_cast<uint32_t>(m_DeferredContexts.size());
     }
 }

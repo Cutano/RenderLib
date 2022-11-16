@@ -6,8 +6,11 @@ namespace RenderCore;
 public unsafe class DeviceContext : IDeviceContext
 {
     public static delegate* unmanaged<IntPtr> GetDeviceContextUnmanaged;
+    public static delegate* unmanaged<IntPtr> GetDeviceDeferredContext;
+    public static delegate* unmanaged<int> GetDeviceNumDeferredContext;
     
     private static DeviceContext? _deviceContext;
+    private static DeviceContext[]? _deferredContext;
     
     public new DeviceContextDesc Desc => GetDesc();
 
@@ -18,6 +21,33 @@ public unsafe class DeviceContext : IDeviceContext
     public static DeviceContext GetContext()
     {
         return _deviceContext ??= new DeviceContext(GetDeviceContextUnmanaged());
+    }
+
+    public static DeviceContext GetDeferredContext(int index)
+    {
+        if (_deferredContext is null)
+        {
+            var num = GetDeviceNumDeferredContext();
+            _deferredContext = new DeviceContext[num];
+
+            var baseAddr = GetDeviceDeferredContext();
+            for (var i = 0; i < num; i++)
+            {
+                _deferredContext[i] = new DeviceContext(baseAddr + i);
+            }
+        }
+
+        return _deferredContext[index];
+    }
+
+    public static int GetNumDeferredContext()
+    {
+        if (_deferredContext is null)
+        {
+            return GetDeviceNumDeferredContext();
+        }
+        
+        return _deferredContext.Length;
     }
 
     public new DeviceContextDesc GetDesc()

@@ -14,6 +14,8 @@ namespace RL::Interop::Binding
     {
         void* GetDevice();
         void* GetContext();
+        void* GetDeferredContext();
+        uint32_t GetNumDeferredContext();
     }
 
     // Instantiable

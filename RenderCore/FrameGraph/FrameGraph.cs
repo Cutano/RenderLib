@@ -5,6 +5,9 @@ namespace RenderCore.FrameGraph;
 
 public class FrameGraph
 {
+    private Compiler _compiler = new();
+    private Executor _executor = new();
+
     public string Name { get; init; }
 
     public List<MoveNode> MoveNodes { get; private set; } = new();
@@ -17,6 +20,8 @@ public class FrameGraph
     public Dictionary<ResourceNode, MoveNode> MoveNodeBySource { get; private set; } = new();
     public Dictionary<ResourceNode, MoveNode> MoveNodeByDestination { get; private set; } = new();
 
+    public Compiler.Result? CompileResult { get; set; }
+
     public FrameGraph(string name)
     {
         Name = name;
@@ -28,52 +33,64 @@ public class FrameGraph
     public ResourceNode GetMoveDestinationBySource(ResourceNode source) => MoveNodeBySource[source].Destination;
     public ResourceNode GetMoveSourceByDestination(ResourceNode destination) => MoveNodeByDestination[destination].Source;
 
-    public ResourceNode RegisterResourceNode(ResourceNode resourceNode)
+    public FrameGraph AddResourceNode(ResourceNode resourceNode)
     {
         ResourceNodes.Add(resourceNode);
         ResourceNodeRegistry[resourceNode.Name] = resourceNode;
 
-        return resourceNode;
+        return this;
     }
 
-    public ResourceNode RegisterResourceNode(string name)
+    public FrameGraph AddResourceNode(string name)
     {
         var node = new ResourceNode(name);
         ResourceNodes.Add(node);
         ResourceNodeRegistry[name] = node;
 
-        return node;
+        return this;
     }
 
-    public PassNode RegisterPassNode(PassNode passNode)
+    public FrameGraph AddPassNode(PassNode passNode)
     {
         PassNodes.Add(passNode);
         PassNodeRegistry[passNode.Name] = passNode;
 
-        return passNode;
+        return this;
     }
 
-    public PassNode RegisterPassNode(string name, List<ResourceNode> inputs, List<ResourceNode> outputs,
+    public FrameGraph AddPassNode(string name, IEnumerable<ResourceNode> inputs, IEnumerable<ResourceNode> outputs,
         bool async = false, PassNode.Type passType = PassNode.Type.General)
     {
         var node = new PassNode(name, inputs, outputs, async, passType);
         PassNodes.Add(node);
         PassNodeRegistry[name] = node;
 
-        return node;
+        return this;
+    }
+    
+    public FrameGraph AddPassNode(string name, IEnumerable<string> inputsName, IEnumerable<string> outputsName,
+        bool async = false, PassNode.Type passType = PassNode.Type.General)
+    {
+        var inputs = from inputName in inputsName select ResourceNodeRegistry[inputName];
+        var outputs = from outputName in outputsName select ResourceNodeRegistry[outputName];
+        var node = new PassNode(name, inputs, outputs, async, passType);
+        PassNodes.Add(node);
+        PassNodeRegistry[name] = node;
+
+        return this;
     }
 
-    public MoveNode RegisterMoveNode(MoveNode moveNode)
+    public FrameGraph AddMoveNode(MoveNode moveNode)
     {
         MoveNodes.Add(moveNode);
         MoveNodeByName[moveNode.Name] = moveNode;
         MoveNodeBySource[moveNode.Source] = moveNode;
         MoveNodeByDestination[moveNode.Destination] = moveNode;
 
-        return moveNode;
+        return this;
     }
 
-    public MoveNode RegisterMoveNode(string name, ResourceNode source, ResourceNode destination)
+    public FrameGraph AddMoveNode(string name, ResourceNode source, ResourceNode destination)
     {
         var moveNode = new MoveNode(name, source, destination);
         MoveNodes.Add(moveNode);
@@ -81,7 +98,24 @@ public class FrameGraph
         MoveNodeBySource[source] = moveNode;
         MoveNodeByDestination[destination] = moveNode;
 
-        return moveNode;
+        return this;
+    }
+
+    public void Compile()
+    {
+        CompileResult = _compiler.Compile(this);
+    }
+
+    public void Execute(ResourceManager manager)
+    {
+        if (CompileResult is not null)
+        {
+            _executor.Execute(CompileResult, manager);
+        }
+        else
+        {
+            Log.Error("No available compile result!");
+        }
     }
 
     public void ToGraphVis()
