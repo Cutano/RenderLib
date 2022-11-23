@@ -60,7 +60,6 @@ namespace RL
         
         Diligent::EngineD3D12CreateInfo createInfo;
         createInfo.NumDeferredContexts = std::thread::hardware_concurrency();
-        createInfo.NumImmediateContexts = 1;
         
 #ifdef _DEBUG
         createInfo.EnableValidation = true;
@@ -73,7 +72,7 @@ namespace RL
 #endif
 
         std::vector<Diligent::IDeviceContext*> deviceContexts;
-        deviceContexts.resize(createInfo.NumImmediateContexts + createInfo.NumDeferredContexts);
+        deviceContexts.resize(1 + createInfo.NumDeferredContexts);
         
         m_EngineFactory = Diligent::GetEngineFactoryD3D12();
         m_EngineFactory->CreateDeviceAndContextsD3D12(createInfo, &m_RenderDevice, deviceContexts.data());
@@ -121,7 +120,6 @@ namespace RL
 
         for (auto& deferredContext : m_DeferredContexts)
         {
-            deferredContext->Flush();
             deferredContext->Release();
             deferredContext = nullptr;
         }
